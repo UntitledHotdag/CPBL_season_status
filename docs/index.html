@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&text=BRWTLGCP&display=swap" rel="stylesheet">
 <style>
   /* ================================================================
      THEME TOKENS (poster-version palette) · light default, dark via OS
@@ -19,6 +20,7 @@
     --ink:#12121A; --ink-dim:#4A4750; --muted:#8A8790;
     --accent:#D4A70F; --accent-fill:#F5C518; --accent-ink:#12121A;
     --badge-off:#DCD7CB; --badge-off-ink:#8A8790;
+    --mark-stroke:#1A1A22;
     --shadow:0 20px 50px -20px rgba(0,0,0,.15);
     color-scheme:light;
   }
@@ -29,6 +31,7 @@
       --ink:#F5F1E8; --ink-dim:#B6B4AC; --muted:#6B6970;
       --accent:#F5C518; --accent-fill:#F5C518; --accent-ink:#0B0B0F;
       --badge-off:#2E2E37; --badge-off-ink:#7C7A84;
+      --mark-stroke:#F5F1E8;
       --shadow:0 30px 80px -20px rgba(0,0,0,.8);
       color-scheme:dark;
     }
@@ -39,6 +42,7 @@
     --ink:#F5F1E8; --ink-dim:#B6B4AC; --muted:#6B6970;
     --accent:#F5C518; --accent-fill:#F5C518; --accent-ink:#0B0B0F;
     --badge-off:#2E2E37; --badge-off-ink:#7C7A84;
+    --mark-stroke:#F5F1E8;
     --shadow:0 30px 80px -20px rgba(0,0,0,.8);
     color-scheme:dark;
   }
@@ -90,24 +94,51 @@
   }
 
   /* ================================================================
-     Team badge — copyright-free English abbreviation on a colour disc
+     Team mark — "enamel tile": a softly shaded team-colour square with a
+     hairline highlight and one serif capital (copyright-free; losers grey)
      ================================================================ */
-  .badge{
-    --c:#888;--k:#fff;
-    width:26px;height:26px;border-radius:50%;flex-shrink:0;
-    display:inline-grid;place-items:center;
-    background:var(--c);color:var(--k);
-    font-family:"Manrope",sans-serif;font-weight:800;font-size:8.5px;letter-spacing:.03em;line-height:1;
-  }
-  .badge.lose{background:var(--badge-off);color:var(--badge-off-ink)}
-  .badge.xs{width:16px;height:16px;font-size:5.5px}
-  .badge.md{width:40px;height:40px;font-size:12px}
-  .badge.lg{width:44px;height:44px;font-size:13px}
+  .badge{--c:#888;--k:#fff;width:26px;height:26px;flex-shrink:0;display:inline-block;vertical-align:middle}
+  .badge .t{fill:var(--c);stroke:rgba(0,0,0,.12);stroke-width:.6}
+  .badge .sh{fill:url(#mk-shade)}
+  .badge .hl{fill:none;stroke:rgba(255,255,255,.32);stroke-width:.8}
+  .badge text{font-family:"DM Serif Display","Playfair Display",Georgia,"Times New Roman",serif;font-size:22px;fill:var(--k)}
+  .badge.lose .t{fill:var(--badge-off);stroke:none}
+  .badge.lose .sh{opacity:.45}
+  .badge.lose .hl{stroke:rgba(255,255,255,.18)}
+  .badge.lose text{fill:var(--badge-off-ink)}
+  .badge.xs{width:17px;height:17px}
+  .badge.md{width:40px;height:40px}
+  .badge.lg{width:44px;height:44px}
 
   /* ================================================================
      Picker controls
      ================================================================ */
   .controls{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;align-items:center}
+  .filters{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+  .f-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .f-k{font-family:"Manrope","Noto Sans TC",sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--muted);margin-right:4px;white-space:nowrap}
+  .tchip{
+    min-width:40px;height:40px;padding:0 12px 0 7px;gap:7px;border:1px solid var(--rule);border-radius:10px;background:var(--panel);
+    display:inline-flex;align-items:center;justify-content:center;transition:border-color .12s,background .12s;
+    font-size:12.5px;font-weight:700;color:var(--ink);white-space:nowrap;
+  }
+  .tchip .badge{width:24px;height:24px}
+  .tchip.all{padding:0 12px;font-size:12px;font-weight:700;color:var(--ink-dim)}
+  .tchip:hover{border-color:var(--ink-dim)}
+  .tchip[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);background:var(--panel-2)}
+  .tchip.all[aria-pressed="true"]{background:var(--ink);color:var(--ground)}
+  .fsel{display:inline-flex;align-items:center;gap:4px;position:relative}
+  .fsel select{
+    appearance:none;-webkit-appearance:none;min-height:40px;padding:8px 32px 8px 12px;border:1px solid var(--rule);border-radius:10px;
+    background:var(--panel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238A8790' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center/14px;
+    color:var(--ink);font-size:13px;font-weight:600;cursor:pointer;max-width:220px;
+  }
+  .fsel select:hover{border-color:var(--ink-dim)}
+  .f-sel{gap:14px}
+  .f-misc{flex:1;justify-content:flex-end;flex-wrap:nowrap}
+  .f-misc .search{margin-left:0}
+  .f-status{flex-basis:100%;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted);min-height:24px}
+  .f-status .linkish{min-height:24px}
   .chip{
     min-height:34px;border:1px solid var(--rule);color:var(--ink-dim);
     padding:6px 12px;border-radius:99px;font-size:12px;font-weight:500;letter-spacing:.02em;
@@ -142,8 +173,8 @@
 
   .card{
     border:1px solid var(--rule);border-radius:8px;padding:8px 10px;min-height:46px;
-    display:grid;grid-template-columns:auto 26px auto 26px auto auto;gap:6px;align-items:center;
-    transition:all .1s;user-select:none;min-width:200px;text-align:left;
+    display:grid;grid-template-columns:auto auto auto auto auto auto;gap:6px;align-items:center;
+    transition:all .1s;user-select:none;min-width:250px;text-align:left;
   }
   .card:hover{border-color:var(--muted)}
   .card[aria-pressed="true"]{background:var(--panel);border-color:var(--ink)}
@@ -159,6 +190,8 @@
   }
   .card-score .sep{color:var(--muted);font-weight:400}
   .card-score .lose{color:var(--muted)}
+  .ct{display:inline-flex;align-items:center;gap:5px;min-width:0;font-size:12.5px;font-weight:700;white-space:nowrap}
+  .ct.lose{color:var(--muted);font-weight:500}
   .card-venue{font-size:11px;color:var(--muted);margin-left:6px;letter-spacing:.03em;white-space:nowrap}
   .card-tag{
     font-family:"Manrope","Noto Sans TC",sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.06em;
@@ -214,10 +247,11 @@
     color:#F5F1E8;
   }
   .poster-banner .b-abbr{
-    position:absolute;right:-2%;bottom:-18%;
-    font-family:"Manrope",sans-serif;font-weight:800;font-size:clamp(96px,26vw,190px);line-height:1;
-    letter-spacing:-.03em;color:rgba(255,255,255,.14);
+    position:absolute;right:3%;bottom:-24%;
+    font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(170px,46vw,330px);line-height:1;
+    color:rgba(255,255,255,.14);
   }
+  .poster-banner .b-abbr.word{font-family:"Manrope",sans-serif;font-weight:800;font-size:clamp(96px,26vw,190px);letter-spacing:-.03em;right:-2%;bottom:-18%}
   .poster-banner .b-text{position:absolute;left:28px;bottom:24px;right:28px}
   .poster-banner .b-eyebrow{font-family:"Manrope",sans-serif;font-weight:700;font-size:11px;letter-spacing:.22em;color:#F5C518}
   .poster-banner .b-title{font-weight:700;font-size:clamp(20px,5vw,30px);line-height:1.25;margin-top:6px;text-wrap:balance}
@@ -393,6 +427,27 @@
   .btn-ghost:hover{border-color:var(--ink-dim)}
   .scroll-hint{margin-top:44px;font-size:12px;color:var(--muted);letter-spacing:.14em;display:inline-flex;align-items:center;gap:8px;min-height:40px;align-self:flex-start}
   .hero-sample{position:relative}
+  .wall{
+    position:relative;height:min(74svh,620px);overflow:hidden;border-radius:20px;perspective:1600px;
+    background:radial-gradient(120% 80% at 70% 30%,var(--panel-2),var(--ground));
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 10%,#000 88%,transparent 100%);
+            mask-image:linear-gradient(to bottom,transparent 0,#000 10%,#000 88%,transparent 100%);
+  }
+  .wall-plane{
+    position:absolute;left:50%;top:50%;width:150%;display:grid;grid-template-columns:repeat(4,1fr);gap:22px;
+    transform:translate(-50%,-50%) rotateX(42deg) rotateZ(-24deg);transform-style:preserve-3d;
+  }
+  .wall-col{display:flex;flex-direction:column;animation:wall-drift var(--d,50s) linear infinite;will-change:transform}
+  .wall-col:nth-child(even){animation-direction:reverse;margin-top:-140px}
+  @keyframes wall-drift{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+  .wall-card{
+    aspect-ratio:9/16;margin-bottom:22px;border-radius:14px;overflow:hidden;
+    background:linear-gradient(135deg,var(--tc,#2a2a33),#0b0b0f 90%);
+    box-shadow:0 2px 0 rgba(255,255,255,.06) inset,-18px 28px 40px -14px rgba(0,0,0,.45);
+  }
+  .wall-card img{width:100%;height:100%;display:block;object-fit:cover}
+  .wall .sample-tag{top:14px;right:14px}
+  @media (prefers-reduced-motion: reduce){ .wall-col{animation:none} }
   .hero-sample .rate{margin:0;box-shadow:var(--shadow)}
   .sample-tag{position:absolute;top:-10px;right:14px;z-index:1;font-size:10px;font-weight:700;letter-spacing:.12em;background:var(--ink);color:var(--ground);padding:3px 8px;border-radius:99px}
   .sample-games{display:flex;flex-direction:column;gap:6px;margin-top:10px}
@@ -424,9 +479,16 @@
   .notes li{display:grid;grid-template-columns:18px 1fr;gap:10px;font-size:14px;color:var(--ink-dim);line-height:1.7}
   .notes li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent-fill);margin-top:8px}
   .notes b{color:var(--ink)}
+  .legal{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 32px;max-width:860px}
+  .legal-item{border:1px solid var(--rule);border-radius:10px;padding:16px 18px;background:var(--panel)}
+  .legal-k{font-family:"Manrope","Noto Sans TC",sans-serif;font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--muted);margin-bottom:6px}
+  .legal-item p{font-size:12.5px;line-height:1.75;color:var(--ink-dim)}
 
   @media (max-width:780px){
-    .hero-grid{grid-template-columns:1fr;gap:32px}
+    .hero-grid{grid-template-columns:1fr;gap:28px}
+    .wall{height:420px;margin-inline:-6px}
+    .wall-plane{grid-template-columns:repeat(3,1fr);width:165%;gap:14px}
+    .wall-card{margin-bottom:14px;border-radius:10px}
     .steps-grid{grid-template-columns:1fr}
   }
   @media (max-width:640px){
@@ -434,6 +496,7 @@
     .screen.first{min-height:calc(100svh - 70px)}
     .hero-ctas .cta,.hero-ctas .btn-ghost{width:100%;justify-content:center}
     .fact + .fact{padding-left:12px}
+    .legal{grid-template-columns:1fr}
   }
 
   .page-foot{margin-top:28px;padding-top:16px;border-top:1px solid var(--rule);font-size:11px;color:var(--muted);line-height:1.8;text-align:center}
@@ -454,6 +517,18 @@
     .chip,.search{flex-shrink:0}
     .search{margin-left:0;width:160px}
     .day-group{grid-template-columns:52px 1fr;gap:8px}
+    .filters{gap:10px}
+    .f-row{width:100%}
+    .f-teams{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+    .f-teams .f-k{display:none}
+    .tchip{min-width:0;height:42px;padding:0 6px;gap:5px;font-size:12px}
+    .tchip .badge{width:20px;height:20px}
+    .tchip.all{padding:0 6px}
+    .f-sel{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .fsel{flex-direction:column;align-items:stretch;gap:4px}
+    .fsel select{max-width:none;width:100%}
+    .f-misc{justify-content:flex-start;flex-wrap:nowrap}
+    .f-misc .search{flex:1;width:auto;min-width:0}
     .day-md{font-size:15px}
     .card{min-width:0;flex:1 1 100%}
     .card-venue{margin-left:auto}
@@ -491,6 +566,11 @@
 <body>
 
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="mk-shade" x1="0" y1="0" x2="0.35" y2="1">
+    <stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".48" stop-color="#fff" stop-opacity="0"/>
+    <stop offset="1" stop-color="#000" stop-opacity=".24"/></linearGradient></defs>
+</svg>
 <div class="app">
   <header class="top">
     <a class="brand brand-btn" href="#intro" style="color:inherit;text-decoration:none">CPBL <span class="brand-year">/ 2026</span></a>
@@ -510,14 +590,13 @@
         <div>
           <div class="intro-eyebrow">CPBL 2026 例行賽 · 進場戰績</div>
           <h1 class="hero-title">你進場的時候，<br><em>你的球隊</em>贏了幾場？</h1>
-          <p class="hero-lede">把今年進場看過的比賽勾起來，馬上算出你的觀賽勝率，再跟球隊整季的勝率比一比，看看你是福神，還是逆風鐵粉。</p>
+          <p class="hero-lede">把今年進場看過的比賽勾起來，馬上算出你的觀賽勝率，再做成一張 IG 限動分享圖：你是福神，還是逆風鐵粉？</p>
           <div class="hero-ctas" id="hero-ctas"></div>
           <button class="scroll-hint" id="scroll-hint">往下看怎麼玩 ↓</button>
         </div>
-        <div class="hero-sample">
-          <span class="sample-tag">範例</span>
-          <div class="rate" id="hero-rate"></div>
-          <div class="sample-games" id="hero-games" aria-hidden="true"></div>
+        <div class="wall" aria-label="分享圖範例">
+          <div class="wall-plane" id="wall-plane" aria-hidden="true"></div>
+          <span class="sample-tag">分享圖範例</span>
         </div>
       </div>
     </section>
@@ -531,7 +610,7 @@
         <div class="step">
           <span class="no">STEP 01</span>
           <h3>勾選進場的比賽</h3>
-          <p>360 場例行賽依日期排好，可以用球隊、上下半季篩選，或直接搜尋場次、日期、球場。</p>
+          <p>360 場例行賽依日期排好，可以用月份、球隊、球場篩選，或直接搜尋場次、日期。</p>
           <div class="demo" id="demo-card" aria-hidden="true"></div>
         </div>
         <div class="step">
@@ -544,7 +623,7 @@
           <span class="no">STEP 03</span>
           <h3>做一張限動分享圖</h3>
           <p>放上你這季的照片，下載 9:16 圖片分享到 IG 限動。</p>
-          <div class="demo" aria-hidden="true"><span class="demo-story"><i></i><i></i><i style="width:55%"></i></span><span class="demo-soon">下一版推出</span></div>
+          <div class="demo" aria-hidden="true"><span class="demo-story"><i></i><i></i><i style="width:55%"></i></span><span class="demo-soon">1080 × 1920 PNG</span></div>
         </div>
       </div>
     </section>
@@ -558,15 +637,24 @@
       <ul class="notes">
         <li><span><b>只算進場</b>：轉播、直播看的比賽不列入統計。</span></li>
         <li><span><b>紀錄只存在你的手機</b>：不會上傳；換手機或清除瀏覽器資料就會消失。</span></li>
-        <li><span><b>非 CPBL 官方網站</b>：球隊以英文縮寫表示，資料取自 CPBL 官網 2026 一軍例行賽賽程。</span></li>
       </ul>
+      <div class="legal">
+        <div class="legal-item">
+          <div class="legal-k">資料來源</div>
+          <p>中華職棒大聯盟（CPBL）官方網站公開之 2026 年一軍例行賽賽程與比賽結果（3/28–10/06，共 360 場），由本站整理後呈現。若與官方公布內容不一致，以 CPBL 官方資料為準。</p>
+        </div>
+        <div class="legal-item">
+          <div class="legal-k">免責聲明</div>
+          <p>本站為球迷自製的非官方網站，與中華職棒大聯盟及各球團無任何隸屬、授權或贊助關係。球隊名稱僅供辨識，標誌以英文字母與代表色自行設計，未使用任何官方商標或 Logo。統計結果僅供娛樂參考；你的勾選紀錄與照片只存在你的裝置，本站不會蒐集或保存。</p>
+        </div>
+      </div>
       <div class="hero-ctas" id="end-ctas" style="margin-top:0"></div>
     </section>
   </div>
 
   <!-- ==================== Picker ==================== -->
   <section id="view-pick" class="view" hidden>
-    <div class="controls" id="filters"></div>
+    <div class="filters" id="filters"></div>
     <div class="list" id="game-list"></div>
     <div class="footer-bar">
       <div class="picked-stats">
@@ -576,8 +664,8 @@
       <button class="cta" id="go-result">看我的戰績 →</button>
     </div>
     <p class="page-foot">
-      資料：CPBL 官網 2026 一軍例行賽賽程（3/28–10/06，共 360 場）· 只計進場觀賽<br>
-      你的紀錄只存在這台裝置的瀏覽器，不會上傳 · 本站非 CPBL 官方網站，球隊以英文縮寫表示
+      資料來源：CPBL 官方網站 2026 一軍例行賽賽程（3/28–10/06，共 360 場）· 只計進場觀賽<br>
+      球迷自製非官方網站，與 CPBL 及各球團無關 · 紀錄只存在這台裝置，不會上傳
     </p>
   </section>
 
@@ -685,14 +773,14 @@
 const GAMES = [{"n":1,"d":"2026-03-28","a":"中信兄弟","h":"樂天桃猿","as":2,"hs":3,"v":"大巨蛋"},{"n":2,"d":"2026-03-29","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":1,"hs":3,"v":"亞太主"},{"n":3,"d":"2026-03-29","a":"味全龍","h":"樂天桃猿","as":3,"hs":2,"v":"大巨蛋"},{"n":4,"d":"2026-03-29","a":"富邦悍將","h":"中信兄弟","as":8,"hs":2,"v":"洲際"},{"n":5,"d":"2026-03-31","a":"味全龍","h":"中信兄弟","as":1,"hs":4,"v":"洲際"},{"n":6,"d":"2026-03-31","a":"台鋼雄鷹","h":"樂天桃猿","as":3,"hs":1,"v":"樂天桃園"},{"n":7,"d":"2026-03-31","a":"富邦悍將","h":"統一7-ELEVEn獅","as":5,"hs":3,"v":"亞太主"},{"n":8,"d":"2026-04-01","a":"味全龍","h":"中信兄弟","as":8,"hs":2,"v":"洲際"},{"n":9,"d":"2026-04-01","a":"台鋼雄鷹","h":"樂天桃猿","as":6,"hs":1,"v":"樂天桃園"},{"n":10,"d":"2026-04-01","a":"富邦悍將","h":"統一7-ELEVEn獅","as":2,"hs":4,"v":"亞太主"},{"n":11,"d":"2026-04-03","a":"統一7-ELEVEn獅","h":"中信兄弟","as":6,"hs":2,"v":"洲際"},{"n":12,"d":"2026-04-03","a":"樂天桃猿","h":"富邦悍將","as":2,"hs":3,"v":"新莊"},{"n":13,"d":"2026-04-03","a":"台鋼雄鷹","h":"味全龍","as":4,"hs":5,"v":"天母"},{"n":14,"d":"2026-10-05","a":"統一7-ELEVEn獅","h":"中信兄弟","as":7,"hs":4,"v":"洲際","od":"2026-04-04"},{"n":15,"d":"2026-06-27","a":"樂天桃猿","h":"富邦悍將","as":2,"hs":9,"v":"新莊","od":"2026-04-04"},{"n":16,"d":"2026-04-04","a":"台鋼雄鷹","h":"味全龍","as":7,"hs":6,"v":"天母"},{"n":17,"d":"2026-04-05","a":"台鋼雄鷹","h":"味全龍","as":1,"hs":2,"v":"天母"},{"n":18,"d":"2026-04-05","a":"統一7-ELEVEn獅","h":"中信兄弟","as":9,"hs":4,"v":"洲際"},{"n":19,"d":"2026-04-05","a":"樂天桃猿","h":"富邦悍將","as":5,"hs":1,"v":"新莊"},{"n":20,"d":"2026-04-06","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":4,"hs":7,"v":"澄清湖"},{"n":21,"d":"2026-04-06","a":"樂天桃猿","h":"味全龍","as":1,"hs":0,"v":"天母"},{"n":22,"d":"2026-04-06","a":"中信兄弟","h":"富邦悍將","as":4,"hs":5,"v":"新莊"},{"n":23,"d":"2026-04-07","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":1,"hs":1,"v":"澄清湖"},{"n":24,"d":"2026-06-02","a":"樂天桃猿","h":"味全龍","as":0,"hs":3,"v":"天母","od":"2026-04-07"},{"n":25,"d":"2026-05-12","a":"中信兄弟","h":"富邦悍將","as":1,"hs":2,"v":"新莊","od":"2026-04-07"},{"n":26,"d":"2026-04-10","a":"富邦悍將","h":"台鋼雄鷹","as":6,"hs":2,"v":"澄清湖"},{"n":27,"d":"2026-04-10","a":"味全龍","h":"統一7-ELEVEn獅","as":4,"hs":2,"v":"亞太主"},{"n":28,"d":"2026-04-10","a":"中信兄弟","h":"樂天桃猿","as":2,"hs":4,"v":"樂天桃園"},{"n":29,"d":"2026-04-11","a":"富邦悍將","h":"台鋼雄鷹","as":0,"hs":12,"v":"澄清湖"},{"n":30,"d":"2026-04-11","a":"味全龍","h":"統一7-ELEVEn獅","as":8,"hs":0,"v":"亞太主"},{"n":31,"d":"2026-04-11","a":"中信兄弟","h":"樂天桃猿","as":1,"hs":2,"v":"樂天桃園"},{"n":32,"d":"2026-04-12","a":"富邦悍將","h":"台鋼雄鷹","as":5,"hs":12,"v":"澄清湖"},{"n":33,"d":"2026-04-12","a":"味全龍","h":"統一7-ELEVEn獅","as":4,"hs":2,"v":"亞太主"},{"n":34,"d":"2026-04-12","a":"中信兄弟","h":"樂天桃猿","as":14,"hs":4,"v":"樂天桃園"},{"n":35,"d":"2026-04-14","a":"味全龍","h":"富邦悍將","as":3,"hs":4,"v":"新莊"},{"n":36,"d":"2026-04-14","a":"台鋼雄鷹","h":"中信兄弟","as":8,"hs":4,"v":"洲際"},{"n":37,"d":"2026-04-15","a":"味全龍","h":"富邦悍將","as":1,"hs":0,"v":"新莊"},{"n":38,"d":"2026-04-15","a":"台鋼雄鷹","h":"中信兄弟","as":4,"hs":0,"v":"洲際"},{"n":39,"d":"2026-04-15","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":5,"hs":1,"v":"樂天桃園"},{"n":40,"d":"2026-04-16","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":7,"hs":3,"v":"樂天桃園"},{"n":41,"d":"2026-04-17","a":"樂天桃猿","h":"台鋼雄鷹","as":6,"hs":3,"v":"澄清湖"},{"n":42,"d":"2026-04-17","a":"統一7-ELEVEn獅","h":"富邦悍將","as":9,"hs":5,"v":"新莊"},{"n":43,"d":"2026-04-17","a":"中信兄弟","h":"味全龍","as":5,"hs":3,"v":"天母"},{"n":44,"d":"2026-04-18","a":"樂天桃猿","h":"台鋼雄鷹","as":1,"hs":6,"v":"澄清湖"},{"n":45,"d":"2026-04-18","a":"統一7-ELEVEn獅","h":"富邦悍將","as":0,"hs":1,"v":"新莊"},{"n":46,"d":"2026-04-18","a":"中信兄弟","h":"味全龍","as":1,"hs":8,"v":"天母"},{"n":47,"d":"2026-04-19","a":"樂天桃猿","h":"台鋼雄鷹","as":4,"hs":5,"v":"澄清湖"},{"n":48,"d":"2026-04-19","a":"中信兄弟","h":"味全龍","as":3,"hs":9,"v":"天母"},{"n":49,"d":"2026-04-19","a":"統一7-ELEVEn獅","h":"富邦悍將","as":1,"hs":7,"v":"新莊"},{"n":50,"d":"2026-04-21","a":"中信兄弟","h":"統一7-ELEVEn獅","as":6,"hs":0,"v":"亞太主"},{"n":51,"d":"2026-04-21","a":"富邦悍將","h":"樂天桃猿","as":1,"hs":6,"v":"樂天桃園"},{"n":52,"d":"2026-04-22","a":"中信兄弟","h":"統一7-ELEVEn獅","as":7,"hs":2,"v":"亞太主"},{"n":53,"d":"2026-04-22","a":"富邦悍將","h":"樂天桃猿","as":2,"hs":4,"v":"樂天桃園"},{"n":54,"d":"2026-04-22","a":"味全龍","h":"台鋼雄鷹","as":8,"hs":0,"v":"嘉義市"},{"n":55,"d":"2026-04-23","a":"味全龍","h":"台鋼雄鷹","as":3,"hs":4,"v":"澄清湖"},{"n":56,"d":"2026-04-24","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":6,"hs":7,"v":"亞太主"},{"n":57,"d":"2026-06-23","a":"富邦悍將","h":"中信兄弟","as":3,"hs":6,"v":"洲際","od":"2026-04-24"},{"n":58,"d":"2026-06-24","a":"味全龍","h":"樂天桃猿","as":2,"hs":7,"v":"樂天桃園","od":"2026-04-24"},{"n":59,"d":"2026-04-25","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":4,"hs":6,"v":"亞太主"},{"n":60,"d":"2026-04-25","a":"富邦悍將","h":"中信兄弟","as":0,"hs":1,"v":"洲際"},{"n":61,"d":"2026-04-25","a":"味全龍","h":"樂天桃猿","as":4,"hs":1,"v":"樂天桃園"},{"n":62,"d":"2026-04-26","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":5,"hs":9,"v":"亞太主"},{"n":63,"d":"2026-04-26","a":"富邦悍將","h":"中信兄弟","as":8,"hs":5,"v":"洲際"},{"n":64,"d":"2026-04-26","a":"味全龍","h":"樂天桃猿","as":2,"hs":3,"v":"樂天桃園"},{"n":65,"d":"2026-04-28","a":"統一7-ELEVEn獅","h":"味全龍","as":3,"hs":5,"v":"天母"},{"n":66,"d":"2026-04-28","a":"台鋼雄鷹","h":"富邦悍將","as":0,"hs":6,"v":"新莊"},{"n":67,"d":"2026-04-29","a":"統一7-ELEVEn獅","h":"味全龍","as":0,"hs":1,"v":"天母"},{"n":68,"d":"2026-04-29","a":"台鋼雄鷹","h":"富邦悍將","as":5,"hs":1,"v":"新莊"},{"n":69,"d":"2026-04-29","a":"樂天桃猿","h":"中信兄弟","as":2,"hs":2,"v":"洲際"},{"n":70,"d":"2026-04-30","a":"樂天桃猿","h":"中信兄弟","as":3,"hs":1,"v":"洲際"},{"n":71,"d":"2026-05-01","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":0,"hs":3,"v":"亞太主"},{"n":72,"d":"2026-05-01","a":"中信兄弟","h":"台鋼雄鷹","as":2,"hs":0,"v":"大巨蛋"},{"n":73,"d":"2026-05-01","a":"富邦悍將","h":"味全龍","as":1,"hs":3,"v":"天母"},{"n":74,"d":"2026-05-02","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":2,"hs":9,"v":"亞太主"},{"n":75,"d":"2026-05-02","a":"中信兄弟","h":"台鋼雄鷹","as":0,"hs":2,"v":"大巨蛋"},{"n":76,"d":"2026-05-02","a":"富邦悍將","h":"味全龍","as":5,"hs":4,"v":"天母"},{"n":77,"d":"2026-05-03","a":"中信兄弟","h":"台鋼雄鷹","as":2,"hs":3,"v":"大巨蛋"},{"n":78,"d":"2026-05-03","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":1,"hs":4,"v":"亞太主"},{"n":79,"d":"2026-05-03","a":"富邦悍將","h":"味全龍","as":4,"hs":6,"v":"天母"},{"n":80,"d":"2026-06-26","a":"樂天桃猿","h":"富邦悍將","as":3,"hs":1,"v":"新莊","od":"2026-05-05"},{"n":81,"d":"2026-05-05","a":"中信兄弟","h":"味全龍","as":3,"hs":5,"v":"大巨蛋"},{"n":82,"d":"2026-05-06","a":"樂天桃猿","h":"富邦悍將","as":1,"hs":7,"v":"新莊"},{"n":83,"d":"2026-05-06","a":"中信兄弟","h":"味全龍","as":6,"hs":0,"v":"大巨蛋"},{"n":84,"d":"2026-05-06","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":1,"hs":4,"v":"嘉義市"},{"n":85,"d":"2026-05-08","a":"味全龍","h":"富邦悍將","as":1,"hs":2,"v":"新莊"},{"n":86,"d":"2026-05-08","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":1,"hs":2,"v":"樂天桃園"},{"n":87,"d":"2026-05-08","a":"台鋼雄鷹","h":"中信兄弟","as":6,"hs":0,"v":"洲際"},{"n":88,"d":"2026-05-09","a":"味全龍","h":"富邦悍將","as":8,"hs":2,"v":"新莊"},{"n":89,"d":"2026-05-09","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":1,"hs":0,"v":"樂天桃園"},{"n":90,"d":"2026-05-09","a":"台鋼雄鷹","h":"中信兄弟","as":2,"hs":4,"v":"洲際"},{"n":91,"d":"2026-05-10","a":"味全龍","h":"富邦悍將","as":7,"hs":8,"v":"新莊"},{"n":92,"d":"2026-05-10","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":2,"hs":7,"v":"樂天桃園"},{"n":93,"d":"2026-05-10","a":"台鋼雄鷹","h":"中信兄弟","as":2,"hs":0,"v":"洲際"},{"n":94,"d":"2026-05-12","a":"味全龍","h":"統一7-ELEVEn獅","as":3,"hs":5,"v":"亞太主"},{"n":95,"d":"2026-05-13","a":"味全龍","h":"統一7-ELEVEn獅","as":1,"hs":2,"v":"亞太主"},{"n":96,"d":"2026-05-13","a":"富邦悍將","h":"中信兄弟","as":17,"hs":2,"v":"洲際"},{"n":97,"d":"2026-05-13","a":"樂天桃猿","h":"台鋼雄鷹","as":3,"hs":1,"v":"嘉義市"},{"n":98,"d":"2026-05-14","a":"樂天桃猿","h":"台鋼雄鷹","as":2,"hs":3,"v":"澄清湖"},{"n":99,"d":"2026-05-15","a":"中信兄弟","h":"統一7-ELEVEn獅","as":7,"hs":4,"v":"亞太主"},{"n":100,"d":"2026-05-15","a":"樂天桃猿","h":"味全龍","as":1,"hs":3,"v":"天母"},{"n":101,"d":"2026-05-15","a":"台鋼雄鷹","h":"富邦悍將","as":1,"hs":3,"v":"新莊"},{"n":102,"d":"2026-05-16","a":"中信兄弟","h":"統一7-ELEVEn獅","as":1,"hs":0,"v":"亞太主"},{"n":103,"d":"2026-05-16","a":"樂天桃猿","h":"味全龍","as":1,"hs":3,"v":"天母"},{"n":104,"d":"2026-05-16","a":"台鋼雄鷹","h":"富邦悍將","as":3,"hs":6,"v":"新莊"},{"n":105,"d":"2026-05-17","a":"中信兄弟","h":"統一7-ELEVEn獅","as":3,"hs":4,"v":"亞太主"},{"n":106,"d":"2026-05-17","a":"樂天桃猿","h":"味全龍","as":0,"hs":2,"v":"天母"},{"n":107,"d":"2026-05-17","a":"台鋼雄鷹","h":"富邦悍將","as":6,"hs":5,"v":"新莊"},{"n":108,"d":"2026-05-19","a":"台鋼雄鷹","h":"味全龍","as":0,"hs":2,"v":"花蓮"},{"n":109,"d":"2026-05-20","a":"台鋼雄鷹","h":"味全龍","as":2,"hs":5,"v":"花蓮"},{"n":110,"d":"2026-05-20","a":"中信兄弟","h":"樂天桃猿","as":7,"hs":9,"v":"樂天桃園"},{"n":111,"d":"2026-05-20","a":"統一7-ELEVEn獅","h":"富邦悍將","as":2,"hs":9,"v":"新莊"},{"n":112,"d":"2026-05-21","a":"統一7-ELEVEn獅","h":"富邦悍將","as":2,"hs":6,"v":"新莊"},{"n":113,"d":"2026-05-22","a":"富邦悍將","h":"樂天桃猿","as":2,"hs":3,"v":"樂天桃園"},{"n":114,"d":"2026-05-22","a":"味全龍","h":"中信兄弟","as":7,"hs":2,"v":"大巨蛋"},{"n":115,"d":"2026-05-22","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":1,"hs":3,"v":"澄清湖"},{"n":116,"d":"2026-05-23","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":0,"hs":2,"v":"澄清湖"},{"n":117,"d":"2026-05-23","a":"富邦悍將","h":"樂天桃猿","as":3,"hs":1,"v":"樂天桃園"},{"n":118,"d":"2026-05-23","a":"味全龍","h":"中信兄弟","as":2,"hs":0,"v":"大巨蛋"},{"n":119,"d":"2026-05-24","a":"味全龍","h":"中信兄弟","as":5,"hs":0,"v":"大巨蛋"},{"n":120,"d":"2026-05-24","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":7,"hs":5,"v":"澄清湖"},{"n":121,"d":"2026-05-24","a":"富邦悍將","h":"樂天桃猿","as":1,"hs":4,"v":"樂天桃園"},{"n":122,"d":"2026-05-26","a":"富邦悍將","h":"味全龍","as":3,"hs":4,"v":"大巨蛋"},{"n":123,"d":"2026-05-26","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":1,"hs":0,"v":"嘉義市"},{"n":124,"d":"2026-05-27","a":"富邦悍將","h":"味全龍","as":5,"hs":1,"v":"大巨蛋"},{"n":125,"d":"2026-05-27","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":5,"hs":8,"v":"嘉義市"},{"n":126,"d":"2026-05-27","a":"中信兄弟","h":"台鋼雄鷹","as":0,"hs":6,"v":"澄清湖"},{"n":127,"d":"2026-05-28","a":"中信兄弟","h":"台鋼雄鷹","as":4,"hs":6,"v":"澄清湖"},{"n":128,"d":"2026-05-29","a":"統一7-ELEVEn獅","h":"味全龍","as":7,"hs":8,"v":"天母"},{"n":129,"d":"2026-05-29","a":"中信兄弟","h":"富邦悍將","as":2,"hs":4,"v":"大巨蛋"},{"n":130,"d":"2026-05-29","a":"台鋼雄鷹","h":"樂天桃猿","as":9,"hs":3,"v":"樂天桃園"},{"n":131,"d":"2026-05-30","a":"統一7-ELEVEn獅","h":"味全龍","as":0,"hs":2,"v":"天母"},{"n":132,"d":"2026-05-30","a":"中信兄弟","h":"富邦悍將","as":10,"hs":1,"v":"大巨蛋"},{"n":133,"d":"2026-05-30","a":"台鋼雄鷹","h":"樂天桃猿","as":5,"hs":3,"v":"樂天桃園"},{"n":134,"d":"2026-05-31","a":"統一7-ELEVEn獅","h":"味全龍","as":4,"hs":1,"v":"天母"},{"n":135,"d":"2026-05-31","a":"中信兄弟","h":"富邦悍將","as":6,"hs":3,"v":"大巨蛋"},{"n":136,"d":"2026-05-31","a":"台鋼雄鷹","h":"樂天桃猿","as":6,"hs":7,"v":"樂天桃園"},{"n":137,"d":"2026-06-02","a":"統一7-ELEVEn獅","h":"中信兄弟","as":7,"hs":3,"v":"大巨蛋"},{"n":138,"d":"2026-06-03","a":"統一7-ELEVEn獅","h":"中信兄弟","as":2,"hs":0,"v":"大巨蛋"},{"n":139,"d":"2026-06-03","a":"味全龍","h":"樂天桃猿","as":7,"hs":3,"v":"樂天桃園"},{"n":140,"d":"2026-06-03","a":"富邦悍將","h":"台鋼雄鷹","as":2,"hs":13,"v":"澄清湖"},{"n":141,"d":"2026-06-24","a":"富邦悍將","h":"台鋼雄鷹","as":3,"hs":1,"v":"澄清湖","od":"2026-06-04"},{"n":142,"d":"2026-06-05","a":"樂天桃猿","h":"中信兄弟","as":6,"hs":7,"v":"洲際"},{"n":143,"d":"2026-06-05","a":"富邦悍將","h":"統一7-ELEVEn獅","as":6,"hs":2,"v":"大巨蛋"},{"n":144,"d":"2026-06-23","a":"味全龍","h":"台鋼雄鷹","as":1,"hs":2,"v":"澄清湖","od":"2026-06-05"},{"n":145,"d":"2026-06-06","a":"富邦悍將","h":"統一7-ELEVEn獅","as":0,"hs":8,"v":"大巨蛋"},{"n":146,"d":"2026-06-06","a":"味全龍","h":"台鋼雄鷹","as":10,"hs":2,"v":"澄清湖"},{"n":147,"d":"2026-06-06","a":"樂天桃猿","h":"中信兄弟","as":4,"hs":8,"v":"洲際"},{"n":148,"d":"2026-06-07","a":"富邦悍將","h":"統一7-ELEVEn獅","as":4,"hs":1,"v":"大巨蛋"},{"n":149,"d":"2026-06-07","a":"味全龍","h":"台鋼雄鷹","as":1,"hs":2,"v":"澄清湖"},{"n":150,"d":"2026-06-28","a":"樂天桃猿","h":"中信兄弟","as":2,"hs":0,"v":"洲際","od":"2026-06-07","ok":"s"},{"n":151,"d":"2026-06-28","a":"味全龍","h":"富邦悍將","as":1,"hs":4,"v":"新莊","od":"2026-06-09"},{"n":152,"d":"2026-06-26","a":"台鋼雄鷹","h":"中信兄弟","as":2,"hs":3,"v":"洲際","od":"2026-06-09"},{"n":153,"d":"2026-06-23","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":1,"hs":0,"v":"樂天桃園","od":"2026-06-10"},{"n":154,"d":"2026-06-11","a":"中信兄弟","h":"味全龍","as":3,"hs":4,"v":"天母"},{"n":155,"d":"2026-06-11","a":"統一7-ELEVEn獅","h":"富邦悍將","as":1,"hs":6,"v":"新莊"},{"n":156,"d":"2026-06-17","a":"樂天桃猿","h":"台鋼雄鷹","as":9,"hs":7,"v":"澄清湖","od":"2026-06-11"},{"n":157,"d":"2026-06-30","a":"中信兄弟","h":"味全龍","as":1,"hs":9,"v":"天母","od":"2026-06-12"},{"n":158,"d":"2026-06-30","a":"統一7-ELEVEn獅","h":"富邦悍將","as":5,"hs":6,"v":"新莊","od":"2026-06-12"},{"n":159,"d":"2026-06-12","a":"樂天桃猿","h":"台鋼雄鷹","as":1,"hs":0,"v":"澄清湖"},{"n":160,"d":"2026-06-13","a":"統一7-ELEVEn獅","h":"味全龍","as":6,"hs":1,"v":"天母"},{"n":161,"d":"2026-06-13","a":"台鋼雄鷹","h":"富邦悍將","as":9,"hs":0,"v":"新莊"},{"n":162,"d":"2026-06-13","a":"樂天桃猿","h":"中信兄弟","as":9,"hs":9,"v":"洲際"},{"n":163,"d":"2026-06-14","a":"統一7-ELEVEn獅","h":"味全龍","as":7,"hs":5,"v":"天母"},{"n":164,"d":"2026-06-14","a":"台鋼雄鷹","h":"富邦悍將","as":0,"hs":7,"v":"新莊"},{"n":165,"d":"2026-07-02","a":"樂天桃猿","h":"中信兄弟","as":9,"hs":6,"v":"洲際","od":"2026-06-14"},{"n":166,"d":"2026-06-16","a":"中信兄弟","h":"台鋼雄鷹","as":1,"hs":6,"v":"澄清湖"},{"n":167,"d":"2026-07-01","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":0,"hs":1,"v":"亞太主","od":"2026-06-16"},{"n":168,"d":"2026-06-17","a":"富邦悍將","h":"味全龍","as":1,"hs":3,"v":"天母"},{"n":169,"d":"2026-06-18","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":1,"hs":7,"v":"亞太主"},{"n":170,"d":"2026-06-18","a":"味全龍","h":"樂天桃猿","as":7,"hs":0,"v":"樂天桃園"},{"n":171,"d":"2026-06-18","a":"富邦悍將","h":"中信兄弟","as":4,"hs":5,"v":"洲際"},{"n":172,"d":"2026-06-19","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":1,"hs":0,"v":"亞太主"},{"n":173,"d":"2026-06-19","a":"味全龍","h":"樂天桃猿","as":11,"hs":3,"v":"樂天桃園"},{"n":174,"d":"2026-06-19","a":"富邦悍將","h":"中信兄弟","as":11,"hs":6,"v":"洲際"},{"n":175,"d":"2026-06-20","a":"中信兄弟","h":"統一7-ELEVEn獅","as":7,"hs":1,"v":"亞太主"},{"n":176,"d":"2026-06-20","a":"味全龍","h":"台鋼雄鷹","as":4,"hs":0,"v":"澄清湖"},{"n":177,"d":"2026-06-20","a":"富邦悍將","h":"樂天桃猿","as":2,"hs":0,"v":"樂天桃園"},{"n":178,"d":"2026-06-21","a":"中信兄弟","h":"統一7-ELEVEn獅","as":6,"hs":4,"v":"亞太主"},{"n":179,"d":"2026-06-21","a":"味全龍","h":"台鋼雄鷹","as":7,"hs":5,"v":"澄清湖"},{"n":180,"d":"2026-06-21","a":"富邦悍將","h":"樂天桃猿","as":3,"hs":1,"v":"樂天桃園"},{"n":181,"d":"2026-07-03","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":3,"hs":6,"v":"澄清湖"},{"n":182,"d":"2026-07-03","a":"富邦悍將","h":"味全龍","as":6,"hs":3,"v":"天母"},{"n":183,"d":"2026-07-03","a":"樂天桃猿","h":"中信兄弟","as":5,"hs":3,"v":"洲際"},{"n":184,"d":"2026-07-04","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":5,"hs":4,"v":"澄清湖"},{"n":185,"d":"2026-07-04","a":"富邦悍將","h":"味全龍","as":2,"hs":11,"v":"天母"},{"n":186,"d":"2026-07-04","a":"樂天桃猿","h":"中信兄弟","as":1,"hs":2,"v":"洲際"},{"n":187,"d":"2026-07-05","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":1,"hs":4,"v":"澄清湖"},{"n":188,"d":"2026-07-05","a":"富邦悍將","h":"味全龍","as":3,"hs":5,"v":"天母"},{"n":189,"d":"2026-07-05","a":"樂天桃猿","h":"中信兄弟","as":4,"hs":2,"v":"洲際"},{"n":190,"d":"2026-07-07","a":"樂天桃猿","h":"富邦悍將","as":5,"hs":3,"v":"新莊"},{"n":191,"d":"2026-07-07","a":"中信兄弟","h":"統一7-ELEVEn獅","as":0,"hs":5,"v":"亞太主"},{"n":192,"d":"2026-07-08","a":"樂天桃猿","h":"富邦悍將","as":1,"hs":0,"v":"新莊"},{"n":193,"d":"2026-07-08","a":"中信兄弟","h":"統一7-ELEVEn獅","as":7,"hs":5,"v":"亞太主"},{"n":194,"d":"2026-07-08","a":"台鋼雄鷹","h":"味全龍","as":2,"hs":1,"v":"斗六"},{"n":195,"d":"2026-07-09","a":"台鋼雄鷹","h":"味全龍","as":5,"hs":0,"v":"斗六"},{"n":196,"d":"2026-09-22","a":"中信兄弟","h":"富邦悍將","as":9,"hs":8,"v":"新莊","od":"2026-07-10"},{"n":197,"d":"2026-09-22","a":"台鋼雄鷹","h":"樂天桃猿","as":5,"hs":6,"v":"樂天桃園","od":"2026-07-10"},{"n":198,"d":"2026-07-10","a":"味全龍","h":"統一7-ELEVEn獅","as":4,"hs":7,"v":"亞太主"},{"n":199,"d":"2026-10-03","a":"味全龍","h":"統一7-ELEVEn獅","as":3,"hs":5,"v":"亞太主","od":"2026-07-11"},{"n":200,"d":"2026-10-03","a":"中信兄弟","h":"富邦悍將","as":3,"hs":0,"v":"新莊","od":"2026-07-11"},{"n":201,"d":"2026-10-03","a":"台鋼雄鷹","h":"樂天桃猿","as":5,"hs":7,"v":"樂天桃園","od":"2026-07-11"},{"n":202,"d":"2026-07-12","a":"味全龍","h":"統一7-ELEVEn獅","as":6,"hs":11,"v":"亞太主"},{"n":203,"d":"2026-07-12","a":"中信兄弟","h":"富邦悍將","as":8,"hs":2,"v":"新莊"},{"n":204,"d":"2026-07-12","a":"台鋼雄鷹","h":"樂天桃猿","as":1,"hs":6,"v":"樂天桃園"},{"n":205,"d":"2026-07-14","a":"味全龍","h":"中信兄弟","as":2,"hs":1,"v":"嘉義市"},{"n":206,"d":"2026-07-14","a":"富邦悍將","h":"台鋼雄鷹","as":2,"hs":0,"v":"台東"},{"n":207,"d":"2026-07-15","a":"味全龍","h":"中信兄弟","as":4,"hs":0,"v":"嘉義市"},{"n":208,"d":"2026-07-15","a":"富邦悍將","h":"台鋼雄鷹","as":0,"hs":12,"v":"台東"},{"n":209,"d":"2026-07-15","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":3,"hs":2,"v":"樂天桃園"},{"n":210,"d":"2026-07-16","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":1,"hs":2,"v":"樂天桃園"},{"n":211,"d":"2026-07-21","a":"台鋼雄鷹","h":"中信兄弟","as":9,"hs":6,"v":"洲際"},{"n":212,"d":"2026-07-21","a":"樂天桃猿","h":"味全龍","as":2,"hs":3,"v":"大巨蛋"},{"n":213,"d":"2026-07-22","a":"台鋼雄鷹","h":"中信兄弟","as":4,"hs":19,"v":"洲際"},{"n":214,"d":"2026-07-22","a":"樂天桃猿","h":"味全龍","as":1,"hs":2,"v":"大巨蛋"},{"n":215,"d":"2026-07-22","a":"富邦悍將","h":"統一7-ELEVEn獅","as":3,"hs":1,"v":"亞太主"},{"n":216,"d":"2026-07-23","a":"富邦悍將","h":"統一7-ELEVEn獅","as":6,"hs":0,"v":"亞太主"},{"n":217,"d":"2026-07-24","a":"統一7-ELEVEn獅","h":"中信兄弟","as":5,"hs":2,"v":"洲際"},{"n":218,"d":"2026-07-24","a":"味全龍","h":"台鋼雄鷹","as":3,"hs":4,"v":"澄清湖"},{"n":219,"d":"2026-07-24","a":"富邦悍將","h":"樂天桃猿","as":6,"hs":5,"v":"大巨蛋"},{"n":220,"d":"2026-07-25","a":"味全龍","h":"台鋼雄鷹","as":5,"hs":4,"v":"澄清湖"},{"n":221,"d":"2026-07-25","a":"統一7-ELEVEn獅","h":"中信兄弟","as":4,"hs":3,"v":"洲際"},{"n":222,"d":"2026-07-25","a":"富邦悍將","h":"樂天桃猿","as":2,"hs":3,"v":"大巨蛋"},{"n":223,"d":"2026-07-26","a":"味全龍","h":"台鋼雄鷹","as":2,"hs":4,"v":"澄清湖"},{"n":224,"d":"2026-07-26","a":"統一7-ELEVEn獅","h":"中信兄弟","as":0,"hs":1,"v":"洲際"},{"n":225,"d":"2026-07-26","a":"富邦悍將","h":"樂天桃猿","as":0,"hs":2,"v":"大巨蛋"},{"n":226,"d":"2026-07-28","a":"味全龍","h":"富邦悍將","as":6,"hs":1,"v":"大巨蛋"},{"n":227,"d":"2026-07-28","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":1,"hs":3,"v":"亞太主"},{"n":228,"d":"2026-07-29","a":"味全龍","h":"富邦悍將","as":3,"hs":1,"v":"大巨蛋"},{"n":229,"d":"2026-07-29","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":5,"hs":4,"v":"亞太主"},{"n":230,"d":"2026-07-29","a":"中信兄弟","h":"樂天桃猿","as":5,"hs":12,"v":"樂天桃園"},{"n":231,"d":"2026-07-30","a":"中信兄弟","h":"樂天桃猿","as":10,"hs":5,"v":"樂天桃園"},{"n":232,"d":"2026-07-31","a":"台鋼雄鷹","h":"富邦悍將","as":6,"hs":9,"v":"新莊"},{"n":233,"d":"","a":"中信兄弟","h":"味全龍","as":2,"hs":4,"v":"大巨蛋"},{"n":234,"d":"","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":1,"hs":0,"v":"亞太主"},{"n":235,"d":"2026-08-01","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":3,"hs":2,"v":"亞太主"},{"n":236,"d":"2026-08-01","a":"台鋼雄鷹","h":"富邦悍將","as":1,"hs":3,"v":"新莊"},{"n":237,"d":"2026-08-01","a":"中信兄弟","h":"味全龍","as":1,"hs":4,"v":"大巨蛋"},{"n":238,"d":"2026-08-02","a":"中信兄弟","h":"味全龍","as":7,"hs":0,"v":"大巨蛋"},{"n":239,"d":"2026-08-02","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":0,"hs":2,"v":"亞太主"},{"n":240,"d":"2026-08-02","a":"台鋼雄鷹","h":"富邦悍將","as":10,"hs":3,"v":"新莊"},{"n":241,"d":"2026-08-04","a":"樂天桃猿","h":"台鋼雄鷹","as":8,"hs":1,"v":"嘉義市"},{"n":242,"d":"2026-08-04","a":"富邦悍將","h":"中信兄弟","as":0,"hs":5,"v":"洲際"},{"n":243,"d":"2026-08-05","a":"樂天桃猿","h":"台鋼雄鷹","as":6,"hs":7,"v":"澄清湖"},{"n":244,"d":"2026-08-05","a":"富邦悍將","h":"中信兄弟","as":10,"hs":2,"v":"洲際"},{"n":245,"d":"2026-08-05","a":"統一7-ELEVEn獅","h":"味全龍","as":0,"hs":3,"v":"天母"},{"n":246,"d":"2026-08-06","a":"統一7-ELEVEn獅","h":"味全龍","as":8,"hs":2,"v":"天母"},{"n":247,"d":"2026-08-07","a":"中信兄弟","h":"台鋼雄鷹","as":5,"hs":2,"v":"澄清湖"},{"n":248,"d":"2026-08-07","a":"味全龍","h":"樂天桃猿","as":1,"hs":3,"v":"樂天桃園"},{"n":249,"d":"2026-08-07","a":"統一7-ELEVEn獅","h":"富邦悍將","as":4,"hs":0,"v":"新莊"},{"n":250,"d":"2026-08-08","a":"中信兄弟","h":"台鋼雄鷹","as":6,"hs":1,"v":"澄清湖"},{"n":251,"d":"2026-10-04","a":"味全龍","h":"樂天桃猿","as":9,"hs":4,"v":"樂天桃園","od":"2026-08-08"},{"n":252,"d":"2026-10-04","a":"統一7-ELEVEn獅","h":"富邦悍將","as":6,"hs":1,"v":"新莊","od":"2026-08-08"},{"n":253,"d":"2026-08-09","a":"中信兄弟","h":"台鋼雄鷹","as":10,"hs":2,"v":"澄清湖"},{"n":254,"d":"2026-09-30","a":"味全龍","h":"樂天桃猿","as":5,"hs":3,"v":"樂天桃園","od":"2026-08-09"},{"n":255,"d":"2026-09-30","a":"統一7-ELEVEn獅","h":"富邦悍將","as":4,"hs":2,"v":"新莊","od":"2026-08-09"},{"n":256,"d":"2026-08-11","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":2,"hs":3,"v":"台東"},{"n":257,"d":"2026-08-11","a":"味全龍","h":"台鋼雄鷹","as":7,"hs":4,"v":"澄清湖"},{"n":258,"d":"2026-08-12","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":4,"hs":0,"v":"台東"},{"n":259,"d":"2026-08-12","a":"味全龍","h":"台鋼雄鷹","as":4,"hs":3,"v":"澄清湖"},{"n":260,"d":"2026-08-12","a":"中信兄弟","h":"富邦悍將","as":2,"hs":3,"v":"新莊"},{"n":261,"d":"2026-08-13","a":"中信兄弟","h":"富邦悍將","as":8,"hs":6,"v":"新莊"},{"n":262,"d":"2026-08-14","a":"富邦悍將","h":"統一7-ELEVEn獅","as":7,"hs":3,"v":"亞太主"},{"n":263,"d":"2026-08-14","a":"樂天桃猿","h":"味全龍","as":1,"hs":2,"v":"大巨蛋"},{"n":264,"d":"2026-08-14","a":"台鋼雄鷹","h":"中信兄弟","as":0,"hs":7,"v":"洲際"},{"n":265,"d":"2026-08-15","a":"富邦悍將","h":"統一7-ELEVEn獅","as":1,"hs":12,"v":"亞太主"},{"n":266,"d":"2026-08-15","a":"樂天桃猿","h":"味全龍","as":3,"hs":9,"v":"大巨蛋"},{"n":267,"d":"2026-08-15","a":"台鋼雄鷹","h":"中信兄弟","as":11,"hs":4,"v":"洲際"},{"n":268,"d":"2026-08-16","a":"樂天桃猿","h":"味全龍","as":5,"hs":1,"v":"大巨蛋"},{"n":269,"d":"2026-08-16","a":"富邦悍將","h":"統一7-ELEVEn獅","as":8,"hs":2,"v":"亞太主"},{"n":270,"d":"2026-10-04","a":"台鋼雄鷹","h":"中信兄弟","as":1,"hs":12,"v":"洲際","od":"2026-08-16"},{"n":271,"d":"2026-08-18","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":8,"hs":0,"v":"台東"},{"n":272,"d":"2026-08-18","a":"富邦悍將","h":"樂天桃猿","as":5,"hs":0,"v":"樂天桃園"},{"n":273,"d":"2026-08-19","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":6,"hs":8,"v":"台東"},{"n":274,"d":"2026-10-06","a":"富邦悍將","h":"樂天桃猿","as":6,"hs":1,"v":"樂天桃園","od":"2026-08-19"},{"n":275,"d":"2026-08-19","a":"中信兄弟","h":"味全龍","as":6,"hs":2,"v":"大巨蛋"},{"n":276,"d":"2026-08-20","a":"中信兄弟","h":"味全龍","as":4,"hs":3,"v":"大巨蛋"},{"n":277,"d":"2026-10-01","a":"樂天桃猿","h":"台鋼雄鷹","as":2,"hs":1,"v":"澄清湖","od":"2026-08-21"},{"n":278,"d":"2026-08-21","a":"中信兄弟","h":"統一7-ELEVEn獅","as":2,"hs":1,"v":"大巨蛋"},{"n":279,"d":"2026-10-02","a":"味全龍","h":"富邦悍將","as":2,"hs":1,"v":"新莊","od":"2026-08-21"},{"n":280,"d":"2026-09-14","a":"樂天桃猿","h":"台鋼雄鷹","as":2,"hs":1,"v":"澄清湖","od":"2026-08-22"},{"n":281,"d":"2026-08-22","a":"中信兄弟","h":"統一7-ELEVEn獅","as":3,"hs":5,"v":"大巨蛋"},{"n":282,"d":"2026-09-15","a":"味全龍","h":"富邦悍將","as":3,"hs":0,"v":"新莊","od":"2026-08-22"},{"n":283,"d":"2026-10-02","a":"樂天桃猿","h":"台鋼雄鷹","as":3,"hs":7,"v":"澄清湖","od":"2026-08-23"},{"n":284,"d":"2026-08-23","a":"中信兄弟","h":"統一7-ELEVEn獅","as":11,"hs":1,"v":"大巨蛋"},{"n":285,"d":"2026-08-23","a":"味全龍","h":"富邦悍將","as":3,"hs":2,"v":"新莊"},{"n":286,"d":"2026-08-25","a":"樂天桃猿","h":"中信兄弟","as":11,"hs":1,"v":"大巨蛋"},{"n":287,"d":"2026-09-22","a":"味全龍","h":"統一7-ELEVEn獅","as":13,"hs":1,"v":"亞太主","od":"2026-08-25"},{"n":288,"d":"2026-08-26","a":"樂天桃猿","h":"中信兄弟","as":0,"hs":2,"v":"大巨蛋"},{"n":289,"d":"2026-08-26","a":"味全龍","h":"統一7-ELEVEn獅","as":0,"hs":1,"v":"亞太主"},{"n":290,"d":"","a":"台鋼雄鷹","h":"富邦悍將","as":4,"hs":5,"v":"新莊"},{"n":291,"d":"2026-08-27","a":"台鋼雄鷹","h":"富邦悍將","as":2,"hs":0,"v":"新莊"},{"n":292,"d":"2026-08-28","a":"富邦悍將","h":"中信兄弟","as":4,"hs":5,"v":"洲際"},{"n":293,"d":"2026-08-28","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":4,"hs":0,"v":"大巨蛋"},{"n":294,"d":"2026-08-28","a":"台鋼雄鷹","h":"味全龍","as":7,"hs":4,"v":"天母"},{"n":295,"d":"2026-08-29","a":"富邦悍將","h":"中信兄弟","as":6,"hs":4,"v":"洲際"},{"n":296,"d":"2026-08-29","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":4,"hs":8,"v":"大巨蛋"},{"n":297,"d":"2026-08-29","a":"台鋼雄鷹","h":"味全龍","as":2,"hs":1,"v":"天母"},{"n":298,"d":"2026-08-30","a":"台鋼雄鷹","h":"味全龍","as":0,"hs":3,"v":"天母"},{"n":299,"d":"2026-08-30","a":"富邦悍將","h":"中信兄弟","as":1,"hs":6,"v":"洲際"},{"n":300,"d":"2026-08-30","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":5,"hs":4,"v":"大巨蛋"},{"n":301,"d":"2026-09-01","a":"統一7-ELEVEn獅","h":"富邦悍將","as":1,"hs":2,"v":"大巨蛋"},{"n":302,"d":"2026-09-30","a":"中信兄弟","h":"台鋼雄鷹","as":7,"hs":1,"v":"澄清湖","od":"2026-09-01"},{"n":303,"d":"2026-09-02","a":"統一7-ELEVEn獅","h":"富邦悍將","as":6,"hs":1,"v":"大巨蛋"},{"n":304,"d":"2026-09-07","a":"中信兄弟","h":"台鋼雄鷹","as":6,"hs":4,"v":"澄清湖","od":"2026-09-02"},{"n":305,"d":"2026-09-02","a":"味全龍","h":"樂天桃猿","as":4,"hs":5,"v":"樂天桃園"},{"n":306,"d":"2026-09-07","a":"味全龍","h":"樂天桃猿","as":2,"hs":0,"v":"樂天桃園","od":"2026-09-03"},{"n":307,"d":"2026-09-04","a":"樂天桃猿","h":"富邦悍將","as":0,"hs":13,"v":"大巨蛋"},{"n":308,"d":"2026-09-04","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":0,"hs":11,"v":"亞太主"},{"n":309,"d":"2026-09-04","a":"味全龍","h":"中信兄弟","as":6,"hs":5,"v":"洲際"},{"n":310,"d":"2026-09-05","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":0,"hs":3,"v":"亞太主"},{"n":311,"d":"2026-09-05","a":"樂天桃猿","h":"富邦悍將","as":4,"hs":0,"v":"大巨蛋"},{"n":312,"d":"2026-09-05","a":"味全龍","h":"中信兄弟","as":0,"hs":8,"v":"洲際"},{"n":313,"d":"2026-09-06","a":"樂天桃猿","h":"富邦悍將","as":3,"hs":2,"v":"大巨蛋"},{"n":314,"d":"2026-09-06","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":2,"hs":9,"v":"亞太主"},{"n":315,"d":"2026-09-06","a":"味全龍","h":"中信兄弟","as":4,"hs":3,"v":"洲際"},{"n":316,"d":"2026-09-08","a":"富邦悍將","h":"味全龍","as":4,"hs":1,"v":"大巨蛋"},{"n":317,"d":"2026-09-08","a":"台鋼雄鷹","h":"樂天桃猿","as":2,"hs":3,"v":"樂天桃園"},{"n":318,"d":"2026-09-09","a":"富邦悍將","h":"味全龍","as":4,"hs":2,"v":"大巨蛋"},{"n":319,"d":"2026-09-09","a":"台鋼雄鷹","h":"樂天桃猿","as":0,"hs":4,"v":"樂天桃園"},{"n":320,"d":"2026-09-09","a":"統一7-ELEVEn獅","h":"中信兄弟","as":3,"hs":5,"v":"洲際"},{"n":321,"d":"2026-09-10","a":"統一7-ELEVEn獅","h":"中信兄弟","as":6,"hs":0,"v":"洲際"},{"n":322,"d":"2026-09-11","a":"統一7-ELEVEn獅","h":"味全龍","as":3,"hs":2,"v":"天母"},{"n":323,"d":"2026-09-11","a":"中信兄弟","h":"樂天桃猿","as":3,"hs":5,"v":"樂天桃園"},{"n":324,"d":"2026-09-11","a":"富邦悍將","h":"台鋼雄鷹","as":1,"hs":4,"v":"嘉義市"},{"n":325,"d":"2026-09-12","a":"富邦悍將","h":"台鋼雄鷹","as":3,"hs":8,"v":"澄清湖"},{"n":326,"d":"2026-10-01","a":"統一7-ELEVEn獅","h":"味全龍","as":4,"hs":3,"v":"天母","od":"2026-09-12","ok":"s"},{"n":327,"d":"2026-09-12","a":"中信兄弟","h":"樂天桃猿","as":6,"hs":0,"v":"樂天桃園"},{"n":328,"d":"2026-09-13","a":"富邦悍將","h":"台鋼雄鷹","as":3,"hs":9,"v":"澄清湖"},{"n":329,"d":"2026-09-13","a":"統一7-ELEVEn獅","h":"味全龍","as":12,"hs":1,"v":"天母"},{"n":330,"d":"2026-09-13","a":"中信兄弟","h":"樂天桃猿","as":9,"hs":3,"v":"樂天桃園"},{"n":331,"d":"2026-09-15","a":"中信兄弟","h":"台鋼雄鷹","as":5,"hs":1,"v":"澄清湖"},{"n":332,"d":"2026-09-15","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":5,"hs":2,"v":"嘉義市"},{"n":333,"d":"2026-09-16","a":"富邦悍將","h":"味全龍","as":6,"hs":0,"v":"天母"},{"n":334,"d":"2026-09-17","a":"統一7-ELEVEn獅","h":"中信兄弟","as":2,"hs":4,"v":"大巨蛋"},{"n":335,"d":"2026-09-17","a":"樂天桃猿","h":"富邦悍將","as":0,"hs":1,"v":"新莊"},{"n":336,"d":"2026-09-17","a":"台鋼雄鷹","h":"味全龍","as":6,"hs":1,"v":"天母"},{"n":337,"d":"2026-09-18","a":"統一7-ELEVEn獅","h":"中信兄弟","as":4,"hs":5,"v":"大巨蛋"},{"n":338,"d":"2026-09-18","a":"樂天桃猿","h":"富邦悍將","as":1,"hs":2,"v":"新莊"},{"n":339,"d":"2026-09-18","a":"台鋼雄鷹","h":"味全龍","as":2,"hs":3,"v":"天母"},{"n":340,"d":"2026-09-19","a":"富邦悍將","h":"統一7-ELEVEn獅","as":3,"hs":4,"v":"亞太主"},{"n":341,"d":"2026-09-19","a":"味全龍","h":"中信兄弟","as":3,"hs":4,"v":"大巨蛋"},{"n":342,"d":"2026-09-19","a":"台鋼雄鷹","h":"樂天桃猿","as":11,"hs":5,"v":"樂天桃園"},{"n":343,"d":"2026-09-20","a":"味全龍","h":"中信兄弟","as":1,"hs":2,"v":"大巨蛋"},{"n":344,"d":"2026-09-20","a":"富邦悍將","h":"統一7-ELEVEn獅","as":4,"hs":3,"v":"亞太主"},{"n":345,"d":"2026-09-20","a":"台鋼雄鷹","h":"樂天桃猿","as":1,"hs":10,"v":"樂天桃園"},{"n":346,"d":"2026-09-24","a":"富邦悍將","h":"台鋼雄鷹","as":8,"hs":0,"v":"大巨蛋"},{"n":347,"d":"2026-09-24","a":"中信兄弟","h":"樂天桃猿","as":5,"hs":6,"v":"樂天桃園"},{"n":348,"d":"","a":"味全龍","h":"統一7-ELEVEn獅","as":2,"hs":4,"v":"亞太主"},{"n":349,"d":"2026-09-25","a":"富邦悍將","h":"台鋼雄鷹","as":1,"hs":2,"v":"大巨蛋"},{"n":350,"d":"2026-09-25","a":"中信兄弟","h":"樂天桃猿","as":0,"hs":6,"v":"樂天桃園"},{"n":351,"d":"2026-09-25","a":"味全龍","h":"統一7-ELEVEn獅","as":2,"hs":3,"v":"亞太主"},{"n":352,"d":"2026-09-26","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":3,"hs":2,"v":"大巨蛋"},{"n":353,"d":"2026-09-26","a":"樂天桃猿","h":"味全龍","as":5,"hs":3,"v":"天母"},{"n":354,"d":"2026-09-26","a":"中信兄弟","h":"富邦悍將","as":7,"hs":3,"v":"新莊"},{"n":355,"d":"2026-09-27","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":2,"hs":4,"v":"大巨蛋"},{"n":356,"d":"2026-09-27","a":"樂天桃猿","h":"味全龍","as":4,"hs":2,"v":"天母"},{"n":357,"d":"2026-09-27","a":"中信兄弟","h":"富邦悍將","as":1,"hs":2,"v":"新莊"},{"n":358,"d":"2026-09-28","a":"台鋼雄鷹","h":"中信兄弟","as":10,"hs":19,"v":"洲際"},{"n":359,"d":"2026-09-28","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":7,"hs":4,"v":"樂天桃園"},{"n":360,"d":"2026-09-28","a":"味全龍","h":"富邦悍將","as":4,"hs":2,"v":"新莊"}];
 const BY_N = new Map(GAMES.map(g => [g.n, g]));
 
-// Copyright-free team marks: English nickname abbreviations + approximate colours.
+// Copyright-free team marks: one English letter + an approximate team colour.
 const TEAMS = {
-  "中信兄弟":       {abbr:"BRO", short:"兄弟",   c:"#F2B705", k:"#14141B"},
-  "樂天桃猿":       {abbr:"MKY", short:"桃猿",   c:"#8E1B3A", k:"#FFFFFF"},
-  "味全龍":         {abbr:"DRG", short:"味全龍", c:"#C8102E", k:"#FFFFFF"},
-  "台鋼雄鷹":       {abbr:"HWK", short:"雄鷹",   c:"#1E5B45", k:"#FFFFFF"},
-  "統一7-ELEVEn獅": {abbr:"LNS", short:"統一獅", c:"#EE7623", k:"#FFFFFF"},
-  "富邦悍將":       {abbr:"GDN", short:"悍將",   c:"#1D3D8F", k:"#FFFFFF"},
+  "中信兄弟":       {abbr:"B", short:"兄弟",   c:"#F2B705", k:"#14141B"},
+  "樂天桃猿":       {abbr:"R", short:"桃猿",   c:"#8E1B3A", k:"#FFFFFF"},
+  "味全龍":         {abbr:"W", short:"味全龍", c:"#C8102E", k:"#FFFFFF"},
+  "台鋼雄鷹":       {abbr:"T", short:"雄鷹",   c:"#1E5B45", k:"#FFFFFF"},
+  "統一7-ELEVEn獅": {abbr:"L", short:"統一獅", c:"#EE7623", k:"#FFFFFF"},
+  "富邦悍將":       {abbr:"G", short:"悍將",   c:"#1D3D8F", k:"#FFFFFF"},
 };
 const TEAM_ORDER = Object.keys(TEAMS);
 const HALF_END = 180;
@@ -714,6 +802,34 @@ const SEASON_HOME_PCT = HOME_W / (HOME_W + HOME_L);
 // ================================================================
 // State (device-only localStorage)
 // ================================================================
+// ================================================================
+// Analytics (GA4) — off until GA_ID is set. The app routes with #hash,
+// so every screen change sends a *virtual* page_view (/intro, /pick,
+// /result) and key actions send events. Never sends names or photos.
+// In GA4 Admin › Data streams › Enhanced measurement, turn OFF
+// "Page changes based on browser history events" to avoid doubles.
+// ================================================================
+const GA_ID = "";   // e.g. "G-XXXXXXXXXX"
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+if (GA_ID){
+  const sc = document.createElement("script");
+  sc.async = true; sc.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+  document.head.appendChild(sc);
+  gtag("js", new Date());
+  gtag("config", GA_ID, {send_page_view:false});
+}
+function track(name, params = {}){
+  try{ if (GA_ID) gtag("event", name, params); }catch(e){}
+}
+const BASE_PATH = location.pathname.replace(/[^/]*\.html$/, "").replace(/\/?$/, "/");
+let lastView = "";
+function trackView(v, title){
+  if (v === lastView) return;
+  lastView = v;
+  track("page_view", {page_title: title, page_location: location.origin + BASE_PATH + v, page_path: BASE_PATH + v});
+}
+
 const K_PICKS = "cpbl2026-picks", K_TEAM = "cpbl2026-team", K_THEME = "cpbl2026-theme", K_NAME = "cpbl2026-name";
 const store = {
   get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
@@ -722,7 +838,7 @@ const store = {
 let picks = new Set();
 try{ JSON.parse(store.get(K_PICKS) || "[]").forEach(n => { if (BY_N.has(n)) picks.add(n); }); }catch(e){}
 const savePicks = () => store.set(K_PICKS, JSON.stringify([...picks].sort((a, b) => a - b)));
-const filt = {team:"", half:"", only:false, q:""};
+const filt = {team:"", month:"", venue:"", only:false, q:""};
 
 // ================================================================
 // Helpers
@@ -738,7 +854,9 @@ function fmtPct(p){
 }
 function badge(team, lose, cls = ""){
   const t = TEAMS[team];
-  return `<span class="badge ${lose ? "lose" : ""} ${cls}" style="--c:${t.c};--k:${t.k}" aria-hidden="true">${t.abbr}</span>`;
+  return `<svg class="badge ${lose ? "lose" : ""} ${cls}" style="--c:${t.c};--k:${t.k}" viewBox="0 0 32 32" aria-hidden="true">`
+    + `<rect class="t" x="1" y="1" width="30" height="30" rx="8.5"/><rect class="sh" x="1" y="1" width="30" height="30" rx="8.5"/>`
+    + `<rect class="hl" x="1.9" y="1.9" width="28.2" height="28.2" rx="7.6"/><text x="16" y="23.4" text-anchor="middle">${t.abbr}</text></svg>`;
 }
 function resultOf(g, team){
   if (g.as === g.hs) return "T";
@@ -757,6 +875,7 @@ document.getElementById("theme-btn").onclick = () => {
   const next = cur === "dark" ? "light" : "dark";
   document.documentElement.dataset.theme = next;
   store.set(K_THEME, next);
+  track("theme_toggle", {theme: next});
 };
 
 // ================================================================
@@ -772,48 +891,90 @@ GAMES.forEach(g => {
 });
 SLOTS.sort((x, y) => x.date === y.date ? x.g.n - y.g.n : x.date.localeCompare(y.date));
 
+// Static option lists (counts = games played in that month / at that venue)
+const MONTH_COUNT = {}, VENUE_COUNT = {};
+GAMES.forEach(g => {
+  const m = Number(g.d.slice(5, 7));
+  MONTH_COUNT[m] = (MONTH_COUNT[m] || 0) + 1;
+  VENUE_COUNT[g.v] = (VENUE_COUNT[g.v] || 0) + 1;
+});
+const VENUES = Object.keys(VENUE_COUNT).sort((a, b) => VENUE_COUNT[b] - VENUE_COUNT[a] || a.localeCompare(b, "zh-Hant"));
+const filtersActive = () => !!(filt.team || filt.month || filt.venue || filt.only || filt.q);
+
 function buildFilters(){
-  document.getElementById("filters").innerHTML =
-    `<button class="chip" data-team="" aria-pressed="${filt.team === ""}">全部</button>` +
-    TEAM_ORDER.map(t => `<button class="chip" data-team="${esc(t)}" aria-pressed="${filt.team === t}">${badge(t, false, "xs")}${esc(TEAMS[t].short)}</button>`).join("") +
-    `<span class="split"></span>` +
-    [["","全季"],["H1","上半季"],["H2","下半季"]].map(([v, l]) => `<button class="chip" data-half="${v}" aria-pressed="${filt.half === v}">${l}</button>`).join("") +
-    `<button class="chip" data-only aria-pressed="${filt.only}">只看已選</button>` +
-    `<input class="search" id="f-q" placeholder="搜尋 場次／日期／場地" value="${esc(filt.q)}" aria-label="搜尋">`;
+  const opt = (v, label, cur) => `<option value="${esc(v)}" ${v === cur ? "selected" : ""}>${esc(label)}</option>`;
+  document.getElementById("filters").innerHTML = `
+    <div class="f-row f-teams" role="group" aria-label="依球隊篩選">
+      <span class="f-k">球隊</span>
+      <button class="tchip all" data-team="" aria-pressed="${filt.team === ""}">全部</button>
+      ${TEAM_ORDER.map(t => `<button class="tchip" data-team="${esc(t)}" aria-pressed="${filt.team === t}" title="${esc(t)}">${badge(t, false)}<span>${esc(TEAMS[t].short)}</span></button>`).join("")}
+    </div>
+    <div class="f-row f-sel">
+      <label class="fsel"><span class="f-k">月份</span>
+        <select id="f-month">${opt("", "全季", filt.month)}${opt("H1", "上半季（第 1–180 場）", filt.month)}${opt("H2", "下半季（第 181–360 場）", filt.month)}
+          <optgroup label="依月份">${MONTHS.map(m => opt(String(m), `${m} 月（${MONTH_COUNT[m] || 0} 場）`, filt.month)).join("")}</optgroup>
+        </select></label>
+      <label class="fsel"><span class="f-k">球場</span>
+        <select id="f-venue">${opt("", "全部球場", filt.venue)}${VENUES.map(v => opt(v, `${v}（${VENUE_COUNT[v]} 場）`, filt.venue)).join("")}</select></label>
+    </div>
+    <div class="f-row f-misc">
+      <button class="chip" data-only aria-pressed="${filt.only}">只看已選</button>
+      <input class="search" id="f-q" type="search" placeholder="搜尋 場次／日期" value="${esc(filt.q)}" aria-label="搜尋場次或日期">
+    </div>
+    <div class="f-status"><span id="f-count"></span><button class="linkish" id="f-reset" ${filtersActive() ? "" : "hidden"}>清除篩選</button></div>`;
 }
 document.getElementById("filters").addEventListener("click", e => {
-  const b = e.target.closest("button.chip");
+  const b = e.target.closest("button");
   if (!b) return;
-  if (b.hasAttribute("data-team")) filt.team = b.dataset.team;
-  else if (b.hasAttribute("data-half")) filt.half = b.dataset.half;
-  else if (b.hasAttribute("data-only")) filt.only = !filt.only;
+  if (b.id === "f-reset"){ Object.assign(filt, {team:"", month:"", venue:"", only:false, q:""}); track("filter_reset"); }
+  else if (b.hasAttribute("data-team")){ filt.team = b.dataset.team; track("filter_change", {filter_type:"team", filter_value: filt.team ? TEAMS[filt.team].abbr : "all"}); }
+  else if (b.hasAttribute("data-only")){ filt.only = !filt.only; track("filter_change", {filter_type:"only_picked", filter_value: String(filt.only)}); }
+  else return;
   buildFilters(); renderList();
 });
+document.getElementById("filters").addEventListener("change", e => {
+  if (e.target.id === "f-month") filt.month = e.target.value;
+  else if (e.target.id === "f-venue") filt.venue = e.target.value;
+  else return;
+  track("filter_change", {filter_type: e.target.id === "f-month" ? "month" : "venue", filter_value: e.target.value || "all"});
+  buildFilters(); renderList();
+});
+let searchTimer = 0;
 document.getElementById("filters").addEventListener("input", e => {
   if (e.target.id !== "f-q") return;
   filt.q = e.target.value.trim(); renderList();
+  document.getElementById("f-reset").hidden = !filtersActive();
+  clearTimeout(searchTimer);
+  if (filt.q) searchTimer = setTimeout(() => track("filter_change", {filter_type:"search", filter_value:"(text)"}), 1200);
 });
 
 function slotPasses(s){
   const g = s.g;
   if (filt.team && g.a !== filt.team && g.h !== filt.team) return false;
-  if (filt.half === "H1" && g.n > HALF_END) return false;
-  if (filt.half === "H2" && g.n <= HALF_END) return false;
+  if (filt.month === "H1" && g.n > HALF_END) return false;
+  else if (filt.month === "H2" && g.n <= HALF_END) return false;
+  else if (/^\d+$/.test(filt.month) && Number(s.date.slice(5, 7)) !== Number(filt.month)) return false;
+  if (filt.venue && g.v !== filt.venue) return false;
   if (filt.only && (s.kind === "postponed" || !picks.has(g.n))) return false;
   if (filt.q){
     const q = filt.q.toLowerCase();
-    const hay = [String(g.n), pad3(g.n), s.date, md(s.date), g.v, TEAMS[g.a].short, TEAMS[g.h].short, TEAMS[g.a].abbr, TEAMS[g.h].abbr].join(" ").toLowerCase();
+    const hay = [String(g.n), pad3(g.n), s.date, md(s.date), g.v, TEAMS[g.a].short, TEAMS[g.h].short, g.a, g.h].join(" ").toLowerCase();
     if (!hay.includes(q)) return false;
   }
   return true;
 }
 
+// Letter mark + Chinese short name; the home side puts the name first so marks frame the score.
+function teamTag(team, lose, home){
+  const nm = `<span class="tn">${esc(TEAMS[team].short)}</span>`;
+  return `<span class="ct ${lose ? "lose" : ""}">${home ? nm + badge(team, lose) : badge(team, lose) + nm}</span>`;
+}
 function cardHtml(s){
   const g = s.g;
   if (s.kind === "postponed"){
     return `<div class="card stub" role="note" aria-label="第 ${g.n} 場延賽，${md(g.d)} 補賽">
-      <span class="card-no">${pad3(g.n)}</span>${badge(g.a, true)}
-      <span class="card-score">延賽</span>${badge(g.h, true)}
+      <span class="card-no">${pad3(g.n)}</span>${teamTag(g.a, true, false)}
+      <span class="card-score">延賽</span>${teamTag(g.h, true, true)}
       <span class="card-venue">${esc(g.v)}</span><span class="card-tag">${md(g.d)} 補</span></div>`;
   }
   const aWin = g.as > g.hs, hWin = g.hs > g.as, tie = g.as === g.hs;
@@ -822,9 +983,9 @@ function cardHtml(s){
   const label = `第 ${g.n} 場，${TEAMS[g.a].short} ${g.as} 比 ${g.hs} ${TEAMS[g.h].short}，${g.v}`;
   return `<button class="card" data-n="${g.n}" aria-pressed="${on}" aria-label="${esc(label)}">
     <span class="card-no">${pad3(g.n)}</span>
-    ${badge(g.a, !aWin && !tie)}
+    ${teamTag(g.a, !aWin && !tie, false)}
     <span class="card-score"><span class="${aWin || tie ? "" : "lose"}">${g.as}</span><span class="sep">:</span><span class="${hWin || tie ? "" : "lose"}">${g.hs}</span></span>
-    ${badge(g.h, !hWin && !tie)}
+    ${teamTag(g.h, !hWin && !tie, true)}
     <span class="card-venue">${esc(g.v)}</span>${tag ? `<span class="card-tag">${tag}</span>` : "<span></span>"}
   </button>`;
 }
@@ -833,7 +994,7 @@ function renderList(){
   const host = document.getElementById("game-list");
   const shown = SLOTS.filter(slotPasses);
   if (!shown.length){
-    host.innerHTML = `<div class="list-empty">${filt.only ? "還沒有勾選任何比賽" : "沒有符合條件的比賽"}</div>`;
+    host.innerHTML = `<div class="list-empty">${filt.only && !(filt.team || filt.month || filt.venue || filt.q) ? "還沒有勾選任何比賽" : "沒有符合條件的比賽，試試放寬篩選"}</div>`;
   } else {
     let html = "", cur = null, buf = [];
     const flush = () => {
@@ -849,14 +1010,21 @@ function renderList(){
     flush();
     host.innerHTML = html;
   }
+  const fc = document.getElementById("f-count");
+  if (fc){
+    const n = new Set(shown.filter(x => x.kind !== "postponed").map(x => x.g.n)).size;
+    fc.textContent = filtersActive() ? `符合條件 ${n} 場` : `全季 ${n} 場`;
+  }
   updateCount();
 }
 document.getElementById("game-list").addEventListener("click", e => {
   const b = e.target.closest("button.card[data-n]");
   if (!b) return;
   const n = Number(b.dataset.n);
-  if (picks.has(n)) picks.delete(n); else picks.add(n);
+  const adding = !picks.has(n);
+  if (adding) picks.add(n); else picks.delete(n);
   savePicks();
+  track(adding ? "game_pick" : "game_unpick", {game_no: n, picks_total: picks.size});
   document.querySelectorAll(`button.card[data-n="${n}"]`).forEach(el => el.setAttribute("aria-pressed", picks.has(n)));
   updateCount();
 });
@@ -868,10 +1036,11 @@ function updateCount(){
 }
 document.getElementById("s-clear").onclick = () => {
   if (!confirm(`確定要清除已勾選的 ${picks.size} 場嗎？`)) return;
+  track("picks_clear", {picks_total: picks.size});
   picks.clear(); savePicks(); renderList();
 };
-document.getElementById("go-result").onclick = () => go("result");
-document.getElementById("go-pick").onclick = () => go("pick");
+document.getElementById("go-result").onclick = () => { track("cta_click", {cta_location:"pick_footer", cta_target:"result", picks_total: picks.size}); go("result"); };
+document.getElementById("go-pick").onclick = () => { track("cta_click", {cta_location:"result_footer", cta_target:"pick", picks_total: picks.size}); go("pick"); };
 
 // ================================================================
 // RESULT
@@ -911,8 +1080,8 @@ function currentTeam(){
   const saved = store.get(K_TEAM);
   return saved && TEAMS[saved] ? saved : null;   // default (null) = 觀賽摘要
 }
-function statsFor(team){
-  const games = picked().filter(g => g.a === team || g.h === team);
+function statsFor(team, list = picked()){
+  const games = list.filter(g => g.a === team || g.h === team);
   let w = 0, l = 0, t = 0, run = 0, best = 0, bigWin = null, bigLoss = null;
   const home = {w:0,l:0,t:0}, away = {w:0,l:0,t:0}, opp = {};
   games.forEach(g => {
@@ -966,7 +1135,7 @@ function renderResult(){
         ? '<path d="M4 7h3l2-2h6l2 2h3v12H4z"/><circle cx="12" cy="13" r="3.5"/>'
         : '<path d="M12 5v14M5 12h14"/>'}</svg>${photo ? "調整照片" : "換成我的照片"}
     </button>
-    <div class="b-abbr">${team ? TEAMS[team].abbr : "CPBL"}</div>
+    <div class="b-abbr ${team ? "" : "word"}">${team ? TEAMS[team].abbr : "CPBL"}</div>
     <div class="b-text"><div class="b-eyebrow">CPBL 2026 · 進場紀錄</div>
     <div class="b-title">${team ? `我進場的時候，${esc(TEAMS[team].short)}贏了幾場？` : `今年我進場看了 ${all.length} 場球`}</div></div>`;
   if (photo) placePhoto(bannerEl.querySelector(".b-photo"), bannerEl, photo);
@@ -1084,6 +1253,7 @@ function renderResult(){
 }
 document.getElementById("view-select").addEventListener("change", e => {
   store.set(K_TEAM, e.target.value);
+  track("team_view_change", {view: TEAMS[e.target.value] ? TEAMS[e.target.value].abbr : "summary"});
   renderResult();
 });
 const nameEl = document.getElementById("fan-name");
@@ -1100,16 +1270,7 @@ function renderIntro(){
   document.getElementById("hero-ctas").innerHTML = primary + secondary;
   document.getElementById("end-ctas").innerHTML = primary + secondary;
 
-  // Sample result built from real fixtures (Dragons, a 12–5 run)
-  const sp = seasonPct("味全龍");
-  document.getElementById("hero-rate").innerHTML = `
-    <div class="r-label">${badge("味全龍", false, "xs")}你進場時的味全龍 · 觀賽勝率</div>
-    <div class="r-big">.706</div>
-    <div class="r-side"><span class="r-rec">12勝 5敗</span><span class="luck up">福神球迷</span></div>
-    <div class="r-cmp">全季勝率 <b>${fmtPct(sp)}</b>，你進場時高了 <b>${((12 / 17 - sp) * 100).toFixed(1)}</b> 個百分點</div>`;
-  const sample = [BY_N.get(1), BY_N.get(13)];
-  document.getElementById("hero-games").innerHTML = sample.map(g => cardHtml({date:g.d, g, kind:"normal"})
-    .replace('<button class="card"', '<div class="card" aria-pressed="true"').replace(/<\/button>\s*$/, "</div>")).join("");
+  buildWall();
   document.getElementById("demo-card").innerHTML = cardHtml({date:BY_N.get(9).d, g:BY_N.get(9), kind:"normal"})
     .replace('<button class="card"', '<div class="card" aria-pressed="true" style="min-width:0"').replace(/<\/button>\s*$/, "</div>");
   document.getElementById("demo-rate").innerHTML = `<span class="demo-rate">${badge("味全龍", false, "md")}<span class="big">.706</span><span class="side"><span>12勝 5敗</span><span class="luck up">福神球迷</span></span></span>`;
@@ -1122,7 +1283,9 @@ function renderIntro(){
 }
 document.getElementById("view-intro").addEventListener("click", e => {
   const b = e.target.closest("[data-go]");
-  if (b) go(b.dataset.go);
+  if (!b) return;
+  track("cta_click", {cta_location: b.closest("#end-ctas") ? "intro_end" : "intro_hero", cta_target: b.dataset.go, picks_total: picks.size});
+  go(b.dataset.go);
 });
 document.getElementById("scroll-hint").onclick = () =>
   document.getElementById("how").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
@@ -1226,6 +1389,7 @@ photoInput.addEventListener("change", async () => {
     const {blob, w, h} = await compressImage(file);
     if (draftIsNew && draftURL) URL.revokeObjectURL(draftURL);
     openEditor({blob, w, h, fx:.5, fy:.45, z:1}, true);
+    track("photo_upload");
   }catch(e){
     alertBanner("這張照片讀不進來，換一張 JPG 或 PNG 試試看。");
   }
@@ -1246,12 +1410,14 @@ document.getElementById("ed-close").onclick = closeEditor;
 editor.addEventListener("cancel", e => { e.preventDefault(); closeEditor(); });
 document.getElementById("ed-remove").onclick = async () => {
   closeEditor(); setPhoto(null); await PhotoDB.del(); renderResult();
+  track("photo_remove");
 };
 document.getElementById("ed-done").onclick = async () => {
   const p = {blob:draft.blob, w:draft.w, h:draft.h, fx:draft.fx, fy:draft.fy, z:draft.z};
   draftIsNew = false;               // ownership of the blob moves to `photo`
   if (draftURL && draftURL !== photoURL) URL.revokeObjectURL(draftURL);
   closeEditor(); setPhoto(p); renderResult();
+  track("photo_confirm", {zoom: Math.round(p.z * 10) / 10});
   await PhotoDB.put(p);
 };
 zoomEl.addEventListener("input", () => { if (draft){ draft.z = +zoomEl.value; layoutDraft(); } });
@@ -1313,13 +1479,11 @@ const SW = 1080, SH = 1920;
 const F_NUM = '"Manrope", "Noto Sans TC", system-ui, sans-serif';
 const F_TC  = '"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif';
 
-function shareModel(){
-  const all = picked(), team = currentTeam();
+function shareModel(all = picked(), team = currentTeam(), name = (store.get(K_NAME) || "").trim()){
   const venues = new Set(all.map(g => g.v)).size;
-  const name = (store.get(K_NAME) || "").trim();
   const m = {all, team, venues, name, tc: team ? TEAMS[team].c : "#2a2a33"};
   if (team){
-    const s = statsFor(team), short = TEAMS[team].short;
+    const s = statsFor(team, all), short = TEAMS[team].short;
     m.label = `我進場時的${short} · 觀賽勝率`;
     m.title = `我進場的時候，${short}贏了幾場？`;
     if (!s.games.length){
@@ -1362,19 +1526,28 @@ function rr(ctx, x, y, w, h, r){
          ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
 }
 function spacing(ctx, px){ if ("letterSpacing" in ctx) ctx.letterSpacing = px + "px"; }
+const F_MARK = '"DM Serif Display", "Playfair Display", Georgia, "Times New Roman", serif';
+// Enamel-tile mark (same geometry as the SVG badge, scaled to half-size r).
 function drawBadge(ctx, team, cx, cy, r){
-  ctx.fillStyle = TEAMS[team].c; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
-  ctx.strokeStyle = "rgba(255,255,255,.35)"; ctx.lineWidth = 2; ctx.stroke();
-  ctx.fillStyle = TEAMS[team].k; ctx.font = `800 ${Math.round(r * .62)}px ${F_NUM}`;
-  ctx.textAlign = "center"; ctx.textBaseline = "middle"; spacing(ctx, 0);
-  ctx.fillText(TEAMS[team].abbr, cx, cy + 1);
-  ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+  const t = TEAMS[team], s = r * 2 / 30, x = cx - r, y = cy - r, w = r * 2, rad = 8.5 * s;
+  ctx.save();
+  rr(ctx, x, y, w, w, rad); ctx.fillStyle = t.c; ctx.fill();
+  const g = ctx.createLinearGradient(x, y, x + w * .35, y + w);
+  g.addColorStop(0, "rgba(255,255,255,.22)"); g.addColorStop(.48, "rgba(255,255,255,0)"); g.addColorStop(1, "rgba(0,0,0,.24)");
+  ctx.fillStyle = g; ctx.fill();
+  rr(ctx, x + .9 * s, y + .9 * s, w - 1.8 * s, w - 1.8 * s, 7.6 * s);
+  ctx.strokeStyle = "rgba(255,255,255,.32)"; ctx.lineWidth = Math.max(1, .8 * s); ctx.stroke();
+  ctx.font = `400 ${Math.round(22 * s)}px ${F_MARK}`; ctx.fillStyle = t.k;
+  ctx.textAlign = "center"; ctx.textBaseline = "alphabetic"; spacing(ctx, 0);
+  ctx.fillText(t.abbr, cx, y + 22.4 * s);
+  ctx.restore();
 }
 
 async function loadFontsFor(text){
   if (!document.fonts || !document.fonts.load) return;
   const jobs = [
     document.fonts.load(`800 200px "Manrope"`, "0123456789.:—"),
+    document.fonts.load(`400 200px "DM Serif Display"`, "BRWTLGCP"),
     document.fonts.load(`700 40px "Noto Sans TC"`, text),
     document.fonts.load(`500 40px "Noto Sans TC"`, text),
   ];
@@ -1382,7 +1555,12 @@ async function loadFontsFor(text){
 }
 
 async function renderShareImage(){
-  const m = shareModel();
+  const c = await drawShare(shareModel(), photo);
+  return new Promise((res, rej) => c.toBlob(b => b ? res(b) : rej(new Error("encode")), "image/png"));
+}
+
+// Draws one 1080×1920 share image for model `m`; `ph` = photo record or null.
+async function drawShare(m, ph){
   const textAll = [m.label, m.title, m.rec, m.luck, m.name, m.stripLabel || "", ...m.cmp.map(c => c.t),
     ...m.cells.flatMap(c => [c[1], c[2]]), "非官方網站只計進場觀賽戰績 MY 2026 SEASON"].join("");
   await loadFontsFor(textAll);
@@ -1392,15 +1570,15 @@ async function renderShareImage(){
 
   // ---- Background: photo (same focal crop as the editor) or team field
   let img = null;
-  if (photo){
-    img = new Image(); img.src = photoURL;
+  if (ph){
+    img = new Image(); img.src = ph === photo ? photoURL : URL.createObjectURL(ph.blob);
     try{ await img.decode(); }catch(e){ img = null; }
   }
   if (img){
     ctx.fillStyle = "#0b0b0f"; ctx.fillRect(0, 0, SW, SH);
-    const s = Math.max(SW / photo.w, SH / photo.h) * photo.z, dw = photo.w * s, dh = photo.h * s;
-    const x = Math.min(0, Math.max(SW - dw, SW / 2 - photo.fx * dw));
-    const y = Math.min(0, Math.max(SH - dh, SH / 2 - photo.fy * dh));
+    const s = Math.max(SW / ph.w, SH / ph.h) * ph.z, dw = ph.w * s, dh = ph.h * s;
+    const x = Math.min(0, Math.max(SW - dw, SW / 2 - ph.fx * dw));
+    const y = Math.min(0, Math.max(SH - dh, SH / 2 - ph.fy * dh));
     ctx.drawImage(img, x, y, dw, dh);
   } else {
     const g = ctx.createLinearGradient(0, 0, SW, SH);
@@ -1409,8 +1587,10 @@ async function renderShareImage(){
     ctx.save(); ctx.strokeStyle = "rgba(255,255,255,.06)"; ctx.lineWidth = 4;
     for (let i = -SH; i < SW + SH; i += 46){ ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i + SH * .47, SH); ctx.stroke(); }
     ctx.restore();
-    ctx.save(); ctx.fillStyle = "rgba(255,255,255,.12)"; ctx.font = `800 440px ${F_NUM}`; spacing(ctx, -12);
-    ctx.textAlign = "right"; ctx.fillText(m.team ? TEAMS[m.team].abbr : "CPBL", SW + 30, 860); ctx.restore();
+    ctx.save(); ctx.fillStyle = "rgba(255,255,255,.12)"; ctx.textAlign = "right";
+    if (m.team){ ctx.font = `400 1100px ${F_MARK}`; ctx.fillText(TEAMS[m.team].abbr, SW - 30, 930); }
+    else { ctx.font = `800 440px ${F_NUM}`; spacing(ctx, -12); ctx.fillText("CPBL", SW + 30, 860); }
+    ctx.restore();
   }
   // Scrims: top for the brand strip, bottom for the stats block
   let g = ctx.createLinearGradient(0, 0, 0, 420);
@@ -1509,8 +1689,7 @@ async function renderShareImage(){
   ctx.fillStyle = "rgba(245,241,232,.5)"; ctx.font = `500 22px ${F_TC}`; ctx.textAlign = "center";
   ctx.fillText("CPBL 進場戰績 · 只計進場觀賽 · 非 CPBL 官方網站", SW / 2, 1846);
   ctx.textAlign = "left";
-
-  return new Promise((res, rej) => c.toBlob(b => b ? res(b) : rej(new Error("encode")), "image/png"));
+  return c;
 }
 
 // ---- Share dialog -------------------------------------------------
@@ -1523,6 +1702,7 @@ const SHARE_NAME = "cpbl-2026-my-season.png";
 
 function setShareMsg(t){ shMsg.textContent = t; }
 async function openShare(){
+  track("share_open", {view: currentTeam() ? TEAMS[currentTeam()].abbr : "summary", has_photo: !!photo, picks_total: picks.size});
   if (!shareDlg.open) shareDlg.showModal();
   const prev = document.getElementById("sh-preview");
   prev.innerHTML = `<span class="ed-busy">產生中…</span>`;
@@ -1557,7 +1737,7 @@ document.getElementById("sh-save").onclick = async () => {
   if (!shareBlob) return;
   const dl = await dlCap;
   if (dl){
-    try{ await dl.save({filename:SHARE_NAME, data:shareBlob}); setShareMsg("已儲存。"); }
+    try{ await dl.save({filename:SHARE_NAME, data:shareBlob}); setShareMsg("已儲存。"); track("share_save", {method:"claude_downloads"}); }
     catch(e){
       if (e && e.code === "declined") setShareMsg("已取消儲存。");
       else if (e && e.code === "rate_limited") setShareMsg("上一個儲存視窗還開著，請先處理它。");
@@ -1566,17 +1746,71 @@ document.getElementById("sh-save").onclick = async () => {
     return;
   }
   anchorDownload(); setShareMsg("已開始下載。手機若沒反應，請長按圖片儲存。");
+  track("share_save", {method:"download"});
 };
 document.getElementById("sh-share").onclick = async () => {
   if (!shareBlob) return;
   try{
     await navigator.share({files:[new File([shareBlob], SHARE_NAME, {type:"image/png"})]});
+    track("share_save", {method:"native_share"});
   }catch(e){
     if (!e || e.name !== "AbortError"){ anchorDownload(); setShareMsg("這個瀏覽器不支援直接分享，已改成下載。"); }
   }
 };
 // After the photo editor closes, a refreshed share image is one tap away.
 document.getElementById("ed-done").addEventListener("click", () => { if (shareBlob) shareBlob = null; });
+
+// ================================================================
+// Hero wall — real share images (same renderer as the download),
+// drawn from sample seasons, laid on a tilted 2.5D plane that drifts.
+// ================================================================
+// Deterministic sample seasons: every k-th game of a team, offset per sample.
+function sampleSeason(team, k, off){
+  const list = GAMES.filter(g => !team || g.a === team || g.h === team);
+  return list.filter((g, i) => (i + off) % k === 0);
+}
+const WALL_SAMPLES = [
+  ["味全龍", 7, 2], ["中信兄弟", 6, 1], [null, 23, 4], ["統一7-ELEVEn獅", 8, 3],
+  ["富邦悍將", 5, 0], ["樂天桃猿", 9, 5], [null, 31, 7], ["台鋼雄鷹", 6, 4],
+  ["味全龍", 11, 6], ["中信兄弟", 13, 2], ["統一7-ELEVEn獅", 5, 1], ["樂天桃猿", 7, 0],
+];
+let wallURLs = null, wallBusy = false;
+function wallPlaceholder(i){
+  const t = WALL_SAMPLES[i][0];
+  return `<div class="wall-card" style="--tc:${t ? TEAMS[t].c : "#2a2a33"}"></div>`;
+}
+function layoutWall(items){
+  const cols = matchMedia("(max-width: 780px)").matches ? 3 : 4;
+  const per = Math.ceil(items.length / cols);
+  let html = "";
+  for (let c = 0; c < cols; c++){
+    const col = items.slice(c * per, c * per + per);
+    // duplicate so the drift loops seamlessly
+    html += `<div class="wall-col" style="--d:${46 + c * 9}s">${col.join("")}${col.join("")}</div>`;
+  }
+  document.getElementById("wall-plane").innerHTML = html;
+}
+async function buildWall(){
+  if (wallURLs){ layoutWall(wallURLs.map(u => `<div class="wall-card"><img src="${u}" alt=""></div>`)); return; }
+  layoutWall(WALL_SAMPLES.map((_, i) => wallPlaceholder(i)));
+  if (wallBusy) return;
+  wallBusy = true;
+  const urls = [];
+  for (const [team, k, off] of WALL_SAMPLES){
+    const m = shareModel(sampleSeason(team, k, off), team, "");
+    const big = await drawShare(m, null);
+    const c = document.createElement("canvas"); c.width = 324; c.height = 576;
+    c.getContext("2d").drawImage(big, 0, 0, 324, 576);
+    big.width = big.height = 0;                 // free the 1080×1920 buffer right away
+    const blob = await new Promise(r => c.toBlob(r, "image/jpeg", .86));
+    urls.push(blob ? URL.createObjectURL(blob) : "");
+    await new Promise(r => setTimeout(r, 0));    // keep the page responsive
+  }
+  wallURLs = urls;
+  if (!document.getElementById("view-intro").hidden) buildWall();
+}
+let wallMQ = matchMedia("(max-width: 780px)");
+wallMQ.addEventListener && wallMQ.addEventListener("change", () => { if (wallURLs) buildWall(); });
 
 // ================================================================
 // Router — #intro → #pick ⇄ #result (browser back works)
@@ -1588,6 +1822,7 @@ function render(v){
   if (v === "result" && picks.size === 0) v = "pick";
   ["intro", "pick", "result"].forEach(k => document.getElementById("view-" + k).hidden = k !== v);
   document.getElementById("page-name").textContent = PAGE_NAME[v];
+  trackView(v, PAGE_NAME[v]);
   if (v === "intro") renderIntro();
   else if (v === "pick"){ buildFilters(); renderList(); }
   else renderResult();
