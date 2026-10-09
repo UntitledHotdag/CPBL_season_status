@@ -818,7 +818,9 @@ if (GA_ID){
   sc.async = true; sc.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
   document.head.appendChild(sc);
   gtag("js", new Date());
-  gtag("config", GA_ID, {send_page_view:false});
+  // Add ?ga_debug=1 to the URL to see this device's events in GA4 › DebugView.
+  const gaDebug = /[?&]ga_debug=1\b/.test(location.search);
+  gtag("config", GA_ID, gaDebug ? {send_page_view:false, debug_mode:true} : {send_page_view:false});
 }
 function track(name, params = {}){
   try{ if (GA_ID) gtag("event", name, params); }catch(e){}
