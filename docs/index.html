@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&text=BRWTLGCP&display=swap" rel="stylesheet">
 <style>
   /* ================================================================
      THEME TOKENS (poster-version palette) · light default, dark via OS
@@ -95,13 +94,13 @@
 
   /* ================================================================
      Team mark — "enamel tile": a softly shaded team-colour square with a
-     hairline highlight and one serif capital (copyright-free; losers grey)
+     hairline highlight and one heavy sans capital (copyright-free; losers grey)
      ================================================================ */
   .badge{--c:#888;--k:#fff;width:26px;height:26px;flex-shrink:0;display:inline-block;vertical-align:middle}
   .badge .t{fill:var(--c);stroke:rgba(0,0,0,.12);stroke-width:.6}
   .badge .sh{fill:url(#mk-shade)}
   .badge .hl{fill:none;stroke:rgba(255,255,255,.32);stroke-width:.8}
-  .badge text{font-family:"DM Serif Display","Playfair Display",Georgia,"Times New Roman",serif;font-size:22px;fill:var(--k)}
+  .badge text{font-family:"Manrope","Helvetica Neue",Arial,sans-serif;font-weight:800;font-size:19px;fill:var(--k)}
   .badge.lose .t{fill:var(--badge-off);stroke:none}
   .badge.lose .sh{opacity:.45}
   .badge.lose .hl{stroke:rgba(255,255,255,.18)}
@@ -248,7 +247,7 @@
   }
   .poster-banner .b-abbr{
     position:absolute;right:3%;bottom:-24%;
-    font-family:"DM Serif Display",Georgia,serif;font-weight:400;font-size:clamp(170px,46vw,330px);line-height:1;
+    font-family:"Manrope",sans-serif;font-weight:800;font-size:clamp(150px,42vw,300px);line-height:1;
     color:rgba(255,255,255,.14);
   }
   .poster-banner .b-abbr.word{font-family:"Manrope",sans-serif;font-weight:800;font-size:clamp(96px,26vw,190px);letter-spacing:-.03em;right:-2%;bottom:-18%}
@@ -809,7 +808,9 @@ const SEASON_HOME_PCT = HOME_W / (HOME_W + HOME_L);
 // In GA4 Admin › Data streams › Enhanced measurement, turn OFF
 // "Page changes based on browser history events" to avoid doubles.
 // ================================================================
-const GA_ID = "";   // e.g. "G-XXXXXXXXXX"
+// Filled in only for the public build (docs/index.html); skipped on local/preview hosts.
+const GA_ID = /^(localhost|127\.|0\.0\.0\.0)/.test(location.hostname) || location.protocol === "file:"
+  ? "" : "G-3NFXSVM2JD";
 window.dataLayer = window.dataLayer || [];
 function gtag(){ dataLayer.push(arguments); }
 if (GA_ID){
@@ -856,7 +857,7 @@ function badge(team, lose, cls = ""){
   const t = TEAMS[team];
   return `<svg class="badge ${lose ? "lose" : ""} ${cls}" style="--c:${t.c};--k:${t.k}" viewBox="0 0 32 32" aria-hidden="true">`
     + `<rect class="t" x="1" y="1" width="30" height="30" rx="8.5"/><rect class="sh" x="1" y="1" width="30" height="30" rx="8.5"/>`
-    + `<rect class="hl" x="1.9" y="1.9" width="28.2" height="28.2" rx="7.6"/><text x="16" y="23.4" text-anchor="middle">${t.abbr}</text></svg>`;
+    + `<rect class="hl" x="1.9" y="1.9" width="28.2" height="28.2" rx="7.6"/><text x="16" y="22.9" text-anchor="middle">${t.abbr}</text></svg>`;
 }
 function resultOf(g, team){
   if (g.as === g.hs) return "T";
@@ -1526,7 +1527,7 @@ function rr(ctx, x, y, w, h, r){
          ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
 }
 function spacing(ctx, px){ if ("letterSpacing" in ctx) ctx.letterSpacing = px + "px"; }
-const F_MARK = '"DM Serif Display", "Playfair Display", Georgia, "Times New Roman", serif';
+const F_MARK = '"Manrope", "Helvetica Neue", Arial, sans-serif';
 // Enamel-tile mark (same geometry as the SVG badge, scaled to half-size r).
 function drawBadge(ctx, team, cx, cy, r){
   const t = TEAMS[team], s = r * 2 / 30, x = cx - r, y = cy - r, w = r * 2, rad = 8.5 * s;
@@ -1537,9 +1538,9 @@ function drawBadge(ctx, team, cx, cy, r){
   ctx.fillStyle = g; ctx.fill();
   rr(ctx, x + .9 * s, y + .9 * s, w - 1.8 * s, w - 1.8 * s, 7.6 * s);
   ctx.strokeStyle = "rgba(255,255,255,.32)"; ctx.lineWidth = Math.max(1, .8 * s); ctx.stroke();
-  ctx.font = `400 ${Math.round(22 * s)}px ${F_MARK}`; ctx.fillStyle = t.k;
+  ctx.font = `800 ${Math.round(19 * s)}px ${F_MARK}`; ctx.fillStyle = t.k;
   ctx.textAlign = "center"; ctx.textBaseline = "alphabetic"; spacing(ctx, 0);
-  ctx.fillText(t.abbr, cx, y + 22.4 * s);
+  ctx.fillText(t.abbr, cx, y + 21.9 * s);
   ctx.restore();
 }
 
@@ -1547,7 +1548,6 @@ async function loadFontsFor(text){
   if (!document.fonts || !document.fonts.load) return;
   const jobs = [
     document.fonts.load(`800 200px "Manrope"`, "0123456789.:—"),
-    document.fonts.load(`400 200px "DM Serif Display"`, "BRWTLGCP"),
     document.fonts.load(`700 40px "Noto Sans TC"`, text),
     document.fonts.load(`500 40px "Noto Sans TC"`, text),
   ];
@@ -1588,7 +1588,7 @@ async function drawShare(m, ph){
     for (let i = -SH; i < SW + SH; i += 46){ ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i + SH * .47, SH); ctx.stroke(); }
     ctx.restore();
     ctx.save(); ctx.fillStyle = "rgba(255,255,255,.12)"; ctx.textAlign = "right";
-    if (m.team){ ctx.font = `400 1100px ${F_MARK}`; ctx.fillText(TEAMS[m.team].abbr, SW - 30, 930); }
+    if (m.team){ ctx.font = `800 1000px ${F_MARK}`; ctx.fillText(TEAMS[m.team].abbr, SW - 20, 900); }
     else { ctx.font = `800 440px ${F_NUM}`; spacing(ctx, -12); ctx.fillText("CPBL", SW + 30, 860); }
     ctx.restore();
   }
