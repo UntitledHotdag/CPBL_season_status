@@ -1,0 +1,5 @@
+.DS_Store
+logo/
+Claude outputs/
+.venv/
+__pycache__/
