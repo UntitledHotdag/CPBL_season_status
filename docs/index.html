@@ -4,7 +4,14 @@
 <meta charset="utf-8">
 <title>CPBL 進場戰績</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="勾選你 2026 年進場看過的中華職棒一軍例行賽，算出你的觀賽勝率。非 CPBL 官方網站。">
+<meta name="description" content="勾選你 2026 年進場看過的中華職棒一軍例行賽，算出你的觀賽勝率，做成 IG 限動分享圖。球迷自製，非 CPBL 官方網站。">
+<link rel="canonical" href="https://mybaseballgame.com/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mybaseballgame.com/">
+<meta property="og:title" content="CPBL 進場戰績｜你進場的時候，你的球隊贏了幾場？">
+<meta property="og:description" content="勾選你今年進場看過的比賽，算出觀賽勝率，做成 IG 限動分享圖。球迷自製，非 CPBL 官方網站。">
+<meta property="og:locale" content="zh_TW">
+<meta name="theme-color" content="#F5F1E8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -808,9 +815,10 @@ const SEASON_HOME_PCT = HOME_W / (HOME_W + HOME_L);
 // In GA4 Admin › Data streams › Enhanced measurement, turn OFF
 // "Page changes based on browser history events" to avoid doubles.
 // ================================================================
-// Filled in only for the public build (docs/index.html); skipped on local/preview hosts.
-const GA_ID = /^(localhost|127\.|0\.0\.0\.0)/.test(location.hostname) || location.protocol === "file:"
-  ? "" : "G-3NFXSVM2JD";
+// Filled in only for the public build (docs/index.html), and only sent from the
+// production domain — workers.dev, previews and local copies stay out of the data.
+const GA_HOSTS = ["mybaseballgame.com", "www.mybaseballgame.com"];
+const GA_ID = GA_HOSTS.includes(location.hostname) ? "G-3NFXSVM2JD" : "";
 window.dataLayer = window.dataLayer || [];
 function gtag(){ dataLayer.push(arguments); }
 if (GA_ID){
@@ -1689,7 +1697,10 @@ async function drawShare(m, ph){
 
   // Footer (sits in IG's reply-bar zone on purpose — nice to have, not essential)
   ctx.fillStyle = "rgba(245,241,232,.5)"; ctx.font = `500 22px ${F_TC}`; ctx.textAlign = "center";
-  ctx.fillText("CPBL 進場戰績 · 只計進場觀賽 · 非 CPBL 官方網站", SW / 2, 1846);
+  ctx.fillStyle = "rgba(245,241,232,.78)"; ctx.font = `700 26px ${F_NUM}`; spacing(ctx, 2);
+  ctx.fillText("mybaseballgame.com", SW / 2, 1812);
+  ctx.fillStyle = "rgba(245,241,232,.45)"; ctx.font = `500 20px ${F_TC}`; spacing(ctx, 0);
+  ctx.fillText("只計進場觀賽 · 球迷自製，非 CPBL 官方網站", SW / 2, 1852);
   ctx.textAlign = "left";
   return c;
 }
