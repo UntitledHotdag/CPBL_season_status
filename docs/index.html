@@ -259,7 +259,7 @@
   }
   .poster-banner .b-abbr.word{font-family:"Manrope",sans-serif;font-weight:800;font-size:clamp(96px,26vw,190px);letter-spacing:-.03em;right:-2%;bottom:-18%}
   .poster-banner .b-text{position:absolute;left:28px;bottom:24px;right:28px}
-  .poster-banner .b-eyebrow{font-family:"Manrope",sans-serif;font-weight:700;font-size:11px;letter-spacing:.22em;color:#F5C518}
+  .poster-banner .b-eyebrow{font-family:"Manrope",sans-serif;font-weight:700;font-size:11px;letter-spacing:.22em;color:var(--bh,#F5C518)}
   .poster-banner .b-title{font-weight:700;font-size:clamp(20px,5vw,30px);line-height:1.25;margin-top:6px;text-wrap:balance}
   /* user photo (device-only) layered under a scrim so the title stays legible */
   .poster-banner.has-photo{background:#0b0b0f}
@@ -365,6 +365,9 @@
   .rate .r-cmp{grid-column:1/-1;font-size:12px;color:var(--ink-dim);padding-top:12px;margin-top:6px;border-top:1px solid var(--rule-soft)}
   .rate .r-cmp b{font-family:"Manrope",sans-serif;color:var(--ink)}
   .luck{display:inline-flex;align-items:center;min-height:26px;padding:0 12px;border-radius:99px;font-size:12px;font-weight:700;background:var(--panel-2);border:1px solid var(--rule);color:var(--ink)}
+  #view-result[data-team]{--accent:var(--ta-l);--accent-fill:var(--ta-f);--accent-ink:var(--ta-i)}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) #view-result[data-team]{--accent:var(--ta-f)} }
+  :root[data-theme="dark"] #view-result[data-team]{--accent:var(--ta-f)}
   .luck.up{background:var(--accent-fill);border-color:var(--accent-fill);color:var(--accent-ink)}
 
   .poster-body{padding:4px 24px 36px}
@@ -385,6 +388,9 @@
   .reserved{font-family:"Manrope",sans-serif;font-size:10px;letter-spacing:.12em;color:var(--muted)}
 
   .stats-block{padding:28px 0 4px;border-top:1px solid var(--rule);margin-top:16px}
+  .stats-block:first-child{border-top:none;margin-top:0}
+  .games-head{margin-top:36px;padding-top:28px;border-top:2px solid var(--ink)}
+  .games-head h3{font-size:20px;font-weight:700;margin-top:6px}
   .stats-block .section-head{padding-bottom:18px}
   .team-visits{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 8px}
   .team-visit{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border:1px solid var(--rule-soft);border-radius:8px;background:var(--panel)}
@@ -470,8 +476,8 @@
 
   /* Result page — recap download at the end */
   .recap-cta{
-    max-width:720px;margin:8px auto 0;display:grid;grid-template-columns:140px 1fr;gap:24px;align-items:center;
-    border:1px solid var(--rule);border-radius:16px;background:var(--panel);padding:20px 24px;box-shadow:var(--shadow);
+    margin:16px 32px 0;display:grid;grid-template-columns:140px 1fr;gap:24px;align-items:center;
+    border:1px solid var(--rule);border-radius:12px;background:var(--panel);padding:18px 20px;
   }
   .recap-thumb{aspect-ratio:9/16;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,var(--panel-2),var(--rule))}
   .recap-thumb img{width:100%;height:100%;display:block;object-fit:cover}
@@ -594,7 +600,7 @@
     .ed-actions .btn-ghost{flex:1;justify-content:center}
     .sh-body{grid-template-columns:1fr;gap:14px}
     .sh-preview{width:min(62vw,300px);margin:0 auto}
-    .recap-cta{grid-template-columns:96px 1fr;gap:14px;padding:16px;margin-inline:0}
+    .recap-cta{grid-template-columns:96px 1fr;gap:14px;padding:16px;margin:14px 18px 0}
     .recap-body h3{font-size:17px}
     .recap-actions .cta,.recap-actions .btn-ghost{flex:1 1 100%;justify-content:center}
   }
@@ -740,7 +746,7 @@
           <div class="summary" id="summary"></div>
         </div>
         <div class="team-strip">
-          <label class="label" for="view-select">查看方式</label>
+          <label class="label" for="view-select">選擇版面（你支持的球隊）</label>
           <div class="view-pick">
             <span class="vp-badge" id="vp-badge"></span>
             <select id="view-select"></select>
@@ -749,6 +755,18 @@
           <p class="view-hint" id="view-hint"></p>
         </div>
         <div class="rate" id="rate" aria-live="polite"></div>
+        <section class="recap-cta" aria-labelledby="recap-title">
+      <div class="recap-thumb" id="recap-thumb" aria-hidden="true"></div>
+      <div class="recap-body">
+        <div class="eyebrow">Season Recap</div>
+        <h3 id="recap-title">把這一季做成一張回顧圖</h3>
+        <p>套用你選的版面和上面的戰績，再放上這季最喜歡的照片，下載一張 1080 × 1920 的直式回顧圖。</p>
+        <div class="recap-actions">
+          <button class="cta" id="share-btn">下載賽季回顧圖</button>
+          <button class="btn-ghost" id="recap-photo">換成我的照片</button>
+        </div>
+      </div>
+    </section>
         <div class="poster-body" id="poster-body"></div>
         <div class="poster-foot">
           <div class="cpbl">CPBL · 2026 SEASON</div>
@@ -756,18 +774,6 @@
         </div>
       </article>
     </div>
-    <section class="recap-cta" aria-labelledby="recap-title">
-      <div class="recap-thumb" id="recap-thumb" aria-hidden="true"></div>
-      <div class="recap-body">
-        <div class="eyebrow">Season Recap</div>
-        <h3 id="recap-title">把這一季做成一張回顧圖</h3>
-        <p>用上面的戰績，加上你這季最喜歡的照片，下載一張 1080 × 1920 的直式回顧圖。</p>
-        <div class="recap-actions">
-          <button class="cta" id="share-btn">下載賽季回顧圖</button>
-          <button class="btn-ghost" id="recap-photo">換成我的照片</button>
-        </div>
-      </div>
-    </section>
     <div class="footer-bar">
       <div class="picked-stats"><span><b id="r-total">0</b>場進場</span></div>
       <button class="cta" id="go-pick">← 回到選擇賽事</button>
@@ -846,6 +852,17 @@ const TEAMS = {
   "富邦悍將":       {abbr:"G", short:"悍將",   c:"#1D3D8F", k:"#FFFFFF"},
 };
 const TEAM_ORDER = Object.keys(TEAMS);
+// Per-team accent: f = bright fill (dark backgrounds, bars, pills), i = ink on that fill,
+// l = darker shade for text on the light theme. Neutral summary uses a cream accent.
+const ACCENT = {
+  "中信兄弟":       {f:"#F5C518", i:"#12121A", l:"#A8820A"},
+  "樂天桃猿":       {f:"#D2486E", i:"#FFFFFF", l:"#8E1B3A"},
+  "味全龍":         {f:"#E5414B", i:"#FFFFFF", l:"#C8102E"},
+  "台鋼雄鷹":       {f:"#33AD78", i:"#FFFFFF", l:"#1E6B4D"},
+  "統一7-ELEVEn獅": {f:"#F28A2E", i:"#12121A", l:"#C25A0B"},
+  "富邦悍將":       {f:"#3F7FEA", i:"#FFFFFF", l:"#1D4FB8"},
+};
+const NEUTRAL_ACCENT = {f:"#EDE6D3", i:"#12121A"};
 const HALF_END = 180;
 const MONTHS = [3,4,5,6,7,8,9,10];
 const DOW = ["日","一","二","三","四","五","六"];
@@ -1195,6 +1212,18 @@ function renderResult(){
   const tc = team ? TEAMS[team].c : "#1a1a22";
   const bannerEl = document.getElementById("banner");
   bannerEl.style.setProperty("--tc", tc);
+  const viewEl = document.getElementById("view-result");
+  if (team){
+    const a = ACCENT[team];
+    viewEl.dataset.team = TEAMS[team].abbr;
+    viewEl.style.setProperty("--ta-f", a.f); viewEl.style.setProperty("--ta-i", a.i); viewEl.style.setProperty("--ta-l", a.l);
+    bannerEl.style.setProperty("--bh", a.f);
+  } else {
+    // neutral summary: monochrome accents so no team colour is implied
+    viewEl.dataset.team = "none";
+    viewEl.style.setProperty("--ta-f", "var(--ink-dim)"); viewEl.style.setProperty("--ta-i", "var(--ground)"); viewEl.style.setProperty("--ta-l", "var(--ink)");
+    bannerEl.style.setProperty("--bh", NEUTRAL_ACCENT.f);
+  }
   bannerEl.classList.toggle("has-photo", !!photo);
   bannerEl.innerHTML = `
     ${photo ? `<img class="b-photo" src="${photoURL}" alt="你上傳的賽季照片"><div class="b-scrim"></div>` : ""}
@@ -1215,15 +1244,15 @@ function renderResult(){
 
   // Team chips
   const sel = document.getElementById("view-select");
-  sel.innerHTML = `<option value="NONE">預設：我的觀賽摘要</option>
-    <optgroup label="我支持的球隊 · 看觀賽勝率">${TEAM_ORDER.map(t =>
+  sel.innerHTML = `<option value="NONE">觀賽摘要（不選球隊）</option>
+    <optgroup label="支持球隊版面 · 看觀賽勝率">${TEAM_ORDER.map(t =>
       `<option value="${esc(t)}">${esc(t)}</option>`).join("")}</optgroup>`;
   sel.value = team || "NONE";
   document.getElementById("vp-badge").innerHTML = team ? badge(team, false)
     : `<span class="vp-all"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg></span>`;
   document.getElementById("view-hint").textContent = team
-    ? `正在看你進場時${TEAMS[team].short}的勝率 · 選「預設」回到觀賽摘要`
-    : "選一支你支持的球隊，看你進場時它的勝率和幸運指數";
+    ? `${TEAMS[team].short}版面：看你進場時${TEAMS[team].short}的勝率，回顧圖也會套用這個版面`
+    : "選你支持的球隊，版面會換成它的觀賽勝率和幸運指數，回顧圖同步套用";
 
   // Rate block
   const rate = document.getElementById("rate");
@@ -1269,9 +1298,11 @@ function renderResult(){
       <div class="section-head"><div class="section-title">${title}<span class="en">${en}</span></div></div>
       <div class="empty-slot"><span class="reserved">DATA TBD · 季後賽資料尚未提供</span></div></section>`;
 
-  let html = half("上半季", "1st half season", all.filter(g => g.n <= HALF_END))
+  const gamesHtml = `<div class="games-head"><div class="eyebrow">Game log</div><h3>每一場的比賽明細</h3></div>`
+           + half("上半季", "1st half season", all.filter(g => g.n <= HALF_END))
            + half("下半季", "2nd half season", all.filter(g => g.n > HALF_END))
            + reserved("季後挑戰賽", "Playoff Series") + reserved("台灣大賽", "Taiwan Series");
+  let html = "";
 
   // Supported-team details
   if (s && s.games.length){
@@ -1319,7 +1350,7 @@ function renderResult(){
     <div class="rows">${MONTHS.map(m => { const n = bm[m] || 0; return `<div class="row bar-row ${n ? "" : "zero"}"><span class="r-name">${m} 月</span><span class="bar"><i style="width:${n / maxM * 100}%"></i></span><span class="r-val">${n} 場</span></div>`; }).join("")}</div>
   </section>`;
 
-  body.innerHTML = html;
+  body.innerHTML = html + gamesHtml;
 }
 document.getElementById("view-select").addEventListener("change", e => {
   store.set(K_TEAM, e.target.value);
@@ -1552,7 +1583,7 @@ const F_TC  = '"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, s
 
 function shareModel(all = picked(), team = currentTeam(), name = (store.get(K_NAME) || "").trim()){
   const venues = new Set(all.map(g => g.v)).size;
-  const m = {all, team, venues, name, tc: team ? TEAMS[team].c : "#2a2a33"};
+  const m = {all, team, venues, name, tc: team ? TEAMS[team].c : "#2a2a33", acc: team ? ACCENT[team] : NEUTRAL_ACCENT};
   if (team){
     const s = statsFor(team, all), short = TEAMS[team].short;
     m.label = `我進場時的${short} · 觀賽勝率`;
@@ -1570,9 +1601,9 @@ function shareModel(all = picked(), team = currentTeam(), name = (store.get(K_NA
         : [{t:"全季勝率 "}, {t:fmtPct(sp), b:1}, {t:`，我進場時${d >= 0 ? "高" : "低"}了 `}, {t:Math.abs(d).toFixed(1), b:1}, {t:" 個百分點"}];
       m.strip = s.games.map(g => {
         const r = resultOf(g, team);
-        return r === "W" ? {fill:"#F5C518"} : r === "L" ? {fill:"rgba(255,255,255,.22)"} : {stroke:"rgba(255,255,255,.6)"};
+        return r === "W" ? {fill:ACCENT[team].f} : r === "L" ? {fill:"rgba(255,255,255,.22)"} : {stroke:"rgba(255,255,255,.6)"};
       });
-      m.stripLabel = "每場結果（黃 = 贏）";
+      m.stripLabel = "每場結果（亮色 = 贏）";
     }
     m.cells = [[all.length, "場", "進場"], [venues, "座", "球場踩點"],
       s.games.length ? [s.streak, "連勝", "最長"] : [new Set(all.flatMap(g => [g.a, g.h])).size, "隊", "看過"]];
@@ -1677,14 +1708,14 @@ async function drawShare(m, ph){
   ctx.fillStyle = white; ctx.font = `800 46px ${F_NUM}`; spacing(ctx, 1); ctx.fillText("CPBL", L, 176);
   const cw = ctx.measureText("CPBL").width;
   ctx.fillStyle = dim; ctx.font = `600 32px ${F_NUM}`; spacing(ctx, 3); ctx.fillText("/ 2026", L + cw + 16, 176);
-  ctx.textAlign = "right"; ctx.fillStyle = "#F5C518"; ctx.font = `700 24px ${F_NUM}`; spacing(ctx, 5);
+  ctx.textAlign = "right"; ctx.fillStyle = m.acc.f; ctx.font = `700 24px ${F_NUM}`; spacing(ctx, 5);
   ctx.fillText("MY 2026 SEASON", R, 150);
   if (m.name){ ctx.fillStyle = white; ctx.font = `700 40px ${F_TC}`; spacing(ctx, 0); ctx.fillText(m.name, R, 202); }
   ctx.textAlign = "left";
 
   // ---- Stats block
   let y = 960;
-  ctx.fillStyle = "#F5C518"; ctx.font = `700 26px ${F_NUM}`; spacing(ctx, 6);
+  ctx.fillStyle = m.acc.f; ctx.font = `700 26px ${F_NUM}`; spacing(ctx, 6);
   ctx.fillText("CPBL 2026 · 進場紀錄", L, y);
   ctx.fillStyle = white; ctx.font = `700 50px ${F_TC}`; spacing(ctx, 0);
   ctx.fillText(m.title, L, y + 70, W);
@@ -1717,8 +1748,8 @@ async function drawShare(m, ph){
   if (m.luck){
     ctx.font = `700 38px ${F_TC}`;
     const pw = ctx.measureText(m.luck).width + 56;
-    rr(ctx, R - pw, 1286, pw, 70, 35); ctx.fillStyle = "#F5C518"; ctx.fill();
-    ctx.fillStyle = "#12121A"; ctx.textAlign = "center"; ctx.fillText(m.luck, R - pw / 2, 1335);
+    rr(ctx, R - pw, 1286, pw, 70, 35); ctx.fillStyle = m.acc.f; ctx.fill();
+    ctx.fillStyle = m.acc.i; ctx.textAlign = "center"; ctx.fillText(m.luck, R - pw / 2, 1335);
   }
   ctx.textAlign = "left";
 
@@ -1834,85 +1865,33 @@ document.getElementById("sh-share").onclick = async () => {
 document.getElementById("ed-done").addEventListener("click", () => { if (shareBlob) shareBlob = null; });
 
 // ================================================================
-// Hero wall — real share images (same renderer as the download),
-// drawn from sample seasons, laid on a tilted 2.5D plane that drifts.
+// Hero wall — pre-rendered season recaps (img/wall/*.jpg), built offline with
+// the same drawShare() renderer, so the landing page only loads images.
 // ================================================================
-// Deterministic sample seasons: every k-th game of a team, offset per sample.
-function sampleSeason(team, k, off){
-  const list = GAMES.filter(g => !team || g.a === team || g.h === team);
-  return list.filter((g, i) => (i + off) % k === 0);
-}
-// Demo photos shot by the site owner (docs/img). fx/fy = focal point, z = zoom,
-// tuned so the subject sits above the stats block.
-const DEMO_PHOTOS = {
-  1: {src:"img/demo-1.jpg", fx:.52, fy:.80, z:1.35},
-  2: {src:"img/demo-2.jpg", fx:.56, fy:.74, z:1.25},
-  3: {src:"img/demo-3.jpg", fx:.55, fy:.74, z:1.30},
-  5: {src:"img/demo-5.jpg", fx:.47, fy:.86, z:1.35},
-  6: {src:"img/demo-6.jpg", fx:.60, fy:.86, z:1.35},
-  7: {src:"img/demo-7.jpg", fx:.55, fy:.70, z:1.30},
-};
-const demoCache = {};
-function loadDemoPhoto(n){
-  const d = DEMO_PHOTOS[n];
-  if (!d) return Promise.resolve(null);
-  return demoCache[n] = demoCache[n] || fetch(d.src).then(r => { if (!r.ok) throw 0; return r.blob(); })
-    .then(async blob => { const bm = await createImageBitmap(blob); const o = {blob, w:bm.width, h:bm.height, fx:d.fx, fy:d.fy, z:d.z}; bm.close && bm.close(); return o; })
-    .catch(() => null);
-}
-// [team, every k-th game, offset, demo photo]
-const WALL_SAMPLES = [
-  ["中信兄弟", 8, 6, 7], ["味全龍", 7, 2, 1], [null, 23, 4, 0], ["富邦悍將", 5, 0, 3],
-  ["統一7-ELEVEn獅", 8, 3, 0], ["台鋼雄鷹", 9, 5, 0], ["樂天桃猿", 8, 2, 5], [null, 31, 7, 0],
-  ["中信兄弟", 13, 2, 6], ["富邦悍將", 11, 6, 0], ["台鋼雄鷹", 6, 4, 2], ["樂天桃猿", 7, 0, 0],
-];
-const FEATURE_SAMPLE = 0;   // the photo + recap pair shown in the "your photo" section
-let wallURLs = null, wallBusy = false;
-function wallPlaceholder(i){
-  const t = WALL_SAMPLES[i][0];
-  return `<div class="wall-card" style="--tc:${t ? TEAMS[t].c : "#2a2a33"}"></div>`;
-}
-function layoutWall(items){
+const WALL_IMAGES = ["brothers", "plain-dragons", "guardians", "monkeys", "plain-neutral", "dragons",
+  "hawks", "plain-lions", "lions", "stadium", "plain-guardians", "plain-monkeys"].map(n => `img/wall/${n}.jpg`);
+function buildWall(){
+  const plane = document.getElementById("wall-plane");
   const cols = matchMedia("(max-width: 780px)").matches ? 3 : 4;
-  const per = Math.ceil(items.length / cols);
+  if (plane.dataset.cols === String(cols)) return;
+  plane.dataset.cols = cols;
+  const per = Math.ceil(WALL_IMAGES.length / cols);
   let html = "";
   for (let c = 0; c < cols; c++){
-    const col = items.slice(c * per, c * per + per);
-    // duplicate so the drift loops seamlessly
-    html += `<div class="wall-col" style="--d:${46 + c * 9}s">${col.join("")}${col.join("")}</div>`;
+    const col = WALL_IMAGES.slice(c * per, c * per + per)
+      .map((u, i) => `<div class="wall-card"><img src="${u}" alt="" decoding="async" ${c > 1 || i > 1 ? 'loading="lazy"' : ""}></div>`).join("");
+    html += `<div class="wall-col" style="--d:${46 + c * 9}s">${col}${col}</div>`;   // duplicated so the drift loops
   }
-  document.getElementById("wall-plane").innerHTML = html;
+  plane.innerHTML = html;
 }
-async function buildWall(){
-  if (wallURLs){ layoutWall(wallURLs.map(u => `<div class="wall-card"><img src="${u}" alt=""></div>`)); return; }
-  layoutWall(WALL_SAMPLES.map((_, i) => wallPlaceholder(i)));
-  if (wallBusy) return;
-  wallBusy = true;
-  const urls = [];
-  for (const [team, k, off, ph] of WALL_SAMPLES){
-    const m = shareModel(sampleSeason(team, k, off), team, "");
-    const big = await drawShare(m, await loadDemoPhoto(ph));
-    const c = document.createElement("canvas"); c.width = 432; c.height = 768;
-    c.getContext("2d").drawImage(big, 0, 0, 432, 768);
-    big.width = big.height = 0;                 // free the 1080×1920 buffer right away
-    const blob = await new Promise(r => c.toBlob(r, "image/jpeg", .86));
-    urls.push(blob ? URL.createObjectURL(blob) : "");
-    await new Promise(r => setTimeout(r, 0));    // keep the page responsive
-  }
-  wallURLs = urls;
-  fillFeatureDemo();
-  if (!document.getElementById("view-intro").hidden) buildWall();
-}
-// "Your photo → your recap" pair + the STEP 03 thumbnail reuse the wall renders.
 function fillFeatureDemo(){
-  const ph = WALL_SAMPLES[FEATURE_SAMPLE][3];
   const img = document.getElementById("fd-photo");
-  if (!img.src) img.src = DEMO_PHOTOS[ph].src;
-  if (!wallURLs) return;
-  const u = wallURLs[FEATURE_SAMPLE];
-  document.getElementById("fd-recap").innerHTML = `<img src="${u}" alt="">`;
-  document.getElementById("demo-story").innerHTML = `<img src="${u}" alt="">`;
-  document.getElementById("demo-story").classList.add("has-img");
+  if (img.getAttribute("src")) return;
+  img.src = "img/photo-brothers.jpg";
+  document.getElementById("fd-recap").innerHTML = `<img src="img/recap-brothers.jpg" alt="" loading="lazy">`;
+  const st = document.getElementById("demo-story");
+  st.innerHTML = `<img src="img/wall/brothers.jpg" alt="" loading="lazy">`;
+  st.classList.add("has-img");
 }
 
 // Live thumbnail of the user's own recap at the bottom of the result page.
@@ -1935,8 +1914,8 @@ function queueRecapThumb(){
   }, 350);
 }
 document.getElementById("recap-photo").onclick = () => { if (photo) openEditor(photo, false); else photoInput.click(); };
-let wallMQ = matchMedia("(max-width: 780px)");
-wallMQ.addEventListener && wallMQ.addEventListener("change", () => { if (wallURLs) buildWall(); });
+const wallMQ = matchMedia("(max-width: 780px)");
+wallMQ.addEventListener && wallMQ.addEventListener("change", buildWall);
 
 // ================================================================
 // Router — #intro → #pick ⇄ #result (browser back works)
