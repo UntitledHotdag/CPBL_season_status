@@ -1850,6 +1850,7 @@ const DEMO_PHOTOS = {
   3: {src:"img/demo-3.jpg", fx:.55, fy:.74, z:1.30},
   5: {src:"img/demo-5.jpg", fx:.47, fy:.86, z:1.35},
   6: {src:"img/demo-6.jpg", fx:.60, fy:.86, z:1.35},
+  7: {src:"img/demo-7.jpg", fx:.55, fy:.70, z:1.30},
 };
 const demoCache = {};
 function loadDemoPhoto(n){
@@ -1861,11 +1862,11 @@ function loadDemoPhoto(n){
 }
 // [team, every k-th game, offset, demo photo]
 const WALL_SAMPLES = [
-  ["中信兄弟", 6, 1, 0], ["味全龍", 7, 2, 1], [null, 23, 4, 0], ["富邦悍將", 5, 0, 3],
+  ["中信兄弟", 8, 6, 7], ["味全龍", 7, 2, 1], [null, 23, 4, 0], ["富邦悍將", 5, 0, 3],
   ["統一7-ELEVEn獅", 8, 3, 0], ["台鋼雄鷹", 9, 5, 0], ["樂天桃猿", 8, 2, 5], [null, 31, 7, 0],
   ["中信兄弟", 13, 2, 6], ["富邦悍將", 11, 6, 0], ["台鋼雄鷹", 6, 4, 2], ["樂天桃猿", 7, 0, 0],
 ];
-const FEATURE_SAMPLE = 6;   // the photo + recap pair shown in the "your photo" section
+const FEATURE_SAMPLE = 0;   // the photo + recap pair shown in the "your photo" section
 let wallURLs = null, wallBusy = false;
 function wallPlaceholder(i){
   const t = WALL_SAMPLES[i][0];
