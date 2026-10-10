@@ -1893,8 +1893,10 @@ function shareModel(all = picked(), team = currentTeam(), name = (store.get(K_NA
     m.big = String(all.length); m.unit = "場"; m.luck = ""; m.rec = "";
     m.side = {k:"最常看的主場", v:`${TEAMS[S.home.key].short} ${S.home.n} 場`, team:S.home.key};
     m.cmp = [{t:"最常去的球場 "}, {t:S.venue.key, b:1, tc:1}, {t:` ${S.venue.n} 場 · 最常看到 `}, {t:TEAMS[S.seen.key].short, b:1, tc:1}, {t:` ${S.seen.n} 場`}];
-    m.strip = all.map(g => ({fill: g.as === g.hs ? "rgba(255,255,255,.4)" : TEAMS[g.as > g.hs ? g.a : g.h].c}));
-    m.stripLabel = "每場勝隊";
+    // one square per game, coloured by the HOME team: its colour = home win, grey = home loss, outline = tie
+    m.strip = all.map(g => g.as === g.hs ? {stroke:"rgba(255,255,255,.6)"}
+      : g.hs > g.as ? {fill:TEAMS[g.h].c} : {fill:"rgba(255,255,255,.22)"});
+    m.stripLabel = "每場主隊勝負（主隊色 = 主場贏球）";
     m.cells = [[all.length, "場", "進場"], [venues, "座", "球場踩點"], [S.teams, "隊", "看過"]];
   }
   return m;
