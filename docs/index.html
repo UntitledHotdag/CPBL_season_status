@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <title>CPBL 進場戰績</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="勾選你 2026 年進場看過的中華職棒一軍例行賽，算出你的觀賽勝率，做成 IG 限動分享圖。球迷自製，非 CPBL 官方網站。">
+<meta name="description" content="勾選你 2026 年進場看過的中華職棒一軍例行賽，算出你的觀賽勝率，再放上這季最喜歡的照片，做成一張賽季回顧圖。球迷自製，非 CPBL 官方網站。">
 <link rel="canonical" href="https://mybaseballgame.com/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://mybaseballgame.com/">
-<meta property="og:title" content="CPBL 進場戰績｜你進場的時候，你的球隊贏了幾場？">
-<meta property="og:description" content="勾選你今年進場看過的比賽，算出觀賽勝率，做成 IG 限動分享圖。球迷自製，非 CPBL 官方網站。">
+<meta property="og:title" content="CPBL 進場戰績｜你這個賽季，進場看了幾場球？">
+<meta property="og:description" content="勾選你今年進場看過的比賽，算出觀賽勝率，放上最喜歡的照片，做成你的賽季回顧圖。球迷自製，非 CPBL 官方網站。">
 <meta property="og:locale" content="zh_TW">
 <meta name="theme-color" content="#F5F1E8">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -452,6 +452,32 @@
     box-shadow:0 2px 0 rgba(255,255,255,.06) inset,-18px 28px 40px -14px rgba(0,0,0,.45);
   }
   .wall-card img{width:100%;height:100%;display:block;object-fit:cover}
+
+  /* "Your photo" feature screen */
+  .feature-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
+  .feature-notes{margin:24px 0 0}
+  .feature-demo{display:flex;align-items:center;justify-content:center;gap:18px}
+  .feature-demo figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .feature-demo figcaption{font-size:12px;color:var(--muted);letter-spacing:.06em}
+  .fd-photo img{width:min(30vw,230px);aspect-ratio:2/3;object-fit:cover;border-radius:14px;display:block;
+    box-shadow:var(--shadow);transform:rotate(-4deg);background:var(--panel-2)}
+  .fd-recap-img{width:min(32vw,250px);aspect-ratio:9/16;border-radius:16px;overflow:hidden;
+    background:linear-gradient(135deg,#8E1B3A,#0b0b0f 90%);box-shadow:0 30px 60px -20px rgba(0,0,0,.45);transform:rotate(3deg)}
+  .fd-recap-img img{width:100%;height:100%;display:block;object-fit:cover}
+  .fd-arrow{font-family:"Manrope",sans-serif;font-size:28px;font-weight:800;color:var(--accent)}
+  .demo-story.has-img{width:64px;padding:0;overflow:hidden;border:none;box-shadow:0 8px 18px -8px rgba(0,0,0,.4)}
+  .demo-story.has-img img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* Result page — recap download at the end */
+  .recap-cta{
+    max-width:720px;margin:8px auto 0;display:grid;grid-template-columns:140px 1fr;gap:24px;align-items:center;
+    border:1px solid var(--rule);border-radius:16px;background:var(--panel);padding:20px 24px;box-shadow:var(--shadow);
+  }
+  .recap-thumb{aspect-ratio:9/16;border-radius:10px;overflow:hidden;background:linear-gradient(135deg,var(--panel-2),var(--rule))}
+  .recap-thumb img{width:100%;height:100%;display:block;object-fit:cover}
+  .recap-body h3{font-size:20px;font-weight:700;margin-top:6px}
+  .recap-body p{font-size:13px;color:var(--ink-dim);line-height:1.7;margin-top:6px}
+  .recap-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
   .wall .sample-tag{top:14px;right:14px}
   @media (prefers-reduced-motion: reduce){ .wall-col{animation:none} }
   .hero-sample .rate{margin:0;box-shadow:var(--shadow)}
@@ -496,6 +522,10 @@
     .wall-plane{grid-template-columns:repeat(3,1fr);width:165%;gap:14px}
     .wall-card{margin-bottom:14px;border-radius:10px}
     .steps-grid{grid-template-columns:1fr}
+    .feature-grid{grid-template-columns:1fr;gap:28px}
+    .fd-photo img{width:40vw}
+    .fd-recap-img{width:42vw}
+    .feature-demo{gap:10px}
   }
   @media (max-width:640px){
     .screen{padding-block:36px;min-height:auto}
@@ -564,7 +594,9 @@
     .ed-actions .btn-ghost{flex:1;justify-content:center}
     .sh-body{grid-template-columns:1fr;gap:14px}
     .sh-preview{width:min(62vw,300px);margin:0 auto}
-    .poster-toolbar .soon{display:none}
+    .recap-cta{grid-template-columns:96px 1fr;gap:14px;padding:16px;margin-inline:0}
+    .recap-body h3{font-size:17px}
+    .recap-actions .cta,.recap-actions .btn-ghost{flex:1 1 100%;justify-content:center}
   }
   @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
 </style>
@@ -595,14 +627,34 @@
       <div class="hero-grid">
         <div>
           <div class="intro-eyebrow">CPBL 2026 例行賽 · 進場戰績</div>
-          <h1 class="hero-title">你進場的時候，<br><em>你的球隊</em>贏了幾場？</h1>
-          <p class="hero-lede">把今年進場看過的比賽勾起來，馬上算出你的觀賽勝率，再做成一張 IG 限動分享圖：你是福神，還是逆風鐵粉？</p>
+          <h1 class="hero-title">你這個賽季，<br><em>進場看了幾場球</em>？</h1>
+          <p class="hero-lede">把今年進場看過的比賽勾起來，算出你的觀賽勝率，再放上這季最喜歡的照片，做成一張專屬的賽季回顧圖。</p>
           <div class="hero-ctas" id="hero-ctas"></div>
           <button class="scroll-hint" id="scroll-hint">往下看怎麼玩 ↓</button>
         </div>
-        <div class="wall" aria-label="分享圖範例">
+        <div class="wall" aria-label="賽季回顧圖範例">
           <div class="wall-plane" id="wall-plane" aria-hidden="true"></div>
-          <span class="sample-tag">分享圖範例</span>
+          <span class="sample-tag">賽季回顧圖範例</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen feature" id="feature">
+      <div class="feature-grid">
+        <div>
+          <div class="intro-eyebrow">Your photo, your season</div>
+          <h2 class="screen-title">放上這個賽季<br>你最喜歡的照片</h2>
+          <p class="hero-lede">勝投、再見安打、煙火進場，還是和朋友在看台的合照——選一張這季最有感的照片，它就是你回顧圖的主角。</p>
+          <ul class="notes feature-notes">
+            <li><span><b>拖曳、縮放選重點</b>：把最想留下的畫面放進框裡，回顧圖和戰績頁同步套用。</span></li>
+            <li><span><b>照片不會上傳</b>：只在你的手機裡處理與保存，本站看不到你的照片。</span></li>
+            <li><span><b>一鍵下載</b>：1080 × 1920 直式圖片，存進相簿或分享給朋友都好看。</span></li>
+          </ul>
+        </div>
+        <div class="feature-demo" aria-hidden="true">
+          <figure class="fd-photo"><img id="fd-photo" alt="" loading="lazy"><figcaption>你的照片</figcaption></figure>
+          <span class="fd-arrow">→</span>
+          <figure class="fd-recap"><div id="fd-recap" class="fd-recap-img"></div><figcaption>你的賽季回顧圖</figcaption></figure>
         </div>
       </div>
     </section>
@@ -610,7 +662,7 @@
     <section class="screen" id="how">
       <div class="screen-head">
         <div class="intro-eyebrow">How it works</div>
-        <h2 class="screen-title">三個步驟，一分鐘就完成</h2>
+        <h2 class="screen-title">三個步驟，記錄你的 2026 賽季</h2>
       </div>
       <div class="steps-grid">
         <div class="step">
@@ -627,9 +679,9 @@
         </div>
         <div class="step">
           <span class="no">STEP 03</span>
-          <h3>做一張限動分享圖</h3>
-          <p>放上你這季的照片，下載 9:16 圖片分享到 IG 限動。</p>
-          <div class="demo" aria-hidden="true"><span class="demo-story"><i></i><i></i><i style="width:55%"></i></span><span class="demo-soon">1080 × 1920 PNG</span></div>
+          <h3>做成賽季回顧圖</h3>
+          <p>放上這季最喜歡的照片，下載一張專屬的賽季回顧圖，留作紀念或分享給朋友。</p>
+          <div class="demo" aria-hidden="true"><span class="demo-story" id="demo-story"><i></i><i></i><i style="width:55%"></i></span><span class="demo-soon">照片＋戰績<br>一張帶走</span></div>
         </div>
       </div>
     </section>
@@ -651,7 +703,7 @@
         </div>
         <div class="legal-item">
           <div class="legal-k">免責聲明</div>
-          <p>本站為球迷自製的非官方網站，與中華職棒大聯盟及各球團無任何隸屬、授權或贊助關係。球隊名稱僅供辨識，標誌以英文字母與代表色自行設計，未使用任何官方商標或 Logo。統計結果僅供娛樂參考。你的勾選紀錄、名字與照片只存在你的裝置，本站不會蒐集或保存；本站使用 Google Analytics 以 Cookie 蒐集匿名的瀏覽與操作統計（例如頁面瀏覽、按鈕點擊），用來改善網站，不含可識別個人的資料。</p>
+          <p>本站為球迷自製的非官方網站，與中華職棒大聯盟及各球團無任何隸屬、授權或贊助關係。球隊名稱僅供辨識，標誌以英文字母與代表色自行設計，未使用任何官方商標或 Logo。統計結果僅供娛樂參考。首頁範例照片為站長於球場自行拍攝。你的勾選紀錄、名字與照片只存在你的裝置，本站不會蒐集或保存；本站使用 Google Analytics 以 Cookie 蒐集匿名的瀏覽與操作統計（例如頁面瀏覽、按鈕點擊），用來改善網站，不含可識別個人的資料。</p>
         </div>
       </div>
       <div class="hero-ctas" id="end-ctas" style="margin-top:0"></div>
@@ -677,13 +729,6 @@
 
   <!-- ==================== Result (poster layout) ==================== -->
   <section id="view-result" class="view" hidden>
-    <div class="poster-toolbar">
-      <span class="label">你的 2026 進場戰績</span>
-      <div class="tb-right">
-        <span class="soon">IG 限動尺寸 · 1080×1920</span>
-        <button class="cta" id="share-btn">下載 9:16 分享圖</button>
-      </div>
-    </div>
     <div class="poster-shell">
       <article class="poster">
         <div class="poster-banner" id="banner"></div>
@@ -711,6 +756,18 @@
         </div>
       </article>
     </div>
+    <section class="recap-cta" aria-labelledby="recap-title">
+      <div class="recap-thumb" id="recap-thumb" aria-hidden="true"></div>
+      <div class="recap-body">
+        <div class="eyebrow">Season Recap</div>
+        <h3 id="recap-title">把這一季做成一張回顧圖</h3>
+        <p>用上面的戰績，加上你這季最喜歡的照片，下載一張 1080 × 1920 的直式回顧圖。</p>
+        <div class="recap-actions">
+          <button class="cta" id="share-btn">下載賽季回顧圖</button>
+          <button class="btn-ghost" id="recap-photo">換成我的照片</button>
+        </div>
+      </div>
+    </section>
     <div class="footer-bar">
       <div class="picked-stats"><span><b id="r-total">0</b>場進場</span></div>
       <button class="cta" id="go-pick">← 回到選擇賽事</button>
@@ -735,10 +792,10 @@
     </div>
     <div class="ed-col ed-col-story">
       <div class="ed-story-box">
-        <div class="ed-label">限動分享圖<span>9:16 預覽</span></div>
+        <div class="ed-label">賽季回顧圖<span>直式預覽</span></div>
         <div class="ed-frame ed-story" data-frame><img alt=""><div class="ed-safe"></div></div>
       </div>
-      <p class="ed-story-note">兩個框共用同一個重點位置，在哪一個框拖曳都可以。虛線區是分享圖放戰績數字的位置，重點避開這裡會更好看。</p>
+      <p class="ed-story-note">兩個框共用同一個重點位置，在哪一個框拖曳都可以。虛線區是回顧圖放戰績數字的位置，重點避開這裡會更好看。</p>
     </div>
   </div>
   <label class="ed-zoom"><span>縮放</span><input type="range" id="ed-zoom" min="1" max="4" step="0.01" value="1" aria-label="縮放照片"></label>
@@ -753,7 +810,7 @@
 <!-- ==================== 9:16 share image (Canvas 2D, device-only) ==================== -->
 <dialog class="editor share" id="share" aria-labelledby="sh-title">
   <div class="ed-head">
-    <h2 id="sh-title">你的限動分享圖</h2>
+    <h2 id="sh-title">你的賽季回顧圖</h2>
     <button class="icon-btn" id="sh-close" aria-label="關閉">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
@@ -761,7 +818,7 @@
   <div class="sh-body">
     <div class="sh-preview" id="sh-preview"><span class="ed-busy">產生中…</span></div>
     <div class="sh-side">
-      <p class="ed-hint">1080 × 1920 PNG，直接放進 IG／FB 限動。圖片在你的手機上產生，不會上傳。</p>
+      <p class="ed-hint">1080 × 1920 直式圖片，存進相簿、分享到限動都合適。圖片在你的手機上產生，不會上傳。</p>
       <div class="sh-actions">
         <button class="cta" id="sh-share" hidden>分享到 IG／其他 App</button>
         <button class="cta" id="sh-save">儲存圖片</button>
@@ -1150,6 +1207,8 @@ function renderResult(){
     <div class="b-text"><div class="b-eyebrow">CPBL 2026 · 進場紀錄</div>
     <div class="b-title">${team ? `我進場的時候，${esc(TEAMS[team].short)}贏了幾場？` : `今年我進場看了 ${all.length} 場球`}</div></div>`;
   if (photo) placePhoto(bannerEl.querySelector(".b-photo"), bannerEl, photo);
+  document.getElementById("recap-photo").textContent = photo ? "調整照片" : "換成我的照片";
+  queueRecapThumb();
 
   // Summary
   document.getElementById("summary").innerHTML = `共進場 <b>${all.length}</b> 場<br>去過 <b>${venues}</b> 座球場`;
@@ -1282,6 +1341,7 @@ function renderIntro(){
   document.getElementById("end-ctas").innerHTML = primary + secondary;
 
   buildWall();
+  fillFeatureDemo();
   document.getElementById("demo-card").innerHTML = cardHtml({date:BY_N.get(9).d, g:BY_N.get(9), kind:"normal"})
     .replace('<button class="card"', '<div class="card" aria-pressed="true" style="min-width:0"').replace(/<\/button>\s*$/, "</div>");
   document.getElementById("demo-rate").innerHTML = `<span class="demo-rate">${badge("味全龍", false, "md")}<span class="big">.706</span><span class="side"><span>12勝 5敗</span><span class="luck up">福神球迷</span></span></span>`;
@@ -1711,7 +1771,7 @@ const shMsg = document.getElementById("sh-msg");
 const dlCap = (window.claude && typeof window.claude.use === "function")
   ? window.claude.use("downloads").catch(() => null) : Promise.resolve(null);
 let shareBlob = null, shareURL = "";
-const SHARE_NAME = "cpbl-2026-my-season.png";
+const SHARE_NAME = "my-2026-season-recap.png";
 
 function setShareMsg(t){ shMsg.textContent = t; }
 async function openShare(){
@@ -1724,7 +1784,7 @@ async function openShare(){
     shareBlob = await renderShareImage();
     if (shareURL) URL.revokeObjectURL(shareURL);
     shareURL = URL.createObjectURL(shareBlob);
-    prev.innerHTML = `<img src="${shareURL}" alt="9:16 進場戰績分享圖預覽">`;
+    prev.innerHTML = `<img src="${shareURL}" alt="賽季回顧圖預覽">`;
   }catch(e){
     prev.innerHTML = `<span class="ed-busy">產生失敗，請再試一次</span>`;
     shareBlob = null;
@@ -1782,11 +1842,30 @@ function sampleSeason(team, k, off){
   const list = GAMES.filter(g => !team || g.a === team || g.h === team);
   return list.filter((g, i) => (i + off) % k === 0);
 }
+// Demo photos shot by the site owner (docs/img). fx/fy = focal point, z = zoom,
+// tuned so the subject sits above the stats block.
+const DEMO_PHOTOS = {
+  1: {src:"img/demo-1.jpg", fx:.52, fy:.80, z:1.35},
+  2: {src:"img/demo-2.jpg", fx:.56, fy:.74, z:1.25},
+  3: {src:"img/demo-3.jpg", fx:.55, fy:.74, z:1.30},
+  5: {src:"img/demo-5.jpg", fx:.47, fy:.86, z:1.35},
+  6: {src:"img/demo-6.jpg", fx:.60, fy:.86, z:1.35},
+};
+const demoCache = {};
+function loadDemoPhoto(n){
+  const d = DEMO_PHOTOS[n];
+  if (!d) return Promise.resolve(null);
+  return demoCache[n] = demoCache[n] || fetch(d.src).then(r => { if (!r.ok) throw 0; return r.blob(); })
+    .then(async blob => { const bm = await createImageBitmap(blob); const o = {blob, w:bm.width, h:bm.height, fx:d.fx, fy:d.fy, z:d.z}; bm.close && bm.close(); return o; })
+    .catch(() => null);
+}
+// [team, every k-th game, offset, demo photo]
 const WALL_SAMPLES = [
-  ["味全龍", 7, 2], ["中信兄弟", 6, 1], [null, 23, 4], ["統一7-ELEVEn獅", 8, 3],
-  ["富邦悍將", 5, 0], ["樂天桃猿", 9, 5], [null, 31, 7], ["台鋼雄鷹", 6, 4],
-  ["味全龍", 11, 6], ["中信兄弟", 13, 2], ["統一7-ELEVEn獅", 5, 1], ["樂天桃猿", 7, 0],
+  ["中信兄弟", 6, 1, 0], ["味全龍", 7, 2, 1], [null, 23, 4, 0], ["富邦悍將", 5, 0, 3],
+  ["統一7-ELEVEn獅", 8, 3, 0], ["台鋼雄鷹", 9, 5, 0], ["樂天桃猿", 8, 2, 5], [null, 31, 7, 0],
+  ["中信兄弟", 13, 2, 6], ["富邦悍將", 11, 6, 0], ["台鋼雄鷹", 6, 4, 2], ["樂天桃猿", 7, 0, 0],
 ];
+const FEATURE_SAMPLE = 6;   // the photo + recap pair shown in the "your photo" section
 let wallURLs = null, wallBusy = false;
 function wallPlaceholder(i){
   const t = WALL_SAMPLES[i][0];
@@ -1809,19 +1888,52 @@ async function buildWall(){
   if (wallBusy) return;
   wallBusy = true;
   const urls = [];
-  for (const [team, k, off] of WALL_SAMPLES){
+  for (const [team, k, off, ph] of WALL_SAMPLES){
     const m = shareModel(sampleSeason(team, k, off), team, "");
-    const big = await drawShare(m, null);
-    const c = document.createElement("canvas"); c.width = 324; c.height = 576;
-    c.getContext("2d").drawImage(big, 0, 0, 324, 576);
+    const big = await drawShare(m, await loadDemoPhoto(ph));
+    const c = document.createElement("canvas"); c.width = 432; c.height = 768;
+    c.getContext("2d").drawImage(big, 0, 0, 432, 768);
     big.width = big.height = 0;                 // free the 1080×1920 buffer right away
     const blob = await new Promise(r => c.toBlob(r, "image/jpeg", .86));
     urls.push(blob ? URL.createObjectURL(blob) : "");
     await new Promise(r => setTimeout(r, 0));    // keep the page responsive
   }
   wallURLs = urls;
+  fillFeatureDemo();
   if (!document.getElementById("view-intro").hidden) buildWall();
 }
+// "Your photo → your recap" pair + the STEP 03 thumbnail reuse the wall renders.
+function fillFeatureDemo(){
+  const ph = WALL_SAMPLES[FEATURE_SAMPLE][3];
+  const img = document.getElementById("fd-photo");
+  if (!img.src) img.src = DEMO_PHOTOS[ph].src;
+  if (!wallURLs) return;
+  const u = wallURLs[FEATURE_SAMPLE];
+  document.getElementById("fd-recap").innerHTML = `<img src="${u}" alt="">`;
+  document.getElementById("demo-story").innerHTML = `<img src="${u}" alt="">`;
+  document.getElementById("demo-story").classList.add("has-img");
+}
+
+// Live thumbnail of the user's own recap at the bottom of the result page.
+let recapTimer = 0, recapToken = 0, recapURL = "";
+function queueRecapThumb(){
+  clearTimeout(recapTimer);
+  recapTimer = setTimeout(async () => {
+    const my = ++recapToken;
+    try{
+      const big = await drawShare(shareModel(), photo);
+      const c = document.createElement("canvas"); c.width = 270; c.height = 480;
+      c.getContext("2d").drawImage(big, 0, 0, 270, 480);
+      big.width = big.height = 0;
+      const blob = await new Promise(r => c.toBlob(r, "image/jpeg", .85));
+      if (my !== recapToken || !blob) return;
+      if (recapURL) URL.revokeObjectURL(recapURL);
+      recapURL = URL.createObjectURL(blob);
+      document.getElementById("recap-thumb").innerHTML = `<img src="${recapURL}" alt="">`;
+    }catch(e){}
+  }, 350);
+}
+document.getElementById("recap-photo").onclick = () => { if (photo) openEditor(photo, false); else photoInput.click(); };
 let wallMQ = matchMedia("(max-width: 780px)");
 wallMQ.addEventListener && wallMQ.addEventListener("change", () => { if (wallURLs) buildWall(); });
 
