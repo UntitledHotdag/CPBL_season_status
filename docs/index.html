@@ -172,6 +172,46 @@
   }
   .day-group:last-child{border-bottom:none}
   .list{gap:28px}
+  .view-switch{display:inline-flex;gap:2px;padding:3px;border:1px solid var(--rule);border-radius:10px;background:var(--panel);margin-bottom:16px}
+  .view-switch button{min-height:38px;padding:6px 18px;border-radius:7px;font-size:13px;font-weight:700;color:var(--muted)}
+  .view-switch button[aria-selected="true"]{background:var(--ink);color:var(--ground)}
+  .cal{display:block;padding-bottom:12px}
+  .cal-nav{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  .cal-nav .icon-btn:disabled{opacity:.3;cursor:default}
+  .cal-title{flex:1;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .cal-title b{font-family:"Manrope","Noto Sans TC",sans-serif;font-size:24px;font-weight:800}
+  .cal-title span{font-size:12px;color:var(--muted)}
+  .cal-title em{font-style:normal;color:var(--accent);font-weight:700}
+  .month-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px}
+  .month-chips::-webkit-scrollbar{display:none}
+  .mchip{flex-shrink:0;min-height:32px;padding:4px 12px;border:1px solid var(--rule);border-radius:99px;font-size:12px;font-weight:700;color:var(--ink-dim)}
+  .mchip[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+  .cw{font-size:11px;font-weight:700;color:var(--muted);text-align:center;padding:4px 0}
+  .cw.we{color:var(--ink-dim)}
+  .cd{min-height:96px;border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:5px 4px;
+    display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;transition:border-color .12s}
+  .cd.pad{border:none;background:none}
+  .cd.empty{background:transparent;border-style:dashed;opacity:.5}
+  .cd-n{font-family:"Manrope",sans-serif;font-size:12px;font-weight:700;color:var(--ink-dim);line-height:1}
+  .cd-g{display:flex;flex-direction:column;gap:3px;align-items:center}
+  .mg{display:inline-flex;gap:1px;padding:1px;border-radius:5px;border:1.5px solid transparent}
+  .mg.on{border-color:var(--accent-fill);background:var(--panel-2)}
+  .mg.stub{opacity:.45}
+  .badge.xxs{width:14px;height:14px}
+  .cd:hover{border-color:var(--muted)}
+  .cd.picked{background:var(--panel-2);border-color:var(--accent-fill)}
+  .cd.picked .cd-n{color:var(--accent)}
+  .cd.sel{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  .cal-day{margin-top:18px;padding-top:14px;border-top:2px solid var(--ink)}
+  .cal-day:empty{display:none}
+  .cal-day-head{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:10px;font-size:13px;color:var(--ink-dim)}
+  .cal-day-head b{font-family:"Manrope",sans-serif;font-size:20px;font-weight:800;color:var(--ink)}
+  .cal-day-head span{margin-left:auto;font-size:11px;color:var(--muted)}
+  .week-rows{display:flex;flex-direction:column;gap:6px}
+  .week .day-group.off{opacity:.5}
+  .no-game{font-size:12px;color:var(--muted);padding:12px 0}
+  @media (min-width:900px){ .cd{min-height:110px} .badge.xxs{width:17px;height:17px} }
   .month-block{display:flex;flex-direction:column;gap:14px}
   .month-head{
     position:sticky;top:0;z-index:5;
@@ -585,6 +625,12 @@
     .chip,.search{flex-shrink:0}
     .search{margin-left:0;width:160px}
     .day-group{grid-template-columns:52px 1fr;gap:8px}
+    .view-switch{display:flex}
+    .view-switch button{flex:1}
+    .cal-grid{gap:3px}
+    .cd{min-height:78px;padding:4px 2px;border-radius:6px}
+    .badge.xxs{width:13px;height:13px}
+    .cal-title b{font-size:20px}
     .filters{gap:10px}
     .f-row{width:100%}
     .f-teams{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
@@ -745,6 +791,11 @@
   <!-- ==================== Picker ==================== -->
   <section id="view-pick" class="view" hidden>
     <div class="filters" id="filters"></div>
+    <div class="view-switch" id="view-switch" role="tablist" aria-label="瀏覽方式">
+      <button role="tab" data-view="month">月曆</button>
+      <button role="tab" data-view="week">周曆</button>
+      <button role="tab" data-view="list">列表</button>
+    </div>
     <div class="list" id="game-list"></div>
     <div class="undo-toast" id="undo-toast" role="status" hidden>
       <span id="undo-msg">已清除</span><button id="undo-btn">復原</button>
@@ -1049,7 +1100,10 @@ document.getElementById("filters").addEventListener("click", e => {
   buildFilters(); renderList();
 });
 document.getElementById("filters").addEventListener("change", e => {
-  if (e.target.id === "f-month") filt.month = e.target.value;
+  if (e.target.id === "f-month"){
+    filt.month = e.target.value;
+    if (/^\d+$/.test(filt.month)){ calMonth = +filt.month; calDay = `2026-${filt.month.padStart(2, "0")}-01`; weekStart = mondayOf(calDay < SEASON_FIRST ? SEASON_FIRST : calDay); }
+  }
   else if (e.target.id === "f-venue") filt.venue = e.target.value;
   else return;
   track("filter_change", {filter_type: e.target.id === "f-month" ? "month" : "venue", filter_value: e.target.value || "all"});
@@ -1107,7 +1161,14 @@ function cardHtml(s){
 }
 
 function renderList(){
+  document.querySelectorAll("#view-switch [data-view]").forEach(b => b.setAttribute("aria-selected", b.dataset.view === pickView));
+  if (pickView === "month") return renderMonth();
+  if (pickView === "week") return renderWeek();
+  renderSeasonList();
+}
+function renderSeasonList(){
   const host = document.getElementById("game-list");
+  host.className = "list";
   const shown = SLOTS.filter(slotPasses);
   if (!shown.length){
     host.innerHTML = `<div class="list-empty">${filt.only && !(filt.team || filt.month || filt.venue || filt.q) ? "還沒有勾選任何比賽" : "沒有符合條件的比賽，試試放寬篩選"}</div>`;
@@ -1160,7 +1221,153 @@ document.getElementById("game-list").addEventListener("click", e => {
   savePicks();
   track(adding ? "game_pick" : "game_unpick", {game_no: n, picks_total: picks.size});
   document.querySelectorAll(`button.card[data-n="${n}"]`).forEach(el => el.setAttribute("aria-pressed", picks.has(n)));
+  if (pickView === "month") refreshMonthMarks(); else updateCount();
+});
+
+// ================================================================
+// Calendar views — month grid (tap a day → its games below) and week
+// ================================================================
+const K_VIEW = "cpbl2026-view";
+let pickView = ["month", "week", "list"].includes(store.get(K_VIEW)) ? store.get(K_VIEW) : "month";
+const SEASON_FIRST = SLOTS[0].date, SEASON_LAST = SLOTS[SLOTS.length - 1].date;
+const isoUTC = dt => dt.toISOString().slice(0, 10);
+const addDays = (iso, k) => { const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + k); return isoUTC(d); };
+const mondayOf = iso => { const d = new Date(iso + "T00:00:00Z"); return addDays(iso, -((d.getUTCDay() + 6) % 7)); };
+const monthOf = iso => +iso.slice(5, 7);
+const DOW_MON = ["一", "二", "三", "四", "五", "六", "日"];
+let calMonth = null, calDay = null, weekStart = null;
+
+function slotsByDate(){
+  const by = {};
+  SLOTS.filter(slotPasses).forEach(s => (by[s.date] = by[s.date] || []).push(s));
+  return by;
+}
+// Start where the user's picks are, else at the season opener.
+function initCal(){
+  if (calMonth) return;
+  const first = [...picks].map(n => BY_N.get(n)).filter(Boolean).sort((a, b) => a.d.localeCompare(b.d))[0];
+  calDay = first ? first.d : SEASON_FIRST;
+  calMonth = monthOf(calDay);
+  weekStart = mondayOf(calDay);
+}
+function calNav(label, sub, prevOk, nextOk){
+  return `<div class="cal-nav">
+    <button class="icon-btn" data-cal="prev" aria-label="上一個" ${prevOk ? "" : "disabled"}><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <div class="cal-title"><b>${label}</b><span>${sub}</span></div>
+    <button class="icon-btn" data-cal="next" aria-label="下一個" ${nextOk ? "" : "disabled"}><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+  </div>`;
+}
+function countLine(slots){
+  const games = new Set(slots.filter(s => s.kind !== "postponed").map(s => s.g.n));
+  const picked = [...games].filter(n => picks.has(n)).length;
+  return `${games.size} 場${picked ? ` · <em>已選 ${picked} 場</em>` : ""}`;
+}
+function miniGame(s){
+  const g = s.g, on = s.kind !== "postponed" && picks.has(g.n);
+  const aW = g.as > g.hs, hW = g.hs > g.as, stub = s.kind === "postponed";
+  return `<span class="mg ${on ? "on" : ""} ${stub ? "stub" : ""}">${badge(g.a, stub || (!aW && !hW ? false : !aW), "xxs")}${badge(g.h, stub || (!aW && !hW ? false : !hW), "xxs")}</span>`;
+}
+function renderMonth(){
+  initCal();
+  const host = document.getElementById("game-list");
+  host.className = "cal";
+  const by = slotsByDate();
+  const first = `2026-${String(calMonth).padStart(2, "0")}-01`;
+  const days = new Date(Date.UTC(2026, calMonth, 0)).getUTCDate();
+  const lead = (new Date(first + "T00:00:00Z").getUTCDay() + 6) % 7;
+  const monthSlots = Object.keys(by).filter(d => monthOf(d) === calMonth).flatMap(d => by[d]);
+  if (monthOf(calDay) !== calMonth || !by[calDay]){
+    const withPick = Object.keys(by).sort().find(d => monthOf(d) === calMonth && by[d].some(s => picks.has(s.g.n)));
+    calDay = withPick || Object.keys(by).sort().find(d => monthOf(d) === calMonth) || first;
+  }
+  let cells = "";
+  for (let i = 0; i < lead; i++) cells += `<div class="cd pad"></div>`;
+  for (let d = 1; d <= days; d++){
+    const iso = `2026-${String(calMonth).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+    const list = by[iso] || [];
+    const has = list.length > 0, pickedHere = list.some(s => s.kind !== "postponed" && picks.has(s.g.n));
+    cells += has
+      ? `<button class="cd ${pickedHere ? "picked" : ""} ${iso === calDay ? "sel" : ""}" data-day="${iso}" aria-pressed="${iso === calDay}" aria-label="${calMonth}月${d}日，${list.length} 場">
+          <span class="cd-n">${d}</span><span class="cd-g">${list.map(miniGame).join("")}</span></button>`
+      : `<div class="cd empty"><span class="cd-n">${d}</span></div>`;
+  }
+  const daySlots = by[calDay] || [];
+  host.innerHTML = calNav(`${calMonth} 月`, countLine(monthSlots), calMonth > monthOf(SEASON_FIRST), calMonth < monthOf(SEASON_LAST))
+    + `<div class="month-chips">${MONTHS.map(m => `<button class="mchip" data-month-jump="${m}" aria-pressed="${m === calMonth}">${m}月</button>`).join("")}</div>`
+    + `<div class="cal-grid" role="grid">${DOW_MON.map((w, i) => `<div class="cw ${i > 4 ? "we" : ""}">${w}</div>`).join("")}${cells}</div>`
+    + (monthSlots.length ? "" : `<div class="list-empty">這個月沒有符合篩選條件的比賽</div>`)
+    + `<div class="cal-day" id="cal-day">${daySlots.length
+        ? `<div class="cal-day-head"><b>${md(calDay)}</b> 週${dow(calDay)}<span>點卡片勾選你有進場的比賽</span></div><div class="day-games">${daySlots.map(cardHtml).join("")}</div>`
+        : ""}</div>`;
+  updateFilterCount();
   updateCount();
+}
+// After a pick in month view, refresh the grid marks without moving the day panel.
+function refreshMonthMarks(){
+  const by = slotsByDate();
+  document.querySelectorAll(".cd[data-day]").forEach(c => {
+    const list = by[c.dataset.day] || [];
+    c.classList.toggle("picked", list.some(s => s.kind !== "postponed" && picks.has(s.g.n)));
+    c.querySelector(".cd-g").innerHTML = list.map(miniGame).join("");
+  });
+  const t = document.querySelector(".cal-title span");
+  if (t) t.innerHTML = countLine(Object.keys(by).filter(d => monthOf(d) === calMonth).flatMap(d => by[d]));
+  updateCount();
+}
+function renderWeek(){
+  initCal();
+  const host = document.getElementById("game-list");
+  host.className = "cal week";
+  const by = slotsByDate();
+  const end = addDays(weekStart, 6);
+  let rows = "", weekSlots = [];
+  for (let i = 0; i < 7; i++){
+    const iso = addDays(weekStart, i), list = by[iso] || [];
+    weekSlots = weekSlots.concat(list);
+    rows += `<div class="day-group ${list.length ? "" : "off"}">
+      <div class="day-label"><span class="day-md">${md(iso)}</span><span class="day-dow">週${DOW_MON[i]}</span></div>
+      <div class="day-games">${list.length ? list.map(cardHtml).join("") : `<span class="no-game">${iso < SEASON_FIRST || iso > SEASON_LAST ? "非賽季" : "沒有比賽"}</span>`}</div></div>`;
+  }
+  host.innerHTML = calNav(`${md(weekStart)} – ${md(end)}`, countLine(weekSlots), weekStart > SEASON_FIRST, end < SEASON_LAST)
+    + `<div class="week-rows">${rows}</div>`;
+  updateFilterCount();
+  updateCount();
+}
+function updateFilterCount(){
+  const fc = document.getElementById("f-count");
+  if (!fc) return;
+  const n = new Set(SLOTS.filter(slotPasses).filter(x => x.kind !== "postponed").map(x => x.g.n)).size;
+  fc.textContent = filtersActive() ? `符合條件 ${n} 場` : `全季 ${n} 場`;
+}
+document.getElementById("view-switch").addEventListener("click", e => {
+  const b = e.target.closest("[data-view]");
+  if (!b || b.dataset.view === pickView) return;
+  initCal();
+  if (pickView === "month" && b.dataset.view === "week") weekStart = mondayOf(calDay);
+  if (pickView === "week" && b.dataset.view === "month"){ calDay = weekStart < SEASON_FIRST ? SEASON_FIRST : weekStart; calMonth = monthOf(calDay); }
+  pickView = b.dataset.view;
+  store.set(K_VIEW, pickView);
+  track("view_change", {view: pickView});
+  renderList();
+});
+document.getElementById("game-list").addEventListener("click", e => {
+  const nav = e.target.closest("[data-cal]");
+  if (nav){
+    const dir = nav.dataset.cal === "next" ? 1 : -1;
+    if (pickView === "month"){ calMonth = Math.min(10, Math.max(3, calMonth + dir)); }
+    else { weekStart = addDays(weekStart, 7 * dir); calDay = weekStart; }
+    renderList(); return;
+  }
+  const mj = e.target.closest("[data-month-jump]");
+  if (mj){ calMonth = +mj.dataset.monthJump; renderList(); return; }
+  const day = e.target.closest(".cd[data-day]");
+  if (day){
+    calDay = day.dataset.day;
+    document.querySelectorAll(".cd[data-day]").forEach(c => { const on = c === day; c.classList.toggle("sel", on); c.setAttribute("aria-pressed", on); });
+    const by = slotsByDate(), list = by[calDay] || [];
+    document.getElementById("cal-day").innerHTML = `<div class="cal-day-head"><b>${md(calDay)}</b> 週${dow(calDay)}<span>點卡片勾選你有進場的比賽</span></div><div class="day-games">${list.map(cardHtml).join("")}</div>`;
+    if (matchMedia("(max-width: 640px)").matches) document.getElementById("cal-day").scrollIntoView({block:"nearest", behavior:"smooth"});
+  }
 });
 function updateCount(){
   const n = picks.size;
