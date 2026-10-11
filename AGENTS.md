@@ -41,7 +41,9 @@
 | 正式網址 | https://mybaseballgame.com（另接 `www.mybaseballgame.com`） |
 | 主機 | Cloudflare Workers（Static Assets，**只有靜態檔案、沒有 Worker 程式**），專案名 `cpbl-season-status` |
 | 備用網址 | `cpbl-season-status.jjwer210184.workers.dev`（建議在 Cloudflare 停用，避免雙網址） |
-| 部署來源 | GitHub `UntitledHotdag/CPBL_season_status`，分支 `main`，輸出目錄 `docs/`，無建置指令 |
+| 正式部署 | GitHub `UntitledHotdag/CPBL_season_status`，分支 `main`，Cloudflare 專案 `cpbl-season-status`，網址 `mybaseballgame.com` |
+| 測試部署 | 同一 GitHub repository，分支 `staging`，Cloudflare 專案 `cpbl-season-status-staging`，網址 `staging.mybaseballgame.com` |
+| 部署輸出 | 兩個環境皆直接提供 `docs/`，無建置指令 |
 | 網域 | `mybaseballgame.com` 於 Cloudflare Registrar 購買（約 US$10.5／年，需開自動續約） |
 | 分析 | Google Analytics 4，評估 ID `G-3NFXSVM2JD`，只在正式網域送資料 |
 | 舊環境 | 曾用 GitHub Pages（`/docs`）測試；已改用 Cloudflare，若 Pages 仍開啟可關閉 |
@@ -194,11 +196,22 @@ git add src docs && git commit -m "Short imperative summary" && git push
 - **由維護者本人執行 `git add / commit / push`**。AI 會在回覆中附上對應指令。
 - 注意：若維護者同時用編輯器開著 `docs/index.html`，編輯器存檔可能覆蓋 AI 寫入的版本（曾發生過）。推送前用 `git diff --stat` 確認。
 
+### 6.6 測試站發布流程
+
+1. 新功能從 `staging` 建立 `feature/<name>` 分支開發。
+2. 完成修改後執行 `python3 tools/build.py`，並按 §6.4 驗證。
+3. 將功能分支合併至 `staging`，推送後由 Cloudflare 自動部署至 `staging.mybaseballgame.com`。
+4. 測試站驗收通過後，將 `staging` 合併至 `main`，再由 Cloudflare 部署正式站。
+5. `docs/_headers` 只針對 `staging.mybaseballgame.com` 回傳 `X-Robots-Tag: noindex, nofollow, noarchive`，不影響正式網域。
+6. 測試站應使用 Cloudflare Access 限制存取；現行 GA hostname allowlist 不包含 staging 子網域，不會傳送 GA 事件。
+
 ---
 
 ## 7. Git 與部署規範
 
-- 單一分支 `main`；推送即部署。尚無 PR／預覽流程（Cloudflare 會為其他分支產生預覽網址，但 GA 只在正式網域啟用，不會污染數據）。
+- `main` 是正式分支，推送後部署至 `mybaseballgame.com`。
+- `staging` 是長期測試分支，推送後部署至 `staging.mybaseballgame.com`；測試通過後才合併至 `main`。
+- 新功能分支命名為 `feature/<name>`，由 `staging` 建立並優先透過 Cloudflare Preview 或測試站驗證。
 - Commit message：英文、祈使句、一行摘要，例如 `Picker: month / week / list views`、`Fix 4 games missing dates`。資料修正要寫原因。
 - `.gitignore`：`.DS_Store`、`logo/`、`Claude outputs/`、`.venv/`、`__pycache__/`、`data/pdf/`。
 - 歷史上 `logo/` 曾被提交過；正式擴大宣傳前可考慮清理 git 歷史。
