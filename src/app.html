@@ -323,6 +323,20 @@
   .poster-banner .b-text{position:absolute;left:28px;bottom:24px;right:28px}
   .poster-banner .b-eyebrow{font-family:"Manrope",sans-serif;font-weight:700;font-size:11px;letter-spacing:.22em;color:var(--bh,#F5C518)}
   .poster-banner .b-title{font-weight:700;font-size:clamp(20px,5vw,30px);line-height:1.25;margin-top:6px;text-wrap:balance}
+  .poster-banner .b-text,.poster-banner .b-photo-btn{z-index:3}
+  .champion-confetti{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none}
+  .champion-confetti i{
+    position:absolute;left:var(--x);top:-34px;width:7px;height:26px;border-radius:4px;
+    background:var(--ribbon);opacity:0;box-shadow:0 1px 2px rgba(0,0,0,.16);
+    animation:champion-fall var(--dur) linear var(--delay) 2 both;
+  }
+  .champion-confetti i.dot{width:10px;height:10px;border-radius:50%}
+  @keyframes champion-fall{
+    0%{opacity:0;transform:translate3d(0,-24px,0) rotate(var(--rot))}
+    10%{opacity:.95}
+    86%{opacity:.9}
+    100%{opacity:0;transform:translate3d(var(--drift),360px,0) rotate(calc(var(--rot) + 480deg))}
+  }
   /* user photo (device-only) layered under a scrim so the title stays legible */
   .poster-banner.has-photo{background:#0b0b0f}
   .poster-banner.has-photo .b-abbr{display:none}
@@ -406,6 +420,21 @@
   .view-pick select:hover{border-color:var(--ink-dim)}
   .view-pick .vp-chev{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2;pointer-events:none}
   .view-hint{font-size:11.5px;color:var(--muted);margin-top:8px}
+  .champion-note{
+    position:relative;overflow:hidden;margin:18px 32px 0;padding:16px 18px;
+    display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;
+    border:1px solid var(--accent-fill);border-radius:12px;background:var(--panel);
+    box-shadow:inset 4px 0 0 var(--accent-fill);
+  }
+  .champion-note[hidden]{display:none}
+  .champion-note::after{
+    content:"";position:absolute;right:-22px;top:-36px;width:112px;height:112px;border-radius:50%;
+    background:var(--accent-fill);opacity:.1;pointer-events:none;
+  }
+  .champion-note .badge{width:42px;height:42px;font-size:13px}
+  .champion-kicker{font-family:"Manrope","Noto Sans TC",sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--accent);text-transform:uppercase}
+  .champion-title{font-size:21px;font-weight:700;line-height:1.25;margin-top:3px}
+  .champion-desc{font-size:12px;color:var(--ink-dim);line-height:1.6;margin-top:3px}
   .sum-tiles{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}
   .sum-tile{background:var(--panel-2);border:1px solid var(--rule-soft);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
   .sum-tile .k{font-size:11px;color:var(--muted);letter-spacing:.04em}
@@ -645,6 +674,8 @@
     .poster-head{padding:20px 18px 4px}
     .summary{text-align:left;width:100%}
     .team-strip{padding:14px 18px 0}
+    .champion-note{margin:16px 18px 0;padding:14px 14px;gap:11px}
+    .champion-title{font-size:18px}
     .view-pick{max-width:none}
     .sum-tiles{grid-template-columns:1fr}
     .sum-tile{flex-direction:row;align-items:center;justify-content:space-between;padding:10px 12px}
@@ -672,7 +703,10 @@
     .recap-body h3{font-size:17px}
     .recap-actions .cta,.recap-actions .btn-ghost{flex:1 1 100%;justify-content:center}
   }
-  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none!important}
+    .champion-confetti i{top:var(--rest);opacity:.72;animation:none;transform:rotate(var(--rot))}
+  }
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -829,6 +863,7 @@
           </div>
           <p class="view-hint" id="view-hint"></p>
         </div>
+        <div class="champion-note" id="champion-note" role="status" hidden></div>
         <div class="rate" id="rate" aria-live="polite"></div>
         <section class="recap-cta" aria-labelledby="recap-title">
       <div class="recap-thumb" id="recap-thumb" aria-hidden="true"></div>
@@ -939,6 +974,10 @@ const ACCENT = {
 };
 const NEUTRAL_ACCENT = {f:"#EDE6D3", i:"#12121A"};
 const HALF_END = 180;
+const CHAMPIONSHIP_GAMES = {
+  "味全龍":   {gameNo:176, half:"上半季", date:"06/20", venue:"澄清湖"},
+  "中信兄弟": {gameNo:270, half:"下半季", date:"10/04", venue:"洲際"},
+};
 const MONTHS = [3,4,5,6,7,8,9,10];
 const DOW = ["日","一","二","三","四","五","六"];
 
@@ -1460,6 +1499,22 @@ function luckLabel(d){
   return "逆風鐵粉";
 }
 
+function championshipMoment(all, team){
+  const moment = CHAMPIONSHIP_GAMES[team];
+  return moment && all.some(g => g.n === moment.gameNo) ? moment : null;
+}
+function championConfetti(){
+  return Array.from({length:26}, (_, i) => {
+    const x = (i * 37 + 7) % 100;
+    const delay = ((i * 17) % 15) / 10;
+    const dur = 2.5 + ((i * 7) % 9) / 10;
+    const rot = (i * 47) % 180;
+    const drift = (i % 2 ? 1 : -1) * (18 + (i * 11) % 42);
+    const rest = 8 + (i * 29) % 80;
+    return `<i class="${i % 5 === 0 ? "dot" : ""}" style="--x:${x}%;--delay:${delay}s;--dur:${dur}s;--rot:${rot}deg;--drift:${drift}px;--rest:${rest}%;--ribbon:var(--accent-fill)"></i>`;
+  }).join("");
+}
+
 function gameCell(g){
   const aWin = g.as > g.hs, hWin = g.hs > g.as, tie = g.as === g.hs;
   return `<div class="game">
@@ -1477,6 +1532,7 @@ function renderResult(){
   const all = picked();
   if (!all.length){ go("pick"); return; }
   const team = currentTeam();
+  const champion = championshipMoment(all, team);
   document.getElementById("r-total").textContent = all.length;
   const venues = new Set(all.map(g => g.v)).size;
 
@@ -1497,8 +1553,10 @@ function renderResult(){
     bannerEl.style.setProperty("--bh", NEUTRAL_ACCENT.f);
   }
   bannerEl.classList.toggle("has-photo", !!photo);
+  bannerEl.classList.toggle("is-champion", !!champion);
   bannerEl.innerHTML = `
     ${photo ? `<img class="b-photo" src="${photoURL}" alt="你上傳的賽季照片"><div class="b-scrim"></div>` : ""}
+    ${champion ? `<div class="champion-confetti" aria-hidden="true">${championConfetti()}</div>` : ""}
     <button class="b-photo-btn" id="b-photo-btn">
       <svg viewBox="0 0 24 24" aria-hidden="true">${photo
         ? '<path d="M4 7h3l2-2h6l2 2h3v12H4z"/><circle cx="12" cy="13" r="3.5"/>'
@@ -1525,6 +1583,13 @@ function renderResult(){
   document.getElementById("view-hint").textContent = team
     ? `${TEAMS[team].short}版面：看你進場時${TEAMS[team].short}的勝率，回顧圖也會套用這個版面`
     : "選你支持的球隊，版面會換成它的觀賽勝率和幸運指數，回顧圖同步套用";
+
+  const championNote = document.getElementById("champion-note");
+  championNote.hidden = !champion;
+  championNote.innerHTML = champion ? `${badge(team, false, "md")}
+    <div><div class="champion-kicker">2026 ${champion.half}封王戰</div>
+    <div class="champion-title">恭喜你看到拋下封王彩帶</div>
+    <div class="champion-desc">你在 ${champion.date} ${champion.venue}，親眼見證${esc(TEAMS[team].short)}拋下${champion.half}冠軍彩帶。</div></div>` : "";
 
   // Rate block
   const rate = document.getElementById("rate");
@@ -1856,6 +1921,8 @@ const F_TC  = '"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, s
 function shareModel(all = picked(), team = currentTeam(), name = (store.get(K_NAME) || "").trim()){
   const venues = new Set(all.map(g => g.v)).size;
   const m = {all, team, venues, name, tc: team ? TEAMS[team].c : "#2a2a33", acc: team ? ACCENT[team] : NEUTRAL_ACCENT};
+  m.champion = championshipMoment(all, team);
+  m.championText = m.champion ? `恭喜你看到${TEAMS[team].short}拋下${m.champion.half}冠軍彩帶` : "";
   if (team){
     const s = statsFor(team, all), short = TEAMS[team].short;
     m.label = `我進場時的${short} · 觀賽勝率`;
@@ -1937,7 +2004,8 @@ async function renderShareImage(){
 // Draws one 1080×1920 share image for model `m`; `ph` = photo record or null.
 async function drawShare(m, ph){
   const textAll = [m.label, m.title, m.rec, m.luck, m.name, m.stripLabel || "", ...m.cmp.map(c => c.t),
-    ...m.cells.flatMap(c => [c[1], c[2]]), "非官方網站只計進場觀賽戰績 MY 2026 SEASON"].join("");
+    ...m.cells.flatMap(c => [c[1], c[2]]), m.championText,
+    "非官方網站只計進場觀賽戰績 MY 2026 SEASON"].join("");
   await loadFontsFor(textAll);
 
   const c = document.createElement("canvas"); c.width = SW; c.height = SH;
@@ -2034,14 +2102,19 @@ async function drawShare(m, ph){
     ctx.font = `${seg.b ? 800 : 500} 34px ${seg.b && !seg.tc ? F_NUM : F_TC}`;
     ctx.fillStyle = seg.b ? white : dim; ctx.fillText(seg.t, x, 1488); x += ctx.measureText(seg.t).width;
   });
+  if (m.championText){
+    ctx.fillStyle = m.acc.f; ctx.font = `500 34px ${F_TC}`;
+    ctx.fillText(m.championText, L, 1534, W);
+  }
 
   // Per-game strip (chronological), up to 2 rows; shrinks to fit
   if (m.strip.length){
+    const stripY = m.championText ? 1570 : 1520;
     const n = m.strip.length, gap = 6;
     let size = 28, perRow = Math.floor((W + gap) / (size + gap));
     if (n > perRow * 2){ perRow = Math.ceil(n / 2); size = Math.max(8, Math.floor((W + gap) / perRow) - gap); }
     m.strip.forEach((cell, i) => {
-      const cx = L + (i % perRow) * (size + gap), cy = 1520 + Math.floor(i / perRow) * (size + gap);
+      const cx = L + (i % perRow) * (size + gap), cy = stripY + Math.floor(i / perRow) * (size + gap);
       rr(ctx, cx, cy, size, size, Math.min(6, size / 4));
       if (cell.fill){ ctx.fillStyle = cell.fill; ctx.fill(); }
       else { ctx.strokeStyle = cell.stroke; ctx.lineWidth = 3; ctx.stroke(); }
@@ -2049,15 +2122,18 @@ async function drawShare(m, ph){
   }
 
   // Three stat cells
+  const cellTop = m.championText ? 1652 : 1606;
+  const cellLabelY = m.championText ? 1678 : 1632;
+  const cellValueY = m.championText ? 1746 : 1700;
   const colW = W / 3;
   m.cells.forEach(([v, unit, label], i) => {
     const cx = L + i * colW;
-    if (i){ ctx.fillStyle = "rgba(255,255,255,.18)"; ctx.fillRect(cx - 1, 1606, 2, 92); }
+    if (i){ ctx.fillStyle = "rgba(255,255,255,.18)"; ctx.fillRect(cx - 1, cellTop, 2, 92); }
     const px = cx + (i ? 28 : 0);
-    ctx.fillStyle = dim; ctx.font = `500 26px ${F_TC}`; ctx.fillText(label, px, 1632);
-    ctx.fillStyle = white; ctx.font = `800 64px ${F_NUM}`; ctx.fillText(String(v), px, 1700);
+    ctx.fillStyle = dim; ctx.font = `500 26px ${F_TC}`; ctx.fillText(label, px, cellLabelY);
+    ctx.fillStyle = white; ctx.font = `800 64px ${F_NUM}`; ctx.fillText(String(v), px, cellValueY);
     const vw = ctx.measureText(String(v)).width;
-    ctx.fillStyle = dim; ctx.font = `700 30px ${F_TC}`; ctx.fillText(unit, px + vw + 8, 1700);
+    ctx.fillStyle = dim; ctx.font = `700 30px ${F_TC}`; ctx.fillText(unit, px + vw + 8, cellValueY);
   });
 
   // Footer (sits in IG's reply-bar zone on purpose — nice to have, not essential)
