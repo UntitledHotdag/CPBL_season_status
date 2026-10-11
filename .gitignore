@@ -3,3 +3,4 @@ logo/
 Claude outputs/
 .venv/
 __pycache__/
+data/pdf/
