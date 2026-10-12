@@ -477,6 +477,19 @@
   .game-meta{font-size:10px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
   .empty-slot{text-align:center;color:var(--muted);font-size:12px;padding:16px 0}
   .reserved{font-family:"Manrope",sans-serif;font-size:10px;letter-spacing:.12em;color:var(--muted)}
+  .playoff-section{margin-top:18px;padding:28px 18px 22px;border:1px solid var(--rule);border-radius:12px;background:var(--panel)}
+  .playoff-section .section-head{padding-bottom:18px}
+  .playoff-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+  .playoff-game{position:relative;border:1px solid var(--rule-soft);border-radius:10px;padding:13px 14px;background:var(--ground);overflow:hidden}
+  .playoff-game.won{box-shadow:inset 3px 0 0 var(--accent-fill)}
+  .playoff-kicker{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;color:var(--muted);font-size:10px;font-variant-numeric:tabular-nums}
+  .playoff-kicker b{font-family:"Manrope",sans-serif;font-size:12px;letter-spacing:.12em;color:var(--accent)}
+  .playoff-game .game{max-width:260px;margin-inline:auto}
+  .playoff-game .game-no{display:none}
+  .playoff-awards{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin-top:14px;padding-top:12px;border-top:1px solid var(--rule-soft);font-size:11px;color:var(--ink-dim)}
+  .playoff-awards span{display:flex;gap:6px;min-width:0}
+  .playoff-awards b{color:var(--muted);font-size:10px;font-weight:500;white-space:nowrap}
+  .playoff-awards.tribute{grid-template-columns:1fr;color:var(--accent)}
 
   .stats-block{padding:28px 0 4px;border-top:1px solid var(--rule);margin-top:16px}
   .stats-block:first-child{border-top:none;margin-top:0}
@@ -523,6 +536,15 @@
   .hero-title em{font-style:normal;color:var(--accent)}
   .hero-lede{max-width:32em;color:var(--ink-dim);font-size:16px;line-height:1.75;margin-top:18px}
   .hero-ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}
+  .playoff-update{max-width:34em;margin-top:26px;padding-top:17px;border-top:1px solid var(--rule)}
+  .playoff-update-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px 18px;flex-wrap:wrap}
+  .playoff-update-kicker{font-family:"Manrope","Noto Sans TC",sans-serif;font-size:10px;font-weight:800;letter-spacing:.18em;color:var(--accent);text-transform:uppercase}
+  .playoff-update-status{font-family:"Manrope","Noto Sans TC",sans-serif;font-size:11px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+  .playoff-update h2{font-size:20px;line-height:1.35;margin-top:7px}
+  .playoff-update p{max-width:38em;font-size:13px;line-height:1.7;color:var(--ink-dim);margin-top:5px}
+  .playoff-update-link{display:inline-flex;align-items:center;min-height:44px;margin-top:3px;color:var(--accent);font-size:13px;font-weight:700}
+  .playoff-update-link:hover{text-decoration:underline;text-underline-offset:4px}
+  .playoff-update + .hero-ctas{margin-top:17px}
   .btn-ghost{
     border:1px solid var(--rule);color:var(--ink);min-height:44px;padding:12px 22px;border-radius:99px;
     font-family:"Manrope","Noto Sans TC",sans-serif;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;
@@ -627,6 +649,9 @@
   @media (max-width:640px){
     .screen{padding-block:36px;min-height:auto}
     .screen.first{min-height:calc(100svh - 70px)}
+    .playoff-update{margin-top:22px;padding-top:15px}
+    .playoff-update-head{display:block}
+    .playoff-update-status{display:block;margin-top:5px}
     .hero-ctas .cta,.hero-ctas .btn-ghost{width:100%;justify-content:center}
     .fact + .fact{padding-left:12px}
     .legal{grid-template-columns:1fr}
@@ -647,6 +672,8 @@
     .tab{flex:1;justify-content:center}
     .controls{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-inline:-14px;padding-inline:14px}
     .controls::-webkit-scrollbar{display:none}
+    .playoff-section{padding-inline:12px}
+    .playoff-grid{grid-template-columns:1fr}
     .chip,.search{flex-shrink:0}
     .search{margin-left:0;width:160px}
     .day-group{grid-template-columns:52px 1fr;gap:8px}
@@ -734,6 +761,15 @@
           <div class="intro-eyebrow">CPBL 2026 例行賽 · 進場戰績</div>
           <h1 class="hero-title">你這個賽季，<br><em>進場看了幾場球</em>？</h1>
           <p class="hero-lede">把今年進場看過的比賽勾起來，算出你的觀賽勝率，再放上這季最喜歡的照片，做成一張專屬的賽季回顧圖。</p>
+          <div class="playoff-update" aria-label="季後挑戰賽資料更新">
+            <div class="playoff-update-head">
+              <span class="playoff-update-kicker">Playoff update</span>
+              <span class="playoff-update-status" id="playoff-update-status"></span>
+            </div>
+            <h2>季後挑戰賽已加入</h2>
+            <p>統一獅 vs 兄弟，已完賽場次會持續更新。現在可以勾選進場賽事，製作專屬的挑戰賽回顧圖。</p>
+            <button class="playoff-update-link" data-playoff-pick>查看季後挑戰賽 →</button>
+          </div>
           <div class="hero-ctas" id="hero-ctas"></div>
           <button class="scroll-hint" id="scroll-hint">往下看怎麼玩 ↓</button>
         </div>
@@ -773,7 +809,7 @@
         <div class="step">
           <span class="no">STEP 01</span>
           <h3>勾選進場的比賽</h3>
-          <p>360 場例行賽依日期排好，可以用月份、球隊、球場篩選，或直接搜尋場次、日期。</p>
+          <p>360 場例行賽與已完賽的季後挑戰賽依日期排好，可以用月份、球隊、球場篩選，或直接搜尋場次、日期。</p>
           <div class="demo" id="demo-card" aria-hidden="true"></div>
         </div>
         <div class="step">
@@ -804,7 +840,7 @@
       <div class="legal">
         <div class="legal-item">
           <div class="legal-k">資料來源</div>
-          <p>中華職棒大聯盟（CPBL）官方網站公開之 2026 年一軍例行賽賽程與比賽結果（3/28–10/06，共 360 場），由本站整理後呈現。若與官方公布內容不一致，以 CPBL 官方資料為準。</p>
+          <p>中華職棒大聯盟（CPBL）官方網站公開之 2026 年一軍例行賽（3/28–10/06，共 360 場）與季後挑戰賽已完賽資料，由本站整理後呈現。若與官方公布內容不一致，以 CPBL 官方資料為準。</p>
         </div>
         <div class="legal-item">
           <div class="legal-k">免責聲明</div>
@@ -837,7 +873,7 @@
       <button class="cta" id="go-result">看我的戰績 →</button>
     </div>
     <p class="page-foot">
-      資料來源：CPBL 官方網站 2026 一軍例行賽賽程（3/28–10/06，共 360 場）· 只計進場觀賽<br>
+      資料來源：CPBL 官方網站 2026 一軍例行賽（360 場）與季後挑戰賽已完賽資料 · 只計進場觀賽<br>
       球迷自製非官方網站，與 CPBL 及各球團無關 · 紀錄與照片只存在這台裝置 · 使用 Google Analytics 匿名統計
     </p>
   </section>
@@ -950,7 +986,11 @@
 // Data
 // ================================================================
 const GAMES = /*__GAMES_JSON__*/;
+const POSTSEASON_GAMES = /*__POSTSEASON_JSON__*/.map(g => ({...g, ps:true}));
+const ALL_GAMES = [...GAMES, ...POSTSEASON_GAMES];
 const BY_N = new Map(GAMES.map(g => [g.n, g]));
+const gameKey = g => g.ps ? `E${g.g}` : String(g.n);
+const BY_KEY = new Map(ALL_GAMES.map(g => [gameKey(g), g]));
 
 // Copyright-free team marks: one English letter + an approximate team colour.
 const TEAMS = {
@@ -974,6 +1014,7 @@ const ACCENT = {
 };
 const NEUTRAL_ACCENT = {f:"#EDE6D3", i:"#12121A"};
 const HALF_END = 180;
+const CHALLENGE_TEAMS = ["統一7-ELEVEn獅", "中信兄弟"];
 const CHAMPIONSHIP_GAMES = {
   "味全龍":   {gameNo:176, half:"上半季", date:"06/20", venue:"澄清湖"},
   "中信兄弟": {gameNo:270, half:"下半季", date:"10/04", venue:"洲際"},
@@ -1035,8 +1076,11 @@ const store = {
   set(k, v){ try{ localStorage.setItem(k, v); }catch(e){} },
 };
 let picks = new Set();
-try{ JSON.parse(store.get(K_PICKS) || "[]").forEach(n => { if (BY_N.has(n)) picks.add(n); }); }catch(e){}
-const savePicks = () => store.set(K_PICKS, JSON.stringify([...picks].sort((a, b) => a - b)));
+try{ JSON.parse(store.get(K_PICKS) || "[]").forEach(n => { const key = String(n); if (BY_KEY.has(key)) picks.add(key); }); }catch(e){}
+const savePicks = () => store.set(K_PICKS, JSON.stringify([...picks].sort((a, b) => {
+  const x = BY_KEY.get(a), y = BY_KEY.get(b);
+  return x.d === y.d ? gameKey(x).localeCompare(gameKey(y), undefined, {numeric:true}) : x.d.localeCompare(y.d);
+})));
 const filt = {team:"", month:"", venue:"", only:false, q:""};
 
 // ================================================================
@@ -1046,6 +1090,7 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">"
 const md = d => `${d.slice(5,7)}/${d.slice(8)}`;
 const dow = d => DOW[new Date(d + "T12:00:00").getDay()];
 const pad3 = n => String(n).padStart(3, "0");
+const gameNoText = g => g.ps ? `G${g.g}` : pad3(g.n);
 function fmtPct(p){
   if (p == null || isNaN(p)) return "—";
   const v = Math.round(p * 1000);
@@ -1088,11 +1133,12 @@ GAMES.forEach(g => {
   SLOTS.push({date:g.d, g, kind});
   if (g.od) SLOTS.push({date:g.od, g, kind: g.ok === "s" ? "suspended" : "postponed"});
 });
-SLOTS.sort((x, y) => x.date === y.date ? x.g.n - y.g.n : x.date.localeCompare(y.date));
+POSTSEASON_GAMES.forEach(g => SLOTS.push({date:g.d, g, kind:"postseason"}));
+SLOTS.sort((x, y) => x.date === y.date ? gameKey(x.g).localeCompare(gameKey(y.g), undefined, {numeric:true}) : x.date.localeCompare(y.date));
 
 // Static option lists (counts = games played in that month / at that venue)
 const MONTH_COUNT = {}, VENUE_COUNT = {};
-GAMES.forEach(g => {
+ALL_GAMES.forEach(g => {
   const m = Number(g.d.slice(5, 7));
   MONTH_COUNT[m] = (MONTH_COUNT[m] || 0) + 1;
   VENUE_COUNT[g.v] = (VENUE_COUNT[g.v] || 0) + 1;
@@ -1110,7 +1156,8 @@ function buildFilters(){
     </div>
     <div class="f-row f-sel">
       <label class="fsel"><span class="f-k">月份</span>
-        <select id="f-month">${opt("", "全季", filt.month)}${opt("H1", "上半季（第 1–180 場）", filt.month)}${opt("H2", "下半季（第 181–360 場）", filt.month)}
+        <select id="f-month">${opt("", "全部賽事", filt.month)}${opt("H1", "上半季（第 1–180 場）", filt.month)}${opt("H2", "下半季（第 181–360 場）", filt.month)}
+          ${opt("PS", `季後挑戰賽（${POSTSEASON_GAMES.length} 場）`, filt.month)}
           <optgroup label="依月份">${MONTHS.map(m => opt(String(m), `${m} 月（${MONTH_COUNT[m] || 0} 場）`, filt.month)).join("")}</optgroup>
         </select></label>
       <label class="fsel"><span class="f-k">球場</span>
@@ -1153,14 +1200,15 @@ document.getElementById("filters").addEventListener("input", e => {
 function slotPasses(s){
   const g = s.g;
   if (filt.team && g.a !== filt.team && g.h !== filt.team) return false;
-  if (filt.month === "H1" && g.n > HALF_END) return false;
-  else if (filt.month === "H2" && g.n <= HALF_END) return false;
+  if (filt.month === "H1" && (g.ps || g.n > HALF_END)) return false;
+  else if (filt.month === "H2" && (g.ps || g.n <= HALF_END)) return false;
+  else if (filt.month === "PS" && !g.ps) return false;
   else if (/^\d+$/.test(filt.month) && Number(s.date.slice(5, 7)) !== Number(filt.month)) return false;
   if (filt.venue && g.v !== filt.venue) return false;
-  if (filt.only && (s.kind === "postponed" || !picks.has(g.n))) return false;
+  if (filt.only && (s.kind === "postponed" || !picks.has(gameKey(g)))) return false;
   if (filt.q){
     const q = filt.q.toLowerCase();
-    const hay = [String(g.n), pad3(g.n), s.date, md(s.date), g.v, TEAMS[g.a].short, TEAMS[g.h].short, g.a, g.h].join(" ").toLowerCase();
+    const hay = [gameKey(g), gameNoText(g), g.ps ? "季後挑戰賽" : "例行賽", s.date, md(s.date), g.v, TEAMS[g.a].short, TEAMS[g.h].short, g.a, g.h].join(" ").toLowerCase();
     if (!hay.includes(q)) return false;
   }
   return true;
@@ -1180,11 +1228,11 @@ function cardHtml(s){
       <span class="card-venue">${esc(g.v)}</span><span class="card-tag">${md(g.d)} 補</span></div>`;
   }
   const aWin = g.as > g.hs, hWin = g.hs > g.as, tie = g.as === g.hs;
-  const tag = {normal:"", makeup:"補", resumed:"續", suspended:"保留"}[s.kind];
-  const on = picks.has(g.n);
-  const label = `第 ${g.n} 場，${TEAMS[g.a].short} ${g.as} 比 ${g.hs} ${TEAMS[g.h].short}，${g.v}`;
-  return `<button class="card" data-n="${g.n}" aria-pressed="${on}" aria-label="${esc(label)}">
-    <span class="card-no">${pad3(g.n)}</span>
+  const tag = {normal:"", makeup:"補", resumed:"續", suspended:"保留", postseason:"挑戰賽"}[s.kind];
+  const key = gameKey(g), on = picks.has(key);
+  const label = `${g.ps ? "季後挑戰賽 " : "第 "}${gameNoText(g)}，${TEAMS[g.a].short} ${g.as} 比 ${g.hs} ${TEAMS[g.h].short}，${g.v}`;
+  return `<button class="card" data-key="${key}" aria-pressed="${on}" aria-label="${esc(label)}">
+    <span class="card-no">${gameNoText(g)}</span>
     ${teamTag(g.a, !aWin && !tie, false)}
     <span class="card-score"><span class="${aWin || tie ? "" : "lose"}">${g.as}</span><span class="sep">:</span><span class="${hWin || tie ? "" : "lose"}">${g.hs}</span></span>
     ${teamTag(g.h, !hWin && !tie, true)}
@@ -1208,7 +1256,7 @@ function renderSeasonList(){
     let html = "", cur = null, buf = [], curMonth = null;
     const EN = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const monthGames = {};   // games shown per month (postponed stubs excluded)
-    shown.forEach(s => { if (s.kind !== "postponed"){ const m = +s.date.slice(5, 7); (monthGames[m] = monthGames[m] || new Set()).add(s.g.n); } });
+    shown.forEach(s => { if (s.kind !== "postponed"){ const m = +s.date.slice(5, 7); (monthGames[m] = monthGames[m] || new Set()).add(gameKey(s.g)); } });
     const monthHead = m => `<div class="month-head" data-month="${m}" role="heading" aria-level="2">
         <span class="mh-num">${m}<small>月</small></span><span class="mh-en">${EN[m]}</span>
         <span class="mh-count"><span>本月 <b>${monthGames[m] ? monthGames[m].size : 0}</b> 場</span><span class="mh-picked" data-month-picked="${m}"></span></span>
@@ -1239,20 +1287,20 @@ function renderSeasonList(){
   }
   const fc = document.getElementById("f-count");
   if (fc){
-    const n = new Set(shown.filter(x => x.kind !== "postponed").map(x => x.g.n)).size;
-    fc.textContent = filtersActive() ? `符合條件 ${n} 場` : `全季 ${n} 場`;
+    const n = new Set(shown.filter(x => x.kind !== "postponed").map(x => gameKey(x.g))).size;
+    fc.textContent = filtersActive() ? `符合條件 ${n} 場` : `全部賽事 ${n} 場`;
   }
   updateCount();
 }
 document.getElementById("game-list").addEventListener("click", e => {
-  const b = e.target.closest("button.card[data-n]");
+  const b = e.target.closest("button.card[data-key]");
   if (!b) return;
-  const n = Number(b.dataset.n);
-  const adding = !picks.has(n);
-  if (adding) picks.add(n); else picks.delete(n);
+  const key = b.dataset.key;
+  const adding = !picks.has(key);
+  if (adding) picks.add(key); else picks.delete(key);
   savePicks();
-  track(adding ? "game_pick" : "game_unpick", {game_no: n, picks_total: picks.size});
-  document.querySelectorAll(`button.card[data-n="${n}"]`).forEach(el => el.setAttribute("aria-pressed", picks.has(n)));
+  track(adding ? "game_pick" : "game_unpick", {game_no: key, picks_total: picks.size});
+  document.querySelectorAll(`button.card[data-key="${key}"]`).forEach(el => el.setAttribute("aria-pressed", picks.has(key)));
   if (pickView === "month") refreshMonthMarks(); else updateCount();
 });
 
@@ -1277,7 +1325,7 @@ function slotsByDate(){
 // Start where the user's picks are, else at the season opener.
 function initCal(){
   if (calMonth) return;
-  const first = [...picks].map(n => BY_N.get(n)).filter(Boolean).sort((a, b) => a.d.localeCompare(b.d))[0];
+  const first = [...picks].map(key => BY_KEY.get(key)).filter(Boolean).sort((a, b) => a.d.localeCompare(b.d))[0];
   calDay = first ? first.d : SEASON_FIRST;
   calMonth = monthOf(calDay);
   weekStart = mondayOf(calDay);
@@ -1290,12 +1338,12 @@ function calNav(label, sub, prevOk, nextOk){
   </div>`;
 }
 function countLine(slots){
-  const games = new Set(slots.filter(s => s.kind !== "postponed").map(s => s.g.n));
-  const picked = [...games].filter(n => picks.has(n)).length;
+  const games = new Set(slots.filter(s => s.kind !== "postponed").map(s => gameKey(s.g)));
+  const picked = [...games].filter(key => picks.has(key)).length;
   return `${games.size} 場${picked ? ` · <em>已選 ${picked} 場</em>` : ""}`;
 }
 function miniGame(s){
-  const g = s.g, on = s.kind !== "postponed" && picks.has(g.n);
+  const g = s.g, on = s.kind !== "postponed" && picks.has(gameKey(g));
   const aW = g.as > g.hs, hW = g.hs > g.as, stub = s.kind === "postponed";
   return `<span class="mg ${on ? "on" : ""} ${stub ? "stub" : ""}">${badge(g.a, stub || (!aW && !hW ? false : !aW), "xxs")}${badge(g.h, stub || (!aW && !hW ? false : !hW), "xxs")}</span>`;
 }
@@ -1309,7 +1357,7 @@ function renderMonth(){
   const lead = (new Date(first + "T00:00:00Z").getUTCDay() + 6) % 7;
   const monthSlots = Object.keys(by).filter(d => monthOf(d) === calMonth).flatMap(d => by[d]);
   if (monthOf(calDay) !== calMonth || !by[calDay]){
-    const withPick = Object.keys(by).sort().find(d => monthOf(d) === calMonth && by[d].some(s => picks.has(s.g.n)));
+    const withPick = Object.keys(by).sort().find(d => monthOf(d) === calMonth && by[d].some(s => picks.has(gameKey(s.g))));
     calDay = withPick || Object.keys(by).sort().find(d => monthOf(d) === calMonth) || first;
   }
   let cells = "";
@@ -1317,7 +1365,7 @@ function renderMonth(){
   for (let d = 1; d <= days; d++){
     const iso = `2026-${String(calMonth).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
     const list = by[iso] || [];
-    const has = list.length > 0, pickedHere = list.some(s => s.kind !== "postponed" && picks.has(s.g.n));
+    const has = list.length > 0, pickedHere = list.some(s => s.kind !== "postponed" && picks.has(gameKey(s.g)));
     cells += has
       ? `<button class="cd ${pickedHere ? "picked" : ""} ${iso === calDay ? "sel" : ""}" data-day="${iso}" aria-pressed="${iso === calDay}" aria-label="${calMonth}月${d}日，${list.length} 場">
           <span class="cd-n">${d}</span><span class="cd-g">${list.map(miniGame).join("")}</span></button>`
@@ -1339,7 +1387,7 @@ function refreshMonthMarks(){
   const by = slotsByDate();
   document.querySelectorAll(".cd[data-day]").forEach(c => {
     const list = by[c.dataset.day] || [];
-    c.classList.toggle("picked", list.some(s => s.kind !== "postponed" && picks.has(s.g.n)));
+    c.classList.toggle("picked", list.some(s => s.kind !== "postponed" && picks.has(gameKey(s.g))));
     c.querySelector(".cd-g").innerHTML = list.map(miniGame).join("");
   });
   const t = document.querySelector(".cal-title span");
@@ -1368,8 +1416,8 @@ function renderWeek(){
 function updateFilterCount(){
   const fc = document.getElementById("f-count");
   if (!fc) return;
-  const n = new Set(SLOTS.filter(slotPasses).filter(x => x.kind !== "postponed").map(x => x.g.n)).size;
-  fc.textContent = filtersActive() ? `符合條件 ${n} 場` : `全季 ${n} 場`;
+  const n = new Set(SLOTS.filter(slotPasses).filter(x => x.kind !== "postponed").map(x => gameKey(x.g))).size;
+  fc.textContent = filtersActive() ? `符合條件 ${n} 場` : `全部賽事 ${n} 場`;
 }
 document.getElementById("view-switch").addEventListener("click", e => {
   const b = e.target.closest("[data-view]");
@@ -1408,7 +1456,7 @@ function updateCount(){
   document.getElementById("go-result").disabled = n === 0;
   // per-month picked counts in the month headers
   const per = {};
-  picks.forEach(k => { const g = BY_N.get(k); if (g){ const m = +g.d.slice(5, 7); per[m] = (per[m] || 0) + 1; } });
+  picks.forEach(k => { const g = BY_KEY.get(k); if (g){ const m = +g.d.slice(5, 7); per[m] = (per[m] || 0) + 1; } });
   document.querySelectorAll("[data-month-picked]").forEach(el => {
     const c = per[el.dataset.monthPicked] || 0;
     el.innerHTML = c ? `已選 <b>${c}</b> 場` : "";
@@ -1441,8 +1489,8 @@ document.getElementById("go-pick").onclick = () => { track("cta_click", {cta_loc
 // ================================================================
 // RESULT
 // ================================================================
-const picked = () => [...picks].map(n => BY_N.get(n)).filter(Boolean)
-  .sort((x, y) => x.d === y.d ? x.n - y.n : x.d.localeCompare(y.d));
+const picked = () => [...picks].map(key => BY_KEY.get(key)).filter(Boolean)
+  .sort((x, y) => x.d === y.d ? gameKey(x).localeCompare(gameKey(y), undefined, {numeric:true}) : x.d.localeCompare(y.d));
 
 function mostSeen(games){
   const c = {};
@@ -1472,10 +1520,16 @@ function seasonSummary(all){
     homePct: (hw + hl) ? hw / (hw + hl) : null,
   };
 }
-function currentTeam(){
+function currentView(){
   const saved = store.get(K_TEAM);
-  return saved && TEAMS[saved] ? saved : null;   // default (null) = 觀賽摘要
+  if (saved && saved.startsWith("PS:")){
+    const team = saved.slice(3);
+    if (CHALLENGE_TEAMS.includes(team)) return {value:saved, team, postseason:true};
+  }
+  if (saved && TEAMS[saved]) return {value:saved, team:saved, postseason:false};
+  return {value:"NONE", team:null, postseason:false};
 }
+const currentTeam = () => currentView().team;
 function statsFor(team, list = picked()){
   const games = list.filter(g => g.a === team || g.h === team);
   let w = 0, l = 0, t = 0, run = 0, best = 0, bigWin = null, bigLoss = null;
@@ -1520,19 +1574,59 @@ function gameCell(g){
   return `<div class="game">
     ${badge(g.a, !aWin && !tie, "lg")}
     <div class="game-mid">
-      <div class="game-no">Game ${g.n}</div>
+      <div class="game-no">${g.ps ? "Playoff" : "Game"} ${gameNoText(g)}</div>
       <div class="game-score"><span class="${aWin || tie ? "" : "lose"}">${g.as}</span><span class="sep">:</span><span class="${hWin || tie ? "" : "lose"}">${g.hs}</span></div>
-      <div class="game-meta">${md(g.d)} · ${esc(g.v)}</div>
+      <div class="game-meta">${md(g.d)} · ${esc(g.v)}${g.dur ? ` · ${esc(g.dur)}` : ""}</div>
     </div>
     ${badge(g.h, !hWin && !tie, "lg")}
   </div>`;
 }
 
+function postseasonAwards(g){
+  return [
+    ["勝投", g.wp], ["敗投", g.lp], ["救援成功", g.sv],
+    ["勝利打點", g.rbi], ["MVP", g.mvp]
+  ].filter(([, value]) => value);
+}
+
+const YONGJI_TRIBUTE_TEAM = "統一7-ELEVEn獅";
+function isYongjiTribute(g, team){
+  return team === YONGJI_TRIBUTE_TEAM && g && g.ps && g.g === 4;
+}
+function postseasonDetails(g, team){
+  if (isYongjiTribute(g, team)) return [
+    ["", "陳鏞基 球員生涯最後一個打席：一壘安打"],
+    ["", "陳鏞基 季後挑戰賽最年長安打記錄（43年91天）"]
+  ];
+  return postseasonAwards(g);
+}
+function hasYongjiTribute(games, team){
+  return games.some(g => isYongjiTribute(g, team));
+}
+function postseasonIntro(games, team){
+  return hasYongjiTribute(games, team)
+    ? "Go Go Let's Go 陳鏞基！"
+    : `拼戰到最後一刻的季後挑戰賽，你在現場參與了 ${games.length} 場`;
+}
+
+function playoffGameCell(g, team){
+  const won = team && resultOf(g, team) === "W";
+  const tribute = isYongjiTribute(g, team);
+  const awards = `<div class="playoff-awards ${tribute ? "tribute" : ""}">${postseasonDetails(g, team).map(([label, value]) =>
+    `<span>${label ? `<b>${label}</b>` : ""}${esc(value)}</span>`).join("")}</div>`;
+  return `<article class="playoff-game ${won ? "won" : ""}">
+    <div class="playoff-kicker"><b>G${g.g}</b><span>${md(g.d)} · ${esc(g.v)}${g.dur ? ` · ${esc(g.dur)}` : ""}</span></div>
+    ${gameCell(g)}${awards}
+  </article>`;
+}
+
 function renderResult(){
-  const all = picked();
-  if (!all.length){ go("pick"); return; }
-  const team = currentTeam();
-  const champion = championshipMoment(all, team);
+  const allPicks = picked();
+  if (!allPicks.length){ go("pick"); return; }
+  const regular = allPicks.filter(g => !g.ps), postseason = allPicks.filter(g => g.ps);
+  const view = currentView(), team = view.team, postseasonMode = view.postseason;
+  const all = postseasonMode ? postseason : allPicks;
+  const champion = postseasonMode ? null : championshipMoment(regular, team);
   document.getElementById("r-total").textContent = all.length;
   const venues = new Set(all.map(g => g.v)).size;
 
@@ -1564,23 +1658,27 @@ function renderResult(){
     </button>
     <div class="b-abbr ${team ? "" : "word"}">${team ? TEAMS[team].abbr : "CPBL"}</div>
     <div class="b-text"><div class="b-eyebrow">CPBL 2026 · 進場紀錄</div>
-    <div class="b-title">${team ? `我進場的時候，${esc(TEAMS[team].short)}贏了幾場？` : `今年我進場看了 ${all.length} 場球`}</div></div>`;
+    <div class="b-title">${postseasonMode ? `${esc(TEAMS[team].short)}的季後挑戰賽，我看了幾場？` : team ? `我進場的時候，${esc(TEAMS[team].short)}贏了幾場？` : `今年我進場看了 ${all.length} 場球`}</div></div>`;
   if (photo) placePhoto(bannerEl.querySelector(".b-photo"), bannerEl, photo);
   document.getElementById("recap-photo").textContent = photo ? "調整照片" : "換成我的照片";
   queueRecapThumb();
 
   // Summary
-  document.getElementById("summary").innerHTML = `共進場 <b>${all.length}</b> 場<br>去過 <b>${venues}</b> 座球場`;
+  document.getElementById("summary").innerHTML = `${postseasonMode ? "挑戰賽進場" : "共進場"} <b>${all.length}</b> 場<br>去過 <b>${venues}</b> 座球場`;
 
   // Team chips
   const sel = document.getElementById("view-select");
   sel.innerHTML = `<option value="NONE">觀賽摘要（不選球隊）</option>
     <optgroup label="支持球隊版面 · 看觀賽勝率">${TEAM_ORDER.map(t =>
-      `<option value="${esc(t)}">${esc(t)}</option>`).join("")}</optgroup>`;
-  sel.value = team || "NONE";
+      `<option value="${esc(t)}">${esc(t)}</option>`).join("")}</optgroup>
+    <optgroup label="季後挑戰賽版面">${CHALLENGE_TEAMS.map(t =>
+      `<option value="PS:${esc(t)}">${esc(TEAMS[t].short)}（季後挑戰賽）</option>`).join("")}</optgroup>`;
+  sel.value = view.value;
   document.getElementById("vp-badge").innerHTML = team ? badge(team, false)
     : `<span class="vp-all"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg></span>`;
-  document.getElementById("view-hint").textContent = team
+  document.getElementById("view-hint").textContent = postseasonMode
+    ? `${TEAMS[team].short}季後挑戰賽版面：網頁與回顧圖只顯示你勾選的挑戰賽；每場都會顯示比分與單場關鍵資訊`
+    : team
     ? `${TEAMS[team].short}版面：看你進場時${TEAMS[team].short}的勝率，回顧圖也會套用這個版面`
     : "選你支持的球隊，版面會換成它的觀賽勝率和幸運指數，回顧圖同步套用";
 
@@ -1594,8 +1692,22 @@ function renderResult(){
   // Rate block
   const rate = document.getElementById("rate");
   let s = null;
-  if (team){
-    s = statsFor(team);
+  if (postseasonMode){
+    s = statsFor(team, postseason);
+    if (!postseason.length){
+      rate.innerHTML = `<div class="r-label">${badge(team, false, "xs")}${esc(TEAMS[team].short)} · 季後挑戰賽</div>
+        <div class="r-big">0<small>場</small></div><div class="r-side"></div>
+        <div class="r-cmp">你還沒有勾選季後挑戰賽，回到賽事列表選擇已完賽場次。</div>`;
+    } else {
+      rate.innerHTML = `<div class="r-label">${badge(team, false, "xs")}${esc(TEAMS[team].short)} · 季後挑戰賽進場戰績</div>
+        <div class="r-big">${s.w}<small>勝</small></div>
+        <div class="r-side"><span class="r-rec">${s.l}敗${s.t ? ` ${s.t}和` : ""}</span><span class="luck ${s.w ? "up" : ""}">PLAYOFFS</span></div>
+        <div class="r-cmp">${hasYongjiTribute(postseason, team)
+          ? "Go Go Let's Go 陳鏞基！"
+          : `拼戰到最後一刻的季後挑戰賽，你在現場參與了 <b>${postseason.length}</b> 場；每場都會顯示單場關鍵資訊。`}</div>`;
+    }
+  } else if (team){
+    s = statsFor(team, regular);
     if (!s.games.length){
       rate.innerHTML = `<div class="r-label">${badge(team, false, "xs")}你進場時的${esc(TEAMS[team].short)}</div>
         <div class="r-big">0<small>場</small></div><div class="r-side"></div>
@@ -1625,24 +1737,30 @@ function renderResult(){
       <div class="r-cmp">主場隊在你面前勝率 <b>${fmtPct(S.homePct)}</b>，全季 <b>${fmtPct(SEASON_HOME_PCT)}</b> · 進場最多在 <b>${S.month.key}</b> 月（${S.month.n} 場）</div>`;
   }
 
-  // Poster body: half seasons + playoffs (reserved) + stats
+  // Poster body: regular-season halves + a visually distinct postseason series.
   const body = document.getElementById("poster-body");
   const half = (title, en, list) => `<section class="section">
       <div class="section-head"><div class="section-title">${title}<span class="en">${en}</span><span class="count">· ${list.length} games</span></div></div>
       ${list.length ? `<div class="games-grid">${list.map(gameCell).join("")}</div>` : `<div class="empty-slot">這半季還沒有勾選賽事</div>`}
     </section>`;
-  const reserved = (title, en) => `<section class="section">
+  const reserved = (title, en, note = "DATA TBD · 賽事資料尚未提供") => `<section class="section">
       <div class="section-head"><div class="section-title">${title}<span class="en">${en}</span></div></div>
-      <div class="empty-slot"><span class="reserved">DATA TBD · 季後賽資料尚未提供</span></div></section>`;
+      <div class="empty-slot"><span class="reserved">${note}</span></div></section>`;
+  const playoff = `<section class="section playoff-section">
+      <div class="section-head"><div class="section-title">季後挑戰賽<span class="en">Playoff Series</span><span class="count">· ${postseason.length} games</span></div></div>
+      ${postseason.length ? `<div class="playoff-grid">${postseason.map(g => playoffGameCell(g, team)).join("")}</div>`
+        : `<div class="empty-slot">還沒有勾選季後挑戰賽</div>`}
+    </section>`;
 
   const gamesHtml = `<div class="games-head"><div class="eyebrow">Game log</div><h3>每一場的比賽明細</h3></div>`
-           + half("上半季", "1st half season", all.filter(g => g.n <= HALF_END))
-           + half("下半季", "2nd half season", all.filter(g => g.n > HALF_END))
-           + reserved("季後挑戰賽", "Playoff Series") + reserved("台灣大賽", "Taiwan Series");
+           + (postseasonMode ? playoff
+             : half("上半季", "1st half season", regular.filter(g => g.n <= HALF_END))
+             + half("下半季", "2nd half season", regular.filter(g => g.n > HALF_END))
+             + playoff + reserved("台灣大賽", "Taiwan Series"));
   let html = "";
 
   // Supported-team details
-  if (s && s.games.length){
+  if (s && s.games.length && !postseasonMode){
     const tp = x => fmtPct((x.w + x.l) ? x.w / (x.w + x.l) : null);
     const opps = Object.entries(s.opp).sort((a, b) => (b[1].w + b[1].l + b[1].t) - (a[1].w + a[1].l + a[1].t));
     const mini = (k, x) => x ? `<div class="row"><span class="r-k">${k}</span>
@@ -1658,6 +1776,8 @@ function renderResult(){
       </div></section>`;
   }
 
+  // General attendance details follow the active view (all picks, or postseason-only).
+  if (all.length){
   // Home games attended (per team)
   const hv = {};
   TEAM_ORDER.forEach(t => hv[t] = 0);
@@ -1686,12 +1806,14 @@ function renderResult(){
     <div class="section-head"><div class="section-title">每月進場<span class="en">by month</span></div></div>
     <div class="rows">${MONTHS.map(m => { const n = bm[m] || 0; return `<div class="row bar-row ${n ? "" : "zero"}"><span class="r-name">${m} 月</span><span class="bar"><i style="width:${n / maxM * 100}%"></i></span><span class="r-val">${n} 場</span></div>`; }).join("")}</div>
   </section>`;
+  }
 
   body.innerHTML = html + gamesHtml;
 }
 document.getElementById("view-select").addEventListener("change", e => {
   store.set(K_TEAM, e.target.value);
-  track("team_view_change", {view: TEAMS[e.target.value] ? TEAMS[e.target.value].abbr : "summary"});
+  const v = currentView();
+  track("team_view_change", {view: v.postseason ? `postseason_${TEAMS[v.team].abbr}` : v.team ? TEAMS[v.team].abbr : "summary"});
   renderResult();
 });
 const nameEl = document.getElementById("fan-name");
@@ -1707,6 +1829,10 @@ function renderIntro(){
   const secondary = n ? `<button class="btn-ghost" data-go="result">看我的戰績（${n} 場）</button>` : "";
   document.getElementById("hero-ctas").innerHTML = primary + secondary;
   document.getElementById("end-ctas").innerHTML = primary + secondary;
+  const latestPostseason = POSTSEASON_GAMES.reduce((latest, g) => !latest || g.d > latest.d || (g.d === latest.d && g.g > latest.g) ? g : latest, null);
+  document.getElementById("playoff-update-status").textContent = latestPostseason
+    ? `目前更新至 ${gameNoText(latestPostseason)} · ${md(latestPostseason.d)}`
+    : "資料更新準備中";
 
   buildWall();
   fillFeatureDemo();
@@ -1721,6 +1847,19 @@ function renderIntro(){
     <div class="fact"><div class="v">${TEAM_ORDER.length}</div><div class="k">支球隊</div></div>`;
 }
 document.getElementById("view-intro").addEventListener("click", e => {
+  const playoff = e.target.closest("[data-playoff-pick]");
+  if (playoff){
+    filt.team = "";
+    filt.month = "PS";
+    filt.venue = "";
+    filt.only = false;
+    filt.q = "";
+    pickView = "list";
+    store.set(K_VIEW, pickView);
+    track("cta_click", {cta_location:"intro_playoff_update", cta_target:"pick", picks_total:picks.size});
+    go("pick");
+    return;
+  }
   const b = e.target.closest("[data-go]");
   if (!b) return;
   track("cta_click", {cta_location: b.closest("#end-ctas") ? "intro_end" : "intro_hero", cta_target: b.dataset.go, picks_total: picks.size});
@@ -1918,19 +2057,43 @@ const SW = 1080, SH = 1920;
 const F_NUM = '"Manrope", "Noto Sans TC", system-ui, sans-serif';
 const F_TC  = '"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif';
 
-function shareModel(all = picked(), team = currentTeam(), name = (store.get(K_NAME) || "").trim()){
+function postseasonScoreLine(games){
+  return games.map(g => `G${g.g} ${TEAMS[g.a].short} ${g.as}–${g.hs} ${TEAMS[g.h].short}`).join(" · ");
+}
+
+function shareModel(all, team, name, postseasonMode){
+  const liveCall = arguments.length === 0;
+  if (all === undefined) all = picked();
+  if (team === undefined) team = currentTeam();
+  if (name === undefined) name = (store.get(K_NAME) || "").trim();
+  if (postseasonMode === undefined) postseasonMode = liveCall && currentView().postseason;
+  const postGames = all.filter(g => g.ps);
+  const regular = all.filter(g => !g.ps);
+  if (postseasonMode){
+    const games = postGames, s = statsFor(team, games), venues = new Set(games.map(g => g.v)).size;
+    return {
+      mode:"postseason", all:games, postGames:games, team, name, venues, s,
+      tc:TEAMS[team].c, acc:ACCENT[team], label:`${TEAMS[team].short} · 季後挑戰賽`,
+      title:`2026 季後挑戰賽`, big:String(s.w), unit:"勝", rec:`${s.l}敗${s.t ? ` ${s.t}和` : ""}`,
+      luck:"PLAYOFFS", cmp:[], cells:[], strip:[], extraLines:[], championText:""
+    };
+  }
   const venues = new Set(all.map(g => g.v)).size;
-  const m = {all, team, venues, name, tc: team ? TEAMS[team].c : "#2a2a33", acc: team ? ACCENT[team] : NEUTRAL_ACCENT};
-  m.champion = championshipMoment(all, team);
+  const m = {mode:"season", all, team, venues, name, tc: team ? TEAMS[team].c : "#2a2a33", acc: team ? ACCENT[team] : NEUTRAL_ACCENT};
+  m.champion = championshipMoment(regular, team);
   m.championText = m.champion ? `恭喜你看到${TEAMS[team].short}拋下${m.champion.half}冠軍彩帶` : "";
+  m.extraLines = m.championText ? [m.championText] : [];
+  if (team && CHALLENGE_TEAMS.includes(team) && postGames.length){
+    m.extraLines.push(`季後挑戰賽　${postseasonScoreLine(postGames)}`);
+  }
   if (team){
-    const s = statsFor(team, all), short = TEAMS[team].short;
+    const s = statsFor(team, regular), short = TEAMS[team].short;
     m.label = `我進場時的${short} · 觀賽勝率`;
     m.title = `我進場的時候，${short}贏了幾場？`;
     if (!s.games.length){
       m.label = `我進場時的${short}`;
       m.big = "0"; m.unit = "場"; m.rec = ""; m.luck = "";
-      m.cmp = [{t:`我進場的 ${all.length} 場都沒有${short}`}];
+      m.cmp = [{t:`我進場的例行賽沒有${short}`}];
       m.strip = [];
     } else {
       const sp = seasonPct(team), d = s.pct == null ? null : (s.pct - sp) * 100;
@@ -2004,7 +2167,8 @@ async function renderShareImage(){
 // Draws one 1080×1920 share image for model `m`; `ph` = photo record or null.
 async function drawShare(m, ph){
   const textAll = [m.label, m.title, m.rec, m.luck, m.name, m.stripLabel || "", ...m.cmp.map(c => c.t),
-    ...m.cells.flatMap(c => [c[1], c[2]]), m.championText,
+    ...m.cells.flatMap(c => [c[1], c[2]]), ...(m.extraLines || []),
+    ...(m.postGames || []).flatMap(g => [g.wp, g.lp, g.sv, g.rbi, g.mvp, g.v].filter(Boolean)),
     "非官方網站只計進場觀賽戰績 MY 2026 SEASON"].join("");
   await loadFontsFor(textAll);
 
@@ -2031,8 +2195,8 @@ async function drawShare(m, ph){
     for (let i = -SH; i < SW + SH; i += 46){ ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i + SH * .47, SH); ctx.stroke(); }
     ctx.restore();
     ctx.save(); ctx.fillStyle = "rgba(255,255,255,.12)"; ctx.textAlign = "right";
-    if (m.team){ ctx.font = `800 1000px ${F_MARK}`; ctx.fillText(TEAMS[m.team].abbr, SW - 20, 900); }
-    else { ctx.font = `800 440px ${F_NUM}`; spacing(ctx, -12); ctx.fillText("CPBL", SW + 30, 860); }
+    if (m.team && m.mode !== "postseason"){ ctx.font = `800 1000px ${F_MARK}`; ctx.fillText(TEAMS[m.team].abbr, SW - 20, 900); }
+    else if (!m.team){ ctx.font = `800 440px ${F_NUM}`; spacing(ctx, -12); ctx.fillText("CPBL", SW + 30, 860); }
     ctx.restore();
   }
   // Scrims: top for the brand strip, bottom for the stats block
@@ -2054,6 +2218,96 @@ async function drawShare(m, ph){
   ctx.fillText("MY 2026 SEASON", R, 150);
   if (m.name){ ctx.fillStyle = white; ctx.font = `700 40px ${F_TC}`; spacing(ctx, 0); ctx.fillText(m.name, R, 202); }
   ctx.textAlign = "left";
+
+  // ---- Dedicated postseason card: only the selected challenge-series games.
+  if (m.mode === "postseason"){
+    ctx.fillStyle = m.acc.f; ctx.font = `700 26px ${F_NUM}`; spacing(ctx, 6);
+    ctx.fillText("2026 PLAYOFF SERIES", L, 872);
+    ctx.fillStyle = white; ctx.font = `700 58px ${F_TC}`; spacing(ctx, 0);
+    ctx.fillText("季後挑戰賽", L, 950);
+    ctx.fillStyle = dim; ctx.font = `500 32px ${F_TC}`;
+    ctx.fillText(`${TEAMS[m.team].short} · 我的進場戰績`, L, 1034);
+
+    ctx.fillStyle = white; ctx.font = `800 190px ${F_NUM}`; spacing(ctx, -4);
+    ctx.fillText(m.big, L - 3, 1254);
+    const bigW = ctx.measureText(m.big).width;
+    ctx.font = `700 54px ${F_TC}`; spacing(ctx, 0); ctx.fillText("勝", L + bigW + 12, 1254);
+    ctx.textAlign = "right"; ctx.font = `800 54px ${F_TC}`; ctx.fillText(m.rec, R, 1195);
+    ctx.fillStyle = m.acc.f; ctx.font = `700 24px ${F_NUM}`; spacing(ctx, 4);
+    ctx.fillText("PLAYOFFS", R, 1257);
+    spacing(ctx, 0);
+    ctx.textAlign = "left";
+
+    ctx.fillStyle = "rgba(255,255,255,.22)"; ctx.fillRect(L, 1302, W, 2);
+    ctx.fillStyle = dim; ctx.font = `500 25px ${F_TC}`;
+    ctx.fillText(postseasonIntro(m.postGames, m.team), L, 1345);
+
+    const games = m.postGames;
+    const denseGames = games.length >= 4;
+    const rowH = games.length ? Math.min(142, 390 / games.length) : 142;
+    if (!games.length){
+      ctx.fillStyle = dim; ctx.font = `500 32px ${F_TC}`; ctx.fillText("還沒有勾選季後挑戰賽", L, 1460);
+    }
+    games.forEach((game, i) => {
+      const y0 = 1372 + i * rowH;
+      const won = resultOf(game, m.team) === "W";
+      const awardItems = postseasonDetails(game, m.team).map(([label, value]) => label ? `${label} ${value}` : value);
+      const awardLines = [awardItems.slice(0, 3).join("　·　"), awardItems.slice(3).join("　·　")].filter(Boolean);
+
+      if (denseGames){
+        ctx.fillStyle = won ? m.acc.f : dim; ctx.font = `800 21px ${F_NUM}`; spacing(ctx, 1);
+        ctx.fillText(`G${game.g}`, L, y0 + 25);
+        const gw = ctx.measureText(`G${game.g}`).width;
+        ctx.fillStyle = dim; ctx.font = `500 16px ${F_TC}`; spacing(ctx, 0);
+        ctx.fillText(`${md(game.d)} · ${game.v}${game.dur ? ` · ${game.dur}` : ""}`, L + gw + 18, y0 + 25);
+
+        ctx.fillStyle = white; ctx.font = `700 27px ${F_TC}`;
+        ctx.fillText(`${TEAMS[game.a].short}　`, L + 300, y0 + 27);
+        const awayW = ctx.measureText(`${TEAMS[game.a].short}　`).width;
+        ctx.font = `800 32px ${F_NUM}`;
+        ctx.fillText(`${game.as} : ${game.hs}`, L + 300 + awayW, y0 + 28);
+        const scoreW = ctx.measureText(`${game.as} : ${game.hs}`).width;
+        ctx.font = `700 27px ${F_TC}`;
+        ctx.fillText(`　${TEAMS[game.h].short}`, L + 300 + awayW + scoreW, y0 + 27);
+
+        ctx.fillStyle = dim; ctx.font = `500 15px ${F_TC}`;
+        awardLines.forEach((line, lineIndex) => ctx.fillText(line, L, y0 + 56 + lineIndex * 23, W));
+        if (i < games.length - 1){
+          ctx.fillStyle = "rgba(255,255,255,.18)"; ctx.fillRect(L, y0 + rowH - 4, W, 1);
+        }
+        return;
+      }
+
+      const compact = rowH < 140, headY = compact ? 20 : 27, scoreY = compact ? 53 : 68;
+      ctx.fillStyle = won ? m.acc.f : dim; ctx.font = `800 23px ${F_NUM}`; spacing(ctx, 1);
+      ctx.fillText(`G${game.g}`, L, y0 + headY);
+      const gw = ctx.measureText(`G${game.g}`).width;
+      ctx.fillStyle = dim; ctx.font = `500 ${compact ? 16 : 19}px ${F_TC}`; spacing(ctx, 0);
+      ctx.fillText(`${md(game.d)} · ${game.v}${game.dur ? ` · ${game.dur}` : ""}`, L + gw + 22, y0 + headY);
+
+      ctx.fillStyle = white; ctx.font = `700 ${compact ? 27 : 34}px ${F_TC}`;
+      ctx.fillText(`${TEAMS[game.a].short}　`, L, y0 + scoreY);
+      const awayW = ctx.measureText(`${TEAMS[game.a].short}　`).width;
+      ctx.font = `800 ${compact ? 34 : 42}px ${F_NUM}`;
+      ctx.fillText(`${game.as} : ${game.hs}`, L + awayW, y0 + scoreY + 1);
+      const scoreW = ctx.measureText(`${game.as} : ${game.hs}`).width;
+      ctx.font = `700 ${compact ? 27 : 34}px ${F_TC}`;
+      ctx.fillText(`　${TEAMS[game.h].short}`, L + awayW + scoreW, y0 + scoreY);
+
+      ctx.fillStyle = dim; ctx.font = `500 ${compact ? 14 : 17}px ${F_TC}`;
+      awardLines.forEach((line, lineIndex) => ctx.fillText(line, L, y0 + (compact ? 79 : 96) + lineIndex * (compact ? 22 : 25), W));
+      if (i < games.length - 1){
+        ctx.fillStyle = "rgba(255,255,255,.18)"; ctx.fillRect(L, y0 + rowH - (compact ? 4 : 10), W, 1);
+      }
+    });
+
+    ctx.fillStyle = "rgba(245,241,232,.78)"; ctx.font = `700 26px ${F_NUM}`; ctx.textAlign = "center"; spacing(ctx, 2);
+    ctx.fillText("mybaseballgame.com", SW / 2, 1812);
+    ctx.fillStyle = "rgba(245,241,232,.45)"; ctx.font = `500 20px ${F_TC}`; spacing(ctx, 0);
+    ctx.fillText("只計進場觀賽 · 球迷自製，非 CPBL 官方網站", SW / 2, 1852);
+    ctx.textAlign = "left";
+    return c;
+  }
 
   // ---- Stats block
   let y = 960;
@@ -2102,14 +2356,15 @@ async function drawShare(m, ph){
     ctx.font = `${seg.b ? 800 : 500} 34px ${seg.b && !seg.tc ? F_NUM : F_TC}`;
     ctx.fillStyle = seg.b ? white : dim; ctx.fillText(seg.t, x, 1488); x += ctx.measureText(seg.t).width;
   });
-  if (m.championText){
-    ctx.fillStyle = m.acc.f; ctx.font = `500 34px ${F_TC}`;
-    ctx.fillText(m.championText, L, 1534, W);
-  }
+  const extraLines = m.extraLines || [];
+  extraLines.forEach((line, i) => {
+    ctx.fillStyle = m.acc.f; ctx.font = `500 ${i ? 27 : 31}px ${F_TC}`;
+    ctx.fillText(line, L, 1532 + i * 38, W);
+  });
 
   // Per-game strip (chronological), up to 2 rows; shrinks to fit
   if (m.strip.length){
-    const stripY = m.championText ? 1570 : 1520;
+    const stripY = 1520 + extraLines.length * 38;
     const n = m.strip.length, gap = 6;
     let size = 28, perRow = Math.floor((W + gap) / (size + gap));
     if (n > perRow * 2){ perRow = Math.ceil(n / 2); size = Math.max(8, Math.floor((W + gap) / perRow) - gap); }
@@ -2122,9 +2377,9 @@ async function drawShare(m, ph){
   }
 
   // Three stat cells
-  const cellTop = m.championText ? 1652 : 1606;
-  const cellLabelY = m.championText ? 1678 : 1632;
-  const cellValueY = m.championText ? 1746 : 1700;
+  const cellTop = 1606 + extraLines.length * 38;
+  const cellLabelY = 1632 + extraLines.length * 38;
+  const cellValueY = 1700 + extraLines.length * 38;
   const colW = W / 3;
   m.cells.forEach(([v, unit, label], i) => {
     const cx = L + i * colW;
@@ -2156,7 +2411,8 @@ const SHARE_NAME = "my-2026-season-recap.png";
 
 function setShareMsg(t){ shMsg.textContent = t; }
 async function openShare(){
-  track("share_open", {view: currentTeam() ? TEAMS[currentTeam()].abbr : "summary", has_photo: !!photo, picks_total: picks.size});
+  const v = currentView();
+  track("share_open", {view: v.postseason ? `postseason_${TEAMS[v.team].abbr}` : v.team ? TEAMS[v.team].abbr : "summary", has_photo: !!photo, picks_total: picks.size});
   if (!shareDlg.open) shareDlg.showModal();
   const prev = document.getElementById("sh-preview");
   prev.innerHTML = `<span class="ed-busy">產生中…</span>`;

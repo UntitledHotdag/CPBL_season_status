@@ -29,7 +29,7 @@
 | 一句話 | 球迷勾選 2026 年中華職棒一軍例行賽「進場看過」的比賽，得到整季觀賽摘要與觀賽勝率，再放上自己拍的球場照片，下載一張 1080×1920 的賽季回顧圖 |
 | 初衷 | 季末想用在球場拍的照片＋整季觀賽數據，好好回顧這一季 |
 | 目標使用者 | 台灣職棒進場球迷，主要用手機瀏覽（mobile first） |
-| 資料範圍 | 2026 一軍例行賽，3/28–10/06，共 360 場；季後挑戰賽、台灣大賽尚無資料（頁面上保留「DATA TBD」區塊） |
+| 資料範圍 | 2026 一軍例行賽，3/28–10/06，共 360 場；季後挑戰賽已納入完賽場次，台灣大賽尚無資料（頁面上保留「DATA TBD」區塊） |
 | 性質 | 球迷自製、非官方網站；與 CPBL 及各球團無隸屬、授權或贊助關係 |
 
 ---
@@ -59,7 +59,8 @@ CPBL_season_status/
 ├── CLAUDE.md              ← 指向本文件
 ├── src/
 │   ├── app.html           ← 網站原始碼（唯一要手改的前端檔案；含 /*__GAMES_JSON__*/、/*__GA_ID__*/ 佔位符）
-│   └── games.json         ← 360 場比賽精簡資料（由 parse_cpbl_pdf.py 產生）
+│   ├── games.json         ← 360 場例行賽精簡資料（由 parse_cpbl_pdf.py 產生）
+│   └── postseason.json    ← 已完賽季後挑戰賽資料（比分與單場獎項）
 ├── tools/
 │   ├── build.py           ← src → docs/index.html（嵌入資料與 GA ID）
 │   ├── parse_cpbl_pdf.py  ← 官方月份 PDF → cpbl_2026.csv、standings、src/games.json
@@ -109,9 +110,9 @@ CPBL_season_status/
 
 | 頁面 | 重點功能 |
 |---|---|
-| 介紹頁 `#intro` | Hero 主標「你這個賽季，進場看了幾場球？」＋2.5D 斜放、緩慢捲動的回顧圖牆（12 張預先算好的 JPG）；「放上這個賽季你最喜歡的照片」區塊（照片 → 回顧圖對照）；三步驟（勾選、選球隊、做成賽季回顧圖）；整季數字；資料來源與免責聲明 |
+| 介紹頁 `#intro` | Hero 主標「你這個賽季，進場看了幾場球？」＋季後挑戰賽更新資訊與快速篩選入口＋2.5D 斜放、緩慢捲動的回顧圖牆（12 張預先算好的 JPG）；「放上這個賽季你最喜歡的照片」區塊（照片 → 回顧圖對照）；三步驟（勾選、選球隊、做成賽季回顧圖）；整季數字；資料來源與免責聲明 |
 | 選擇賽事 `#pick` | 三種檢視：**月曆**（預設，格子內為對戰字母小徽章，點日期在下方展開當日卡片）、**周曆**（7 天、左右換週）、**列表**（整季、依月份分段且月份標題 sticky）。篩選：球隊（7 顆按鈕）、月份（全季／上半季／下半季／3–10 月）、球場、只看已選、搜尋。右下角「看我的戰績 →」、「清除所有」（7 秒內可復原） |
-| 我的戰績 `#result` | 主視覺（可上傳照片並拖曳/縮放取景）→ 名字 → **選擇版面（你支持的球隊）** 下拉 → 觀賽摘要或球隊觀賽勝率 → **賽季回顧圖卡片**（即時縮圖＋下載）→ 球隊細項、主場觀賽、球場踩點、每月進場 → 最底部「每一場的比賽明細」（上半季、下半季、季後挑戰賽／台灣大賽 TBD）。右下角「← 回到選擇賽事」 |
+| 我的戰績 `#result` | 主視覺（可上傳照片並拖曳/縮放取景）→ 名字 → **選擇版面（你支持的球隊）** 下拉 → 觀賽摘要、球隊觀賽勝率或季後挑戰賽專用版面 → **賽季回顧圖卡片**（即時縮圖＋下載）→ 球隊細項、主場觀賽、球場踩點、每月進場 → 最底部「每一場的比賽明細」（上半季、下半季、季後挑戰賽、台灣大賽 TBD）。右下角「← 回到選擇賽事」 |
 
 ### 5.2 統計定義
 
@@ -236,7 +237,7 @@ git add src docs && git commit -m "Short imperative summary" && git push
 | 事件 | 觸發 | 參數 |
 |---|---|---|
 | `page_view` | 換頁（虛擬） | `page_title`, `page_location`, `page_path` |
-| `cta_click` | 主要按鈕 | `cta_location`（intro_hero / intro_end / pick_footer / result_footer）, `cta_target`, `picks_total` |
+| `cta_click` | 主要按鈕 | `cta_location`（intro_hero / intro_playoff_update / intro_end / pick_footer / result_footer）, `cta_target`, `picks_total` |
 | `game_pick` / `game_unpick` | 勾選／取消 | `game_no`, `picks_total` |
 | `picks_clear` / `picks_clear_undo` | 清除所有／復原 | `picks_total` |
 | `filter_change` / `filter_reset` | 篩選 | `filter_type`（team / month / venue / only_picked / search）, `filter_value`（搜尋只記 `(text)`） |
@@ -258,7 +259,7 @@ git add src docs && git commit -m "Short imperative summary" && git push
 - **日期運算**一律用 UTC（`new Date(iso + "T00:00:00Z")`），避免時區造成差一天。
 - **快取**：推送後若看不到新版，先確認 Cloudflare 部署完成，再強制重新整理或用無痕視窗。
 - 範例照片中可見球員與贊助商標誌（現場自拍）；啦啦隊員特寫因肖像權風險**未使用**。
-- 季後賽資料尚未提供，成果頁保留「DATA TBD」區塊。
+- 季後挑戰賽完賽資料放在 `src/postseason.json`；單場獎項以官方 PDF 的 `wp`、`lp`、`sv`、`mvp` 為準，另有可靠來源時可補選填的 `rbi`。尚未完賽的場次不要寫入即時比分。台灣大賽仍保留「DATA TBD」區塊。
 
 ---
 
@@ -288,7 +289,7 @@ git add src docs && git commit -m "Short imperative summary" && git push
 - [ ] 依 GA 數據（`view_change`、`share_open`／`share_save` 轉換率、`picks_clear_undo` 比例）調整介面
 
 ### 中期（季後賽～下季開打前）
-- [ ] 季後挑戰賽、台灣大賽資料與區塊
+- [ ] 持續補齊季後挑戰賽完賽資料；新增台灣大賽資料與區塊
 - [ ] 多賽季架構：資料改為 `src/games-2027.json` 等，localStorage key 依年份分開，網址或選單切換賽季
 - [ ] 解析流程自動化（若官方資料可程式化取得，改回爬蟲並排程更新）
 - [ ] 回顧圖多種版型（例如方形 1:1 貼文版）
