@@ -489,6 +489,7 @@
   .playoff-awards{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin-top:14px;padding-top:12px;border-top:1px solid var(--rule-soft);font-size:11px;color:var(--ink-dim)}
   .playoff-awards span{display:flex;gap:6px;min-width:0}
   .playoff-awards b{color:var(--muted);font-size:10px;font-weight:500;white-space:nowrap}
+  .playoff-awards.tribute{grid-template-columns:1fr;color:var(--accent)}
 
   .stats-block{padding:28px 0 4px;border-top:1px solid var(--rule);margin-top:16px}
   .stats-block:first-child{border-top:none;margin-top:0}
@@ -1575,7 +1576,7 @@ function gameCell(g){
     <div class="game-mid">
       <div class="game-no">${g.ps ? "Playoff" : "Game"} ${gameNoText(g)}</div>
       <div class="game-score"><span class="${aWin || tie ? "" : "lose"}">${g.as}</span><span class="sep">:</span><span class="${hWin || tie ? "" : "lose"}">${g.hs}</span></div>
-      <div class="game-meta">${md(g.d)} · ${esc(g.v)}</div>
+      <div class="game-meta">${md(g.d)} · ${esc(g.v)}${g.dur ? ` · ${esc(g.dur)}` : ""}</div>
     </div>
     ${badge(g.h, !hWin && !tie, "lg")}
   </div>`;
@@ -1588,12 +1589,33 @@ function postseasonAwards(g){
   ].filter(([, value]) => value);
 }
 
+const YONGJI_TRIBUTE_TEAM = "統一7-ELEVEn獅";
+function isYongjiTribute(g, team){
+  return team === YONGJI_TRIBUTE_TEAM && g && g.ps && g.g === 4;
+}
+function postseasonDetails(g, team){
+  if (isYongjiTribute(g, team)) return [
+    ["", "陳鏞基 球員生涯最後一個打席：一壘安打"],
+    ["", "陳鏞基 季後挑戰賽最年長安打記錄（43年91天）"]
+  ];
+  return postseasonAwards(g);
+}
+function hasYongjiTribute(games, team){
+  return games.some(g => isYongjiTribute(g, team));
+}
+function postseasonIntro(games, team){
+  return hasYongjiTribute(games, team)
+    ? "Go Go Let's Go 陳鏞基！"
+    : `拼戰到最後一刻的季後挑戰賽，你在現場參與了 ${games.length} 場`;
+}
+
 function playoffGameCell(g, team){
   const won = team && resultOf(g, team) === "W";
-  const awards = `<div class="playoff-awards">${postseasonAwards(g).map(([label, value]) =>
-    `<span><b>${label}</b>${esc(value)}</span>`).join("")}</div>`;
+  const tribute = isYongjiTribute(g, team);
+  const awards = `<div class="playoff-awards ${tribute ? "tribute" : ""}">${postseasonDetails(g, team).map(([label, value]) =>
+    `<span>${label ? `<b>${label}</b>` : ""}${esc(value)}</span>`).join("")}</div>`;
   return `<article class="playoff-game ${won ? "won" : ""}">
-    <div class="playoff-kicker"><b>G${g.g}</b><span>${md(g.d)} · ${esc(g.v)}</span></div>
+    <div class="playoff-kicker"><b>G${g.g}</b><span>${md(g.d)} · ${esc(g.v)}${g.dur ? ` · ${esc(g.dur)}` : ""}</span></div>
     ${gameCell(g)}${awards}
   </article>`;
 }
@@ -1680,7 +1702,9 @@ function renderResult(){
       rate.innerHTML = `<div class="r-label">${badge(team, false, "xs")}${esc(TEAMS[team].short)} · 季後挑戰賽進場戰績</div>
         <div class="r-big">${s.w}<small>勝</small></div>
         <div class="r-side"><span class="r-rec">${s.l}敗${s.t ? ` ${s.t}和` : ""}</span><span class="luck ${s.w ? "up" : ""}">PLAYOFFS</span></div>
-        <div class="r-cmp">拼戰到最後一刻的季後挑戰賽，你在現場參與了 <b>${postseason.length}</b> 場；每場都會顯示單場關鍵資訊。</div>`;
+        <div class="r-cmp">${hasYongjiTribute(postseason, team)
+          ? "Go Go Let's Go 陳鏞基！"
+          : `拼戰到最後一刻的季後挑戰賽，你在現場參與了 <b>${postseason.length}</b> 場；每場都會顯示單場關鍵資訊。`}</div>`;
     }
   } else if (team){
     s = statsFor(team, regular);
@@ -2216,7 +2240,7 @@ async function drawShare(m, ph){
 
     ctx.fillStyle = "rgba(255,255,255,.22)"; ctx.fillRect(L, 1302, W, 2);
     ctx.fillStyle = dim; ctx.font = `500 25px ${F_TC}`;
-    ctx.fillText(`拼戰到最後一刻的季後挑戰賽，你在現場參與了 ${m.postGames.length} 場`, L, 1345);
+    ctx.fillText(postseasonIntro(m.postGames, m.team), L, 1345);
 
     const games = m.postGames;
     const denseGames = games.length >= 4;
@@ -2227,7 +2251,7 @@ async function drawShare(m, ph){
     games.forEach((game, i) => {
       const y0 = 1372 + i * rowH;
       const won = resultOf(game, m.team) === "W";
-      const awardItems = postseasonAwards(game).map(([label, value]) => `${label} ${value}`);
+      const awardItems = postseasonDetails(game, m.team).map(([label, value]) => label ? `${label} ${value}` : value);
       const awardLines = [awardItems.slice(0, 3).join("　·　"), awardItems.slice(3).join("　·　")].filter(Boolean);
 
       if (denseGames){
@@ -2235,7 +2259,7 @@ async function drawShare(m, ph){
         ctx.fillText(`G${game.g}`, L, y0 + 25);
         const gw = ctx.measureText(`G${game.g}`).width;
         ctx.fillStyle = dim; ctx.font = `500 16px ${F_TC}`; spacing(ctx, 0);
-        ctx.fillText(`${md(game.d)} · ${game.v}`, L + gw + 18, y0 + 25);
+        ctx.fillText(`${md(game.d)} · ${game.v}${game.dur ? ` · ${game.dur}` : ""}`, L + gw + 18, y0 + 25);
 
         ctx.fillStyle = white; ctx.font = `700 27px ${F_TC}`;
         ctx.fillText(`${TEAMS[game.a].short}　`, L + 300, y0 + 27);
@@ -2259,7 +2283,7 @@ async function drawShare(m, ph){
       ctx.fillText(`G${game.g}`, L, y0 + headY);
       const gw = ctx.measureText(`G${game.g}`).width;
       ctx.fillStyle = dim; ctx.font = `500 ${compact ? 16 : 19}px ${F_TC}`; spacing(ctx, 0);
-      ctx.fillText(`${md(game.d)} · ${game.v}`, L + gw + 22, y0 + headY);
+      ctx.fillText(`${md(game.d)} · ${game.v}${game.dur ? ` · ${game.dur}` : ""}`, L + gw + 22, y0 + headY);
 
       ctx.fillStyle = white; ctx.font = `700 ${compact ? 27 : 34}px ${F_TC}`;
       ctx.fillText(`${TEAMS[game.a].short}　`, L, y0 + scoreY);
