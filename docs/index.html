@@ -774,7 +774,7 @@
               <span class="playoff-update-status" id="playoff-update-status"></span>
             </div>
             <h2>季後挑戰賽已加入</h2>
-            <p>統一獅 vs 兄弟，已完賽場次會持續更新。現在可以勾選進場賽事，製作專屬的挑戰賽回顧圖。</p>
+            <p>統一7-11獅 vs 兄弟，已完賽場次會持續更新。現在可以勾選進場賽事，製作專屬的挑戰賽回顧圖。</p>
             <button class="playoff-update-link" data-playoff-pick>查看季後挑戰賽 →</button>
           </div>
           <div class="hero-ctas" id="hero-ctas"></div>
@@ -1005,10 +1005,11 @@ const TEAMS = {
   "樂天桃猿":       {abbr:"R", short:"桃猿",   c:"#8E1B3A", k:"#FFFFFF"},
   "味全龍":         {abbr:"W", short:"味全龍", c:"#C8102E", k:"#FFFFFF"},
   "台鋼雄鷹":       {abbr:"T", short:"雄鷹",   c:"#1E5B45", k:"#FFFFFF"},
-  "統一7-ELEVEn獅": {abbr:"L", short:"統一獅", c:"#EE7623", k:"#FFFFFF"},
+  "統一7-ELEVEn獅": {abbr:"L", short:"統一7-11獅", c:"#EE7623", k:"#FFFFFF"},
   "富邦悍將":       {abbr:"G", short:"悍將",   c:"#1D3D8F", k:"#FFFFFF"},
 };
 const TEAM_ORDER = Object.keys(TEAMS);
+const teamDisplayName = team => team === "統一7-ELEVEn獅" ? "統一7-11獅" : team;
 // Per-team accent: f = bright fill (dark backgrounds, bars, pills), i = ink on that fill,
 // l = darker shade for text on the light theme. Neutral summary uses a cream accent.
 const ACCENT = {
@@ -1159,7 +1160,7 @@ function buildFilters(){
     <div class="f-row f-teams" role="group" aria-label="依球隊篩選">
       <span class="f-k">球隊</span>
       <button class="tchip all" data-team="" aria-pressed="${filt.team === ""}">全部</button>
-      ${TEAM_ORDER.map(t => `<button class="tchip" data-team="${esc(t)}" aria-pressed="${filt.team === t}" title="${esc(t)}">${badge(t, false)}<span>${esc(TEAMS[t].short)}</span></button>`).join("")}
+      ${TEAM_ORDER.map(t => `<button class="tchip" data-team="${esc(t)}" aria-pressed="${filt.team === t}" title="${esc(teamDisplayName(t))}">${badge(t, false)}<span>${esc(TEAMS[t].short)}</span></button>`).join("")}
     </div>
     <div class="f-row f-sel">
       <label class="fsel"><span class="f-k">月份</span>
@@ -1677,7 +1678,7 @@ function renderResult(){
   const sel = document.getElementById("view-select");
   sel.innerHTML = `<option value="NONE">觀賽摘要（不選球隊）</option>
     <optgroup label="支持球隊版面 · 看觀賽勝率">${TEAM_ORDER.map(t =>
-      `<option value="${esc(t)}">${esc(t)}</option>`).join("")}</optgroup>
+      `<option value="${esc(t)}">${esc(teamDisplayName(t))}</option>`).join("")}</optgroup>
     <optgroup label="季後挑戰賽版面">${CHALLENGE_TEAMS.map(t =>
       `<option value="PS:${esc(t)}">${esc(TEAMS[t].short)}（季後挑戰賽）</option>`).join("")}</optgroup>`;
   sel.value = view.value;
