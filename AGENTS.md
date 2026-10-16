@@ -2,17 +2,17 @@
 
 > 給 AI 開發助手（Claude、Codex、Cursor 等）與新加入的開發者閱讀的專案說明。
 > 動手改任何東西之前，先讀完「0. 給 AI 的工作守則」與「6. 開發流程」。
-> 最後更新：2026-10-11 · 維護者：Johnson Lin（GitHub: UntitledHotdag）
+> 最後更新：2026-10-16 · 維護者：Johnson Lin（GitHub: UntitledHotdag）
 
 ---
 
 ## 0. 給 AI 的工作守則（必讀）
 
 1. **不要直接改 `docs/index.html`**。它是建置產物，會被覆蓋。要改網站就改 `src/app.html`，再執行 `python3 tools/build.py`。
-2. **網站必須維持「純前端、純靜態」**：不得新增後端、資料庫、`functions/`、Worker 程式或任何會上傳使用者資料的功能。若需求需要伺服器，先提出方案與費用評估，經維護者同意才做（見 §8）。
+2. **一般網站功能維持純前端**；目前唯一核准的後端範圍是台灣大賽匿名預測 API、D1 統計與受 Cloudflare Access 保護的管理架構。不得擴大保存範圍或新增會上傳個資的功能；若需求需要更多伺服器能力，先提出方案與費用評估，經維護者同意才做（見 §8）。
 3. **不得使用 CPBL 或各球團的官方 Logo、商標、官方照片**。球隊一律以「一個英文字母＋代表色」的自製標誌表示（見 §5.3）。
 4. **介面文字使用繁體中文（台灣用語）**；程式識別名稱、commit message 使用英文。
-5. **使用者的勾選紀錄、名字、照片只存在使用者自己的瀏覽器**，不得送到任何伺服器；GA 事件不得帶入名字、照片或搜尋字串內容。
+5. **使用者的勾選紀錄、名字、照片只存在使用者自己的瀏覽器**；台灣大賽只會送出匿名比分／球員預測與雜湊後的裝置識別。GA 事件不得帶入名字、照片、球員選擇或搜尋字串內容。
 6. **只計「進場觀賽」**：轉播、直播不算，文案不得暗示可以登記電視觀賽。
 7. 改完務必驗證：手機寬度 390px 與桌機 1280px、淺色與深色模式、頁面不可出現水平捲軸、瀏覽器 console 無錯誤（見 §6.4）。
 8. 改動資料（`src/games.json`）只能透過 `tools/parse_cpbl_pdf.py` 重新產生，不要手改；若必須手動修正，要在 commit message 寫明原因與來源。
@@ -29,7 +29,7 @@
 | 一句話 | 球迷勾選 2026 年中華職棒一軍例行賽「進場看過」的比賽，得到整季觀賽摘要與觀賽勝率，再放上自己拍的球場照片，下載一張 1080×1920 的賽季回顧圖 |
 | 初衷 | 季末想用在球場拍的照片＋整季觀賽數據，好好回顧這一季 |
 | 目標使用者 | 台灣職棒進場球迷，主要用手機瀏覽（mobile first） |
-| 資料範圍 | 2026 一軍例行賽，3/28–10/06，共 360 場；季後挑戰賽已納入完賽場次，台灣大賽尚無資料（頁面上保留「DATA TBD」區塊） |
+| 資料範圍 | 2026 一軍例行賽，3/28–10/06，共 360 場；季後挑戰賽已納入完賽場次；台灣大賽已建立 G1–G7 賽程與賽前預測，賽果尚未寫入 |
 | 性質 | 球迷自製、非官方網站；與 CPBL 及各球團無隸屬、授權或贊助關係 |
 
 ---
@@ -39,15 +39,15 @@
 | 項目 | 值 |
 |---|---|
 | 正式網址 | https://mybaseballgame.com（另接 `www.mybaseballgame.com`） |
-| 主機 | Cloudflare Workers（Static Assets，**只有靜態檔案、沒有 Worker 程式**），專案名 `cpbl-season-status` |
+| 主機 | Cloudflare Workers（Static Assets＋僅處理 `/api/*`、`/admin*` 的 Worker），專案名 `cpbl-season-status` |
 | 備用網址 | `cpbl-season-status.jjwer210184.workers.dev`（建議在 Cloudflare 停用，避免雙網址） |
 | 正式部署 | GitHub `UntitledHotdag/CPBL_season_status`，分支 `main`，Cloudflare 專案 `cpbl-season-status`，網址 `mybaseballgame.com` |
 | 測試部署 | 同一 GitHub repository，分支 `staging`，Cloudflare 專案 `cpbl-season-status-staging`，網址 `staging.mybaseballgame.com` |
-| 部署輸出 | 兩個環境皆直接提供 `docs/`，無建置指令 |
+| 部署輸出 | `docs/` 靜態資源＋`worker/index.js`；D1 migration 必須在 Worker 部署前套用 |
 | 網域 | `mybaseballgame.com` 於 Cloudflare Registrar 購買（約 US$10.5／年，需開自動續約） |
 | 分析 | Google Analytics 4，評估 ID `G-3NFXSVM2JD`，只在正式網域送資料 |
 | 舊環境 | 曾用 GitHub Pages（`/docs`）測試；已改用 Cloudflare，若 Pages 仍開啟可關閉 |
-| 成本 | 靜態資源請求免費且不限量；唯一固定支出是網域年費 |
+| 成本 | 網域年費＋Cloudflare Workers／D1 免費額度；超過免費額度前須先評估 |
 
 ---
 
@@ -68,6 +68,8 @@ CPBL_season_status/
 │   ├── parse_cpbl_pdf.py  ← 官方月份 PDF → cpbl_2026.csv、standings、src/games.json
 │   ├── prerender_wall.py  ← 用網站自己的 Canvas 繪圖預先產生首頁回顧圖與宣傳 PNG
 │   └── wall_cards.json    ← 首頁 12 張範例卡片的設定（球隊、場次、照片、取景）
+├── worker/index.js        ← 台灣大賽匿名預測 API；社群 API 目前停用
+├── migrations/            ← D1 schema（逐場預測、社群保留表、系列賽比分預測）
 ├── assets/wall-photos/    ← 站長自拍的球場照片（預先繪圖的素材，1600px）
 ├── docs/                  ← 部署目錄（Cloudflare 直接提供）
 │   ├── index.html         ← 建置產物，勿手改
@@ -86,10 +88,10 @@ CPBL_season_status/
 
 ## 4. 技術架構
 
-- **單一 HTML 檔**：所有 CSS、JS、賽程資料都內嵌在 `docs/index.html`（約 156 KB，gzip 後約 40 KB）。無框架、無打包工具，純 vanilla JS。
+- **單一 HTML 前端**：所有 CSS、JS、賽程資料都內嵌在 `docs/index.html`。無框架、無打包工具，純 vanilla JS；匿名預測才呼叫 Worker API。
 - **外部資源**：只有 Google Fonts（Manrope、Noto Sans TC）與 GA4 的 `gtag.js`。
-- **路由**：hash router，`#intro`（介紹頁）→ `#pick`（選擇賽事）⇄ `#result`（我的戰績）。瀏覽器上一頁可用；`#result` 在沒有勾選時會導回 `#pick`。
-- **狀態儲存（全在使用者裝置）**：
+- **路由**：hash router，包含 `#intro`、`#pick`、`#result`、`#taiwan-series`、`#community`。瀏覽器上一頁可用；`#result` 在沒有勾選時會導回 `#pick`。
+- **本機狀態儲存**：
 
 | 位置 | key | 內容 |
 |---|---|---|
@@ -98,6 +100,7 @@ CPBL_season_status/
 | localStorage | `cpbl2026-theme` | `light` / `dark` |
 | localStorage | `cpbl2026-name` | 使用者在成果頁輸入的名字 |
 | localStorage | `cpbl2026-view` | 選賽頁檢視：`month` / `week` / `list` |
+| localStorage | `cpbl2026-taiwan-series-predictions-v2` | 台灣大賽逐場預測與系列賽比分；用於鎖定後重畫、完賽後對答案 |
 | IndexedDB | DB `cpbl2026`、store `kv`、key `photo` | 壓縮後 JPEG（最長邊 2000px，移除 EXIF/GPS）＋取景 `{fx, fy, z}` |
 
 - **照片取景模型**：焦點 `fx, fy`（0–1）＋縮放 `z`（≥1，以 cover 為基準）。同一組設定套用到成果頁 16:7 大圖與 9:16 回顧圖。
@@ -115,6 +118,7 @@ CPBL_season_status/
 | 介紹頁 `#intro` | Hero 主標「你這個賽季，進場看了幾場球？」＋季後挑戰賽更新資訊與快速篩選入口＋2.5D 斜放、緩慢捲動的回顧圖牆（12 張預先算好的 JPG）；「放上這個賽季你最喜歡的照片」區塊（照片 → 回顧圖對照）；三步驟（勾選、選球隊、做成賽季回顧圖）；整季數字；資料來源與免責聲明 |
 | 選擇賽事 `#pick` | 三種檢視：**月曆**（預設，格子內為對戰字母小徽章，點日期在下方展開當日卡片）、**周曆**（7 天、左右換週）、**列表**（整季、依月份分段且月份標題 sticky）。篩選：球隊（7 顆按鈕）、月份（全季／上半季／下半季／3–10 月）、球場、只看已選、搜尋。右下角「看我的戰績 →」、「清除所有」（7 秒內可復原） |
 | 我的戰績 `#result` | 主視覺（可上傳照片並拖曳/縮放取景）→ 名字 → **選擇版面（你支持的球隊）** 下拉 → 觀賽摘要、球隊觀賽勝率或季後挑戰賽專用版面 → **賽季回顧圖卡片**（即時縮圖＋下載）→ 球隊細項、主場觀賽、球場踩點、每月進場 → 最底部「每一場的比賽明細」（上半季、下半季、季後挑戰賽、台灣大賽 TBD）。右下角「← 回到選擇賽事」 |
+| 台灣大賽 `#taiwan-series` | G1–G7 逐場預測（每場開賽時間到即鎖定）→ 同裝置保存預測 → 賽果資料標記 `dataReady` 後進入對答案；另有系列賽最終勝場預測、匿名比例圖，以及僅在完賽資料齊全後開放的賽後回顧圖 |
 
 ### 5.2 統計定義
 
@@ -203,10 +207,11 @@ git add src docs && git commit -m "Short imperative summary" && git push
 
 1. 新功能從 `staging` 建立 `feature/<name>` 分支開發。
 2. 完成修改後執行 `python3 tools/build.py`，並按 §6.4 驗證。
-3. 將功能分支合併至 `staging`，推送後由 Cloudflare 自動部署至 `staging.mybaseballgame.com`。
-4. 測試站驗收通過後，將 `staging` 合併至 `main`，再由 Cloudflare 部署正式站。
-5. `docs/_headers` 只針對 `staging.mybaseballgame.com` 回傳 `X-Robots-Tag: noindex, nofollow, noarchive`，不影響正式網域。
-6. 測試站應使用 Cloudflare Access 限制存取；現行 GA hostname allowlist 不包含 staging 子網域，不會傳送 GA 事件。
+3. 若新增 D1 migration，先執行 `npm run db:migrate:staging`；Cloudflare Git 部署指令也必須先套用 migration 再執行 `wrangler deploy`。
+4. 將功能分支合併至 `staging`，推送後由 Cloudflare 自動部署至 `staging.mybaseballgame.com`。
+5. 測試站驗收通過後，將 `staging` 合併至 `main`；正式環境先套用 production migration，再部署 Worker。
+6. `docs/_headers` 只針對 `staging.mybaseballgame.com` 回傳 `X-Robots-Tag: noindex, nofollow, noarchive`，不影響正式網域。
+7. 測試站應使用 Cloudflare Access 限制存取；現行 GA hostname allowlist 不包含 staging 子網域，不會傳送 GA 事件。
 
 ---
 
@@ -261,7 +266,8 @@ git add src docs && git commit -m "Short imperative summary" && git push
 - **日期運算**一律用 UTC（`new Date(iso + "T00:00:00Z")`），避免時區造成差一天。
 - **快取**：推送後若看不到新版，先確認 Cloudflare 部署完成，再強制重新整理或用無痕視窗。
 - 範例照片中可見球員與贊助商標誌（現場自拍）；啦啦隊員特寫因肖像權風險**未使用**。
-- 季後挑戰賽完賽資料放在 `src/postseason.json`；單場獎項以官方 PDF 的 `wp`、`lp`、`sv`、`mvp` 為準，另有可靠來源時可補選填的 `rbi`。尚未完賽的場次不要寫入即時比分。台灣大賽仍保留「DATA TBD」區塊。
+- 季後挑戰賽完賽資料放在 `src/postseason.json`；單場獎項以官方 PDF 的 `wp`、`lp`、`sv`、`mvp` 為準，另有可靠來源時可補選填的 `rbi`。台灣大賽賽程放在 `src/taiwan-series.json`；未完賽維持 `dataReady: false` 且不得填入測試比分，正式賽果欄位補齊後才改為 `true`。
+- **預測時間窗**：逐場預測在各場 `startsAt` 當下關閉；系列賽比分預測在 G1 `startsAt` 當下關閉。前端狀態只負責顯示，Worker 必須用同一規則再次驗證。
 - **社群功能暫停中**：前端只顯示「即將上線」，`worker/index.js` 的 `COMMUNITY_FEATURE_ENABLED` 維持 `false`，公開作品、Threads 投稿與管理 API 都回傳 `503 community_coming_soon`。確認資料寫入與審核流程穩定前，不要開啟。
 
 ---
@@ -292,7 +298,7 @@ git add src docs && git commit -m "Short imperative summary" && git push
 - [ ] 依 GA 數據（`view_change`、`share_open`／`share_save` 轉換率、`picks_clear_undo` 比例）調整介面
 
 ### 中期（季後賽～下季開打前）
-- [ ] 持續補齊季後挑戰賽完賽資料；新增台灣大賽資料與區塊
+- [ ] 隨賽程補齊台灣大賽完賽資料並驗證逐場對答案
 - [ ] 多賽季架構：資料改為 `src/games-2027.json` 等，localStorage key 依年份分開，網址或選單切換賽季
 - [ ] 解析流程自動化（若官方資料可程式化取得，改回爬蟲並排程更新）
 - [ ] 回顧圖多種版型（例如方形 1:1 貼文版）

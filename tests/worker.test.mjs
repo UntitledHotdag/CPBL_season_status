@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import taiwanSeriesGames from "../src/taiwan-series.json" with { type: "json" };
 import taiwanSeriesRosters from "../src/taiwan-series-rosters.json" with { type: "json" };
-import worker, { COMMUNITY_FEATURE_ENABLED, normalizeThreadsUrl, sanitizeThreadsEmbed, validatePrediction, verifyAdminAccess } from "../worker/index.js";
+import worker, { normalizeThreadsUrl, predictionWindowOpen, sanitizeThreadsEmbed, validatePrediction, validateSeriesPrediction, verifyAdminAccess } from "../worker/index.js";
 
 const game = taiwanSeriesGames[0];
 
@@ -19,9 +19,14 @@ test("2026 Taiwan Series schedule contains G1-G7 in order", () => {
       { g: 7, date: "2026-10-25", time: "17:05", away: "中信兄弟", home: "味全龍" },
     ],
   );
-  assert.equal(game.testSourceGame, 341);
-  assert.equal(game.dataReady, true);
-  assert.equal(taiwanSeriesGames.slice(1).every((item) => item.dataReady === false), true);
+  assert.equal(taiwanSeriesGames.every((item) => item.dataReady === false), true);
+  assert.equal(taiwanSeriesGames.every((item) => !item.demo && !item.testSourceGame && !item.teams), true);
+});
+
+test("each game accepts predictions until its own first pitch", () => {
+  assert.equal(predictionWindowOpen(game, {}, new Date("2026-10-17T17:04:59+08:00")), true);
+  assert.equal(predictionWindowOpen(game, {}, new Date("2026-10-17T17:05:00+08:00")), false);
+  assert.equal(predictionWindowOpen({ ...game, dataReady: true }, {}, new Date("2026-10-17T16:00:00+08:00")), false);
 });
 
 test("Taiwan Series rosters contain 32 unique players per team", () => {
@@ -36,7 +41,7 @@ test("Taiwan Series rosters contain 32 unique players per team", () => {
   }
 });
 
-test("prediction validation accepts registered players outside the G1 test box score", () => {
+test("prediction validation accepts players from the official Taiwan Series roster", () => {
   const result = validatePrediction(game, {
     awayScore: 5,
     homeScore: 2,
@@ -118,6 +123,13 @@ test("Taiwan Series predictions cannot be tied", () => {
   assert.equal(result.error, "tie_not_allowed");
 });
 
+test("series score validation accepts only best-of-seven final scores", () => {
+  assert.deepEqual(validateSeriesPrediction({ brothersWins: 4, dragonsWins: 2 }).value, { brothersWins: 4, dragonsWins: 2 });
+  assert.deepEqual(validateSeriesPrediction({ brothersWins: 3, dragonsWins: 4 }).value, { brothersWins: 3, dragonsWins: 4 });
+  assert.equal(validateSeriesPrediction({ brothersWins: 3, dragonsWins: 2 }).error, "invalid_series_score");
+  assert.equal(validateSeriesPrediction({ brothersWins: 4, dragonsWins: 4 }).error, "invalid_series_score");
+});
+
 test("Threads URLs are normalized and unrelated hosts are rejected", () => {
   assert.equal(
     normalizeThreadsUrl("https://threads.net/@fan/post/ABC_123?x=1"),
@@ -133,7 +145,6 @@ test("Threads embed HTML drops scripts and rejects event handlers", () => {
 });
 
 test("community reads and submissions stay disabled while the feature is coming soon", async () => {
-  assert.equal(COMMUNITY_FEATURE_ENABLED, false);
   for (const request of [
     new Request("https://staging.mybaseballgame.com/api/community"),
     new Request("https://staging.mybaseballgame.com/api/community-submissions", { method: "POST" }),

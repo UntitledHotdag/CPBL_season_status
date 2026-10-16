@@ -1,6 +1,6 @@
 # Cloudflare backend setup
 
-The site remains static for normal page requests. Only `/api/*` and the protected `/admin*` paths run through the Worker. D1 stores anonymous Taiwan Series predictions and moderated Threads submission URLs; user photos are never uploaded.
+The site remains static for normal page requests. Only `/api/*` and the protected `/admin*` paths run through the Worker. D1 stores anonymous Taiwan Series game and final-score predictions. Community storage remains disabled; user names and photos are never uploaded.
 
 ## Local development
 
@@ -61,7 +61,7 @@ npx wrangler secret put ANON_HASH_SALT --env production
 npm run deploy:production
 ```
 
-Replace the production placeholder `database_id` in `wrangler.jsonc` before deploying. Production deliberately sets `ALLOW_DEMO_SUBMISSIONS` to `false`; a real Taiwan Series game must include `predictionOpensAt` and `startsAt` in `src/taiwan-series.json` before it can accept predictions.
+Replace the production placeholder `database_id` in `wrangler.jsonc` before deploying. Every Taiwan Series game must include `startsAt`; its prediction window closes exactly at that time. The whole-series prediction closes at G1's `startsAt`.
 
 ## Community moderation
 
@@ -92,8 +92,9 @@ Only approve public Threads posts that visibly use this site's fan-made card for
 
 ## Data boundaries
 
-- Stored prediction fields: game, predicted score, predicted winner and selected player names, anonymous browser ID hash, timestamps.
-- Stored community fields: public Threads URL, team/category, author name returned by Threads oEmbed, sanitized official embed HTML, moderation state.
+- Stored game-prediction fields: game, predicted score, predicted winner and selected player names, anonymous browser ID hash, timestamps.
+- Stored series-prediction fields: final wins for both teams, anonymous browser ID hash, timestamps.
+- The community tables and moderation code remain present but all public, submission, and admin APIs return `503 community_coming_soon` while the feature is paused.
 - Never store the fan's display name, uploaded photo, raw anonymous browser ID, or IP address.
 - GA events may record only the team letter and game number; never send player names or Threads URLs to GA.
 

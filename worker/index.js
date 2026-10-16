@@ -17,7 +17,7 @@ const TEAM_NAMES = new Set([
 ]);
 const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 const ADMIN_STATUSES = new Set(["pending", "approved", "rejected"]);
-export const COMMUNITY_FEATURE_ENABLED = false;
+const COMMUNITY_FEATURE_ENABLED = false;
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
 const accessKeysCache = new Map();
@@ -122,20 +122,18 @@ export async function verifyAdminAccess(request, env, now = Date.now()) {
 }
 
 function gameId(game) {
-  return `${game.year}-taiwan-g${game.g}`;
+  return `${game.year}-taiwan-series-g${game.g}`;
 }
 
 function findGame(year, gameNo) {
   return taiwanSeriesGames.find((game) => game.year === Number(year) && game.g === Number(gameNo));
 }
 
-function predictionWindowOpen(game, env, now = new Date()) {
-  if (game.demo) return env.ALLOW_DEMO_SUBMISSIONS === "true";
-  if (!game.predictionOpensAt || !game.startsAt) return false;
-  const opensAt = Date.parse(game.predictionOpensAt);
+export function predictionWindowOpen(game, env, now = new Date()) {
+  if (!game?.startsAt || game.dataReady) return false;
   const startsAt = Date.parse(game.startsAt);
   const current = now.getTime();
-  return Number.isFinite(opensAt) && Number.isFinite(startsAt) && current >= opensAt && current < startsAt;
+  return Number.isFinite(startsAt) && current < startsAt;
 }
 
 export function validatePrediction(game, input) {
@@ -179,6 +177,16 @@ export function validatePrediction(game, input) {
       mvp,
     },
   };
+}
+
+export function validateSeriesPrediction(input) {
+  if (!input || typeof input !== "object") return { error: "invalid_series_score" };
+  const brothersWins = Number(input.brothersWins);
+  const dragonsWins = Number(input.dragonsWins);
+  const valid = Number.isInteger(brothersWins) && Number.isInteger(dragonsWins)
+    && ((brothersWins === 4 && dragonsWins >= 0 && dragonsWins <= 3)
+      || (dragonsWins === 4 && brothersWins >= 0 && brothersWins <= 3));
+  return valid ? { value: { brothersWins, dragonsWins } } : { error: "invalid_series_score" };
 }
 
 export function normalizeThreadsUrl(value) {
@@ -309,6 +317,60 @@ async function submitPrediction(request, env) {
   return json({ ok: true, gameId: gameId(game), winner: value.winnerTeam });
 }
 
+async function seriesPredictionSummary(url, env) {
+  const year = Number(url.searchParams.get("year"));
+  const firstGame = taiwanSeriesGames.find((game) => game.year === year && game.g === 1);
+  if (!firstGame) return apiError("game_not_found", 404);
+  const query = await env.DB.prepare(
+    "SELECT brothers_wins, dragons_wins, COUNT(*) AS votes FROM series_predictions WHERE season = ? AND series = 'taiwan' GROUP BY brothers_wins, dragons_wins ORDER BY votes DESC, brothers_wins DESC",
+  ).bind(year).all();
+  const scores = (query.results || []).map((row) => ({
+    brothersWins: Number(row.brothers_wins),
+    dragonsWins: Number(row.dragons_wins),
+    votes: Number(row.votes) || 0,
+  }));
+  const total = scores.reduce((sum, score) => sum + score.votes, 0);
+  const minimum = Math.max(1, Number(env.POLL_MIN_SAMPLE) || 5);
+  const visible = total >= minimum;
+  return json({ ok: true, year, total, minimum, visible, scores: visible ? scores : null });
+}
+
+async function submitSeriesPrediction(request, env) {
+  if (!sameOrigin(request)) return apiError("origin_not_allowed", 403);
+  let body;
+  try {
+    body = await readJson(request);
+  } catch {
+    return apiError("invalid_json");
+  }
+  const firstGame = taiwanSeriesGames.find((game) => game.year === Number(body.year) && game.g === 1);
+  if (!firstGame) return apiError("game_not_found", 404);
+  if (!predictionWindowOpen(firstGame, env)) return apiError("series_prediction_closed", 403);
+  if (!(await verifyTurnstile(body.turnstileToken, env, "submit_series_prediction"))) return apiError("turnstile_failed", 403);
+  const voterHash = await hashAnonymousId(body.anonymousId, env.ANON_HASH_SALT);
+  if (!voterHash) return apiError("invalid_anonymous_id");
+  const checked = validateSeriesPrediction(body.prediction);
+  if (checked.error) return apiError(checked.error);
+  const now = new Date().toISOString();
+  await env.DB.prepare(
+    `INSERT INTO series_predictions (
+       season, series, voter_hash, brothers_wins, dragons_wins, created_at, updated_at
+     ) VALUES (?, 'taiwan', ?, ?, ?, ?, ?)
+     ON CONFLICT(season, series, voter_hash) DO UPDATE SET
+       brothers_wins = excluded.brothers_wins,
+       dragons_wins = excluded.dragons_wins,
+       updated_at = excluded.updated_at`,
+  ).bind(
+    firstGame.year,
+    voterHash,
+    checked.value.brothersWins,
+    checked.value.dragonsWins,
+    now,
+    now,
+  ).run();
+  return json({ ok: true, year: firstGame.year, ...checked.value });
+}
+
 async function threadsEmbed(url) {
   const endpoint = `https://graph.threads.com/oembed?omitscript=true&maxwidth=550&url=${encodeURIComponent(url)}`;
   try {
@@ -437,6 +499,8 @@ async function handleApi(request, env) {
   }
   if (request.method === "GET" && url.pathname === "/api/predictions/summary") return predictionSummary(url, env);
   if (request.method === "POST" && url.pathname === "/api/predictions") return submitPrediction(request, env);
+  if (request.method === "GET" && url.pathname === "/api/series-predictions/summary") return seriesPredictionSummary(url, env);
+  if (request.method === "POST" && url.pathname === "/api/series-predictions") return submitSeriesPrediction(request, env);
   if ((url.pathname === "/api/community" || url.pathname === "/api/community-submissions") && !COMMUNITY_FEATURE_ENABLED) {
     return apiError("community_coming_soon", 503);
   }

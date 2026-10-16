@@ -742,9 +742,9 @@
   .prediction-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .prediction-grid label{display:flex;flex-direction:column;gap:8px;min-width:0;color:var(--ink-dim);font-size:11px;font-weight:700}
   .prediction-grid select{width:100%;min-height:48px;padding:0 34px 0 12px;border:1px solid var(--rule);border-radius:9px;background:var(--panel);color:var(--ink);font-size:12px;font-weight:700}
-  .bg-options,.finish-options,.series-winner-options{display:flex;flex-wrap:wrap;gap:7px}
-  .bg-options button,.finish-options button,.series-winner-options button{min-height:42px;padding:8px 13px;border:1px solid var(--rule);border-radius:8px;background:var(--panel);color:var(--ink-dim);font-size:11px;font-weight:700}
-  .bg-options button[aria-pressed="true"],.finish-options button[aria-pressed="true"],.series-winner-options button[aria-pressed="true"]{border-color:var(--accent-fill);box-shadow:inset 0 -2px 0 var(--accent-fill);color:var(--ink)}
+  .bg-options{display:flex;flex-wrap:wrap;gap:7px}
+  .bg-options button{min-height:42px;padding:8px 13px;border:1px solid var(--rule);border-radius:8px;background:var(--panel);color:var(--ink-dim);font-size:11px;font-weight:700}
+  .bg-options button[aria-pressed="true"]{border-color:var(--accent-fill);box-shadow:inset 0 -2px 0 var(--accent-fill);color:var(--ink)}
   .prediction-window{display:flex;align-items:flex-start;gap:11px;padding:14px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
   .prediction-window i{width:9px;height:9px;margin-top:5px;border-radius:50%;background:var(--accent-fill);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent-fill) 16%,transparent);flex:0 0 auto}
   .prediction-window b{display:block;font-size:12px}.prediction-window span{display:block;margin-top:2px;color:var(--muted);font-size:10px;line-height:1.55}
@@ -753,11 +753,12 @@
   .series-prediction-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,280px);gap:38px;align-items:start;margin-top:18px}
   .series-prediction-controls{min-width:0}
   .series-prediction-layout>.output-set{grid-template-columns:1fr}
-  .series-picks{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;margin-top:18px}
-  .series-pick{padding:11px 8px;border:1px solid var(--rule);border-radius:9px;background:var(--panel)}
-  .series-pick>b{display:block;font:800 16px "Manrope",sans-serif;margin-bottom:8px}
-  .series-pick .series-winner-options{display:grid;grid-template-columns:1fr 1fr;gap:4px}
-  .series-pick .series-winner-options button{min-width:0;padding:7px 4px;font-family:"Manrope",sans-serif}
+  .series-score-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  .series-score-option{min-height:70px;padding:10px 8px;border:1px solid var(--rule);border-radius:10px;background:var(--panel);color:var(--ink-dim);font-size:10px;font-weight:700;line-height:1.5}
+  .series-score-option b{display:block;margin:3px 0;font:800 20px "Manrope",sans-serif;color:var(--ink)}
+  .series-score-option[aria-pressed="true"]{border-color:var(--accent-fill);box-shadow:inset 0 -3px 0 var(--accent-fill)}
+  .series-poll-panel{margin-top:34px;padding-top:28px;border-top:1px solid var(--rule)}
+  .series-poll-panel h4{font-size:17px;margin-bottom:16px}
   .prediction-lock{display:inline-flex;align-items:center;gap:6px;margin-top:7px;color:var(--muted);font-size:10px}
   .prediction-lock::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
   .turnstile-slot{min-height:0;font-size:10px;line-height:1.6;color:var(--muted)}
@@ -811,18 +812,6 @@
   .community-submit-status{min-height:20px;color:var(--accent);font-size:11px;line-height:1.65}
   .community-coming-hero{min-height:calc(100svh - 210px);align-items:center}
   .community-coming-hero .community-intro{padding-bottom:0}
-  .community-coming{padding:58px 0 72px}
-  .community-coming-head{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:28px}
-  .community-coming-head h2{font-size:clamp(25px,4vw,40px);line-height:1.2;margin-top:8px}
-  .community-coming-head p{max-width:34em;color:var(--muted);font-size:12px;line-height:1.75}
-  .community-coming-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
-  .community-coming-item{min-width:0;padding:26px 24px}
-  .community-coming-item:first-child{padding-left:0}.community-coming-item:last-child{padding-right:0}
-  .community-coming-item+.community-coming-item{border-left:1px solid var(--rule)}
-  .community-coming-item small{font:800 9px "Manrope",sans-serif;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
-  .community-coming-item h3{font-size:17px;margin-top:10px}
-  .community-coming-item p{margin-top:7px;color:var(--ink-dim);font-size:12px;line-height:1.75}
-  .community-coming-note{margin-top:24px;padding-left:14px;border-left:3px solid var(--accent-fill);color:var(--ink-dim);font-size:12px;line-height:1.75}
 
   /* Admin moderation */
   html.admin-mode .site-nav{display:none}
@@ -870,7 +859,7 @@
     .ts-hero{padding-top:44px}.ts-stack{width:min(86vw,400px)}
     .series-games{grid-template-columns:repeat(4,minmax(0,1fr))}
     .builder-layout,.prediction-layout,.series-prediction-layout{grid-template-columns:1fr;gap:24px}
-    .series-picks{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .series-score-options{grid-template-columns:repeat(4,minmax(0,1fr))}
     .community-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     .community-how{grid-template-columns:1fr;gap:30px}.community-how .cta{grid-column:1}
     .community-coming-hero{min-height:auto;padding-bottom:54px}
@@ -896,17 +885,11 @@
     .ts-poll-games{grid-template-columns:repeat(4,minmax(0,1fr))}
     .prediction-grid{grid-template-columns:1fr}
     .ts-poll{padding:42px 0;gap:25px}.poll-row{grid-template-columns:92px 1fr 42px;gap:9px}.poll-row b{font-size:11px}
-    .series-picks{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-    .series-pick{min-width:0;padding:9px 6px}
+    .series-score-options{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
     .builder-controls{padding-top:0}.output-set{gap:7px}.output-set figure>.output-placeholder{padding:10px;border-radius:8px}.output-set b{font-size:12px}.output-set figcaption{font-size:8.5px}
     .next-path{align-items:flex-start;flex-direction:column;padding:42px 0}.next-path h2{font-size:20px}
     .community-hero{padding:40px 0 34px;gap:24px}
     .community-coming-hero{min-height:auto;padding-bottom:54px}
-    .community-coming{padding:44px 0 54px}
-    .community-coming-head{display:block}.community-coming-head p{margin-top:12px}
-    .community-coming-grid{grid-template-columns:1fr}
-    .community-coming-item,.community-coming-item:first-child,.community-coming-item:last-child{padding:20px 0}
-    .community-coming-item+.community-coming-item{border-left:0;border-top:1px solid var(--rule)}
     .community-tools{display:block}.community-tools>span{display:block;margin-top:12px}
     .community-filters{margin-inline:-14px;padding-inline:14px}
     .community-grid{grid-template-columns:1fr;gap:22px}
@@ -1128,11 +1111,10 @@
     <div class="ts-hero">
       <div class="ts-copy">
         <div class="intro-eyebrow">CPBL 2026 · Taiwan Series</div>
-        <span class="prototype-label">2026 G1 · 例行賽第 341 場資料測試</span>
         <h1>你是國師？<br>還是咒言師？</h1>
-        <p>先發名單公布後到比賽開始前，完成單場或系列賽預測；完賽後保留同一張底圖，對照答案並做成賽事摘要與球員回顧。</p>
+        <p>選擇 G1–G7，逐場留下你的賽前預測。每場比賽開賽時鎖定，賽果更新後，再用同一台裝置回來對答案。</p>
         <div class="ts-promises">
-          <span>先發公布後開放</span><span>開賽即鎖定</span><span>照片只留在裝置</span>
+          <span>每場開賽前可修改</span><span>開賽即鎖定</span><span>賽後回來對答案</span>
         </div>
         <button class="cta" data-series-jump>開始體驗 ↓</button>
       </div>
@@ -1173,7 +1155,6 @@
     </section>
 
     <section class="series-flow" id="series-picker" aria-label="台灣大賽功能">
-      <p class="ts-mode-note">正式上線後，系統會依賽事時間自動切換狀態。目前以 2026 例行賽第 341 場資料作為 G1 測試內容。</p>
       <input id="ts-photo-input" type="file" accept="image/jpeg,image/png,image/webp" hidden>
 
       <div id="ts-prediction-view" class="ts-phase-block">
@@ -1183,11 +1164,11 @@
               <div class="intro-eyebrow">1.賽前預言 · Make your pick</div>
               <h2 id="prediction-builder-title">你的 G1 預測</h2>
             </div>
-            <p>G1 測試資料會直接進入「對答案」狀態；正式比賽在開賽前只顯示你的預測。</p>
+            <p id="ts-prediction-phase-copy">開賽前可以更新預測；開賽後鎖定，賽果更新後再回來對答案。</p>
           </div>
           <div class="prediction-layout">
             <div class="prediction-panel">
-              <div class="prediction-window"><i></i><div><b>功能預覽：已完賽，可模擬預測並對答案</b><span>正式環境將顯示「開放預測至 18:34」或「等待先發公布」。</span></div></div>
+              <div class="prediction-window"><i></i><div><b id="ts-prediction-window-title">預測開放中</b><span id="ts-prediction-window-copy">本場開賽時鎖定。</span></div></div>
               <label class="prediction-name" for="ts-fan-name">
                 <span class="prediction-label">圖卡姓名（選填）</span>
                 <input id="ts-fan-name" type="text" maxlength="16" autocomplete="name" placeholder="輸入想顯示在圖卡上的名字">
@@ -1230,23 +1211,34 @@
           <div class="series-prediction">
             <div class="intro-eyebrow">Series prediction</div>
             <h3>整個系列賽，你猜會打幾場？</h3>
-            <p>沿用上方姓名與底圖；只要選結束場次與每一戰勝方，不需要填勝投、敗投、勝利打點或 MVP。</p>
+            <p>直接選擇中信兄弟與味全龍最後各贏幾場；系列賽預測會在 G1 開賽時鎖定。</p>
             <div class="series-prediction-layout">
               <div class="series-prediction-controls">
-                <div class="prediction-group">
-                  <span class="prediction-label">預測結束場次</span>
-                  <div class="finish-options" id="ts-finish-options"></div>
+                <label class="prediction-name" for="ts-series-name">
+                  <span class="prediction-label">圖卡姓名（選填）</span>
+                  <input id="ts-series-name" type="text" maxlength="16" autocomplete="name" placeholder="輸入想顯示在圖卡上的名字">
+                  <small>姓名只會押在下載圖上，不會上傳到公開統計。</small>
+                </label>
+                <div class="prediction-group" style="margin-top:18px">
+                  <span class="prediction-label">預測系列賽最終比分</span>
+                  <div class="series-score-options" id="ts-series-score-options"></div>
                 </div>
-                <div class="series-picks" id="ts-series-picks"></div>
                 <span class="prediction-lock">系列賽預測會在 G1 開賽時一起鎖定</span>
+                <div class="turnstile-slot" id="ts-series-turnstile" style="margin-top:16px">正在確認匿名投票功能…</div>
+                <span class="prediction-consent">按下按鈕代表你同意將系列賽比分匿名納入統計；姓名不會上傳。</span>
                 <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px">
-                  <button class="cta" id="ts-series-generate">產生系列賽預言圖</button>
+                  <button class="cta" id="ts-series-generate">匿名送出並產生系列賽預言圖</button>
                   <span class="builder-status" id="ts-series-status" aria-live="polite"></span>
                 </div>
               </div>
               <div class="output-set" id="ts-series-output" aria-label="系列賽預測圖預覽">
-                <figure><div class="output-placeholder output-data away"><span>SERIES</span><b>系列賽預言</b><i></i><i></i><i></i><i></i></div><figcaption>結束場次與每戰勝方</figcaption></figure>
+                <figure><div class="output-placeholder output-data away"><span>SERIES</span><b>系列賽預言</b><i></i><i></i><i></i><i></i></div><figcaption>兩隊最終勝場預測</figcaption></figure>
               </div>
+            </div>
+            <div class="series-poll-panel">
+              <h4>大家預測的系列賽比分</h4>
+              <div class="ts-poll-chart" id="ts-series-poll-chart" aria-live="polite"><div class="community-empty">連接測試站資料庫後顯示球迷預測。</div></div>
+              <div class="poll-meta" id="ts-series-poll-meta"></div>
             </div>
           </div>
         </section>
@@ -1262,9 +1254,10 @@
             <p>賽事摘要整理全場重點；球員回顧只呈現客觀成績，不使用好壞評分或貶抑文字。</p>
           </div>
           <div class="series-games" id="ts-review-games" aria-label="賽後回顧場次"></div>
+          <div class="community-empty" id="ts-review-empty">台灣大賽尚未開打；賽果更新後，這裡會開放賽事摘要與球員回顧。</div>
         </section>
 
-        <section class="series-builder" aria-labelledby="series-builder-title">
+        <section class="series-builder" id="ts-review-builder" aria-labelledby="series-builder-title" hidden>
           <div class="series-section-head">
             <div>
               <div class="intro-eyebrow">Make your recap</div>
@@ -1303,7 +1296,7 @@
       <div><span>完成圖卡之後</span><h2>分享到 Threads，也讓其他球迷看見。</h2></div>
       <button class="btn-ghost" data-go="community">社群即將上線 →</button>
     </div>
-    <p class="page-foot">目前使用 2026 例行賽第 341 場官方資料測試 G1 功能 · 台灣大賽開放時間與賽果以 CPBL 官方公布內容為準</p>
+    <p class="page-foot">台灣大賽賽程、開賽時間與賽果以 CPBL 官方公布內容為準</p>
   </section>
 
   <!-- ==================== Community ==================== -->
@@ -1315,26 +1308,11 @@
         <h1>球迷社群，<br>正在準備中</h1>
       </div>
       <div class="community-intro">
-        <p>我們正在重新整理作品投稿、審核與資料管理流程。完成前暫不開放 Threads 連結投稿與作品牆，避免球迷送出的內容遺失，或出現審核狀態不一致。</p>
+        <p>球迷作品分享與球隊分類正在準備中。功能上線後，你可以找到同隊球迷的作品，也能分享自己的觀賽回顧。</p>
         <button class="btn-ghost" data-go="taiwan-series">先做一張台灣大賽圖卡 →</button>
       </div>
     </div>
 
-    <section class="community-coming" aria-labelledby="community-coming-title">
-      <div class="community-coming-head">
-        <div>
-          <div class="intro-eyebrow">Before launch</div>
-          <h2 id="community-coming-title">先把三件事做好</h2>
-        </div>
-        <p>等投稿、分類與審核流程都穩定後，社群會再一次完整開放。</p>
-      </div>
-      <div class="community-coming-grid">
-        <article class="community-coming-item"><small>01 · 投稿</small><h3>作品投稿</h3><p>暫停接收 Threads 連結，先確認每一筆內容都能穩定寫入。</p></article>
-        <article class="community-coming-item"><small>02 · 分類</small><h3>球隊作品牆</h3><p>作品牆與球隊篩選完成整理後，再和投稿功能一起開放。</p></article>
-        <article class="community-coming-item"><small>03 · 管理</small><h3>投稿審核</h3><p>確認審核、撤下與重新上架流程一致，避免作品狀態出錯。</p></article>
-      </div>
-      <p class="community-coming-note"><b>目前狀態：</b>網站不會讀取作品資料，也不會將任何 Threads 連結寫入資料庫。</p>
-    </section>
     <p class="page-foot">社群功能即將上線 · 你仍可照常製作與下載觀賽回顧、賽前預言與賽後回顧圖卡</p>
   </section>
 
@@ -1506,7 +1484,7 @@
 // ================================================================
 const GAMES = [{"n":1,"d":"2026-03-28","a":"中信兄弟","h":"樂天桃猿","as":2,"hs":3,"v":"大巨蛋"},{"n":2,"d":"2026-03-29","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":1,"hs":3,"v":"亞太主"},{"n":3,"d":"2026-03-29","a":"味全龍","h":"樂天桃猿","as":3,"hs":2,"v":"大巨蛋"},{"n":4,"d":"2026-03-29","a":"富邦悍將","h":"中信兄弟","as":8,"hs":2,"v":"洲際"},{"n":5,"d":"2026-03-31","a":"味全龍","h":"中信兄弟","as":1,"hs":4,"v":"洲際"},{"n":6,"d":"2026-03-31","a":"台鋼雄鷹","h":"樂天桃猿","as":3,"hs":1,"v":"樂天桃園"},{"n":7,"d":"2026-03-31","a":"富邦悍將","h":"統一7-ELEVEn獅","as":5,"hs":3,"v":"亞太主"},{"n":8,"d":"2026-04-01","a":"味全龍","h":"中信兄弟","as":8,"hs":2,"v":"洲際"},{"n":9,"d":"2026-04-01","a":"台鋼雄鷹","h":"樂天桃猿","as":6,"hs":1,"v":"樂天桃園"},{"n":10,"d":"2026-04-01","a":"富邦悍將","h":"統一7-ELEVEn獅","as":2,"hs":4,"v":"亞太主"},{"n":11,"d":"2026-04-03","a":"統一7-ELEVEn獅","h":"中信兄弟","as":6,"hs":2,"v":"洲際"},{"n":12,"d":"2026-04-03","a":"樂天桃猿","h":"富邦悍將","as":2,"hs":3,"v":"新莊"},{"n":13,"d":"2026-04-03","a":"台鋼雄鷹","h":"味全龍","as":4,"hs":5,"v":"天母"},{"n":14,"d":"2026-10-05","a":"統一7-ELEVEn獅","h":"中信兄弟","as":7,"hs":4,"v":"洲際","od":"2026-04-04"},{"n":15,"d":"2026-06-27","a":"樂天桃猿","h":"富邦悍將","as":2,"hs":9,"v":"新莊","od":"2026-04-04"},{"n":16,"d":"2026-04-04","a":"台鋼雄鷹","h":"味全龍","as":7,"hs":6,"v":"天母"},{"n":17,"d":"2026-04-05","a":"台鋼雄鷹","h":"味全龍","as":1,"hs":2,"v":"天母"},{"n":18,"d":"2026-04-05","a":"統一7-ELEVEn獅","h":"中信兄弟","as":9,"hs":4,"v":"洲際"},{"n":19,"d":"2026-04-05","a":"樂天桃猿","h":"富邦悍將","as":5,"hs":1,"v":"新莊"},{"n":20,"d":"2026-04-06","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":4,"hs":7,"v":"澄清湖"},{"n":21,"d":"2026-04-06","a":"樂天桃猿","h":"味全龍","as":1,"hs":0,"v":"天母"},{"n":22,"d":"2026-04-06","a":"中信兄弟","h":"富邦悍將","as":4,"hs":5,"v":"新莊"},{"n":23,"d":"2026-04-07","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":1,"hs":1,"v":"澄清湖"},{"n":24,"d":"2026-06-02","a":"樂天桃猿","h":"味全龍","as":0,"hs":3,"v":"天母","od":"2026-04-07"},{"n":25,"d":"2026-05-12","a":"中信兄弟","h":"富邦悍將","as":1,"hs":2,"v":"新莊","od":"2026-04-07"},{"n":26,"d":"2026-04-10","a":"富邦悍將","h":"台鋼雄鷹","as":6,"hs":2,"v":"澄清湖"},{"n":27,"d":"2026-04-10","a":"味全龍","h":"統一7-ELEVEn獅","as":4,"hs":2,"v":"亞太主"},{"n":28,"d":"2026-04-10","a":"中信兄弟","h":"樂天桃猿","as":2,"hs":4,"v":"樂天桃園"},{"n":29,"d":"2026-04-11","a":"富邦悍將","h":"台鋼雄鷹","as":0,"hs":12,"v":"澄清湖"},{"n":30,"d":"2026-04-11","a":"味全龍","h":"統一7-ELEVEn獅","as":8,"hs":0,"v":"亞太主"},{"n":31,"d":"2026-04-11","a":"中信兄弟","h":"樂天桃猿","as":1,"hs":2,"v":"樂天桃園"},{"n":32,"d":"2026-04-12","a":"富邦悍將","h":"台鋼雄鷹","as":5,"hs":12,"v":"澄清湖"},{"n":33,"d":"2026-04-12","a":"味全龍","h":"統一7-ELEVEn獅","as":4,"hs":2,"v":"亞太主"},{"n":34,"d":"2026-04-12","a":"中信兄弟","h":"樂天桃猿","as":14,"hs":4,"v":"樂天桃園"},{"n":35,"d":"2026-04-14","a":"味全龍","h":"富邦悍將","as":3,"hs":4,"v":"新莊"},{"n":36,"d":"2026-04-14","a":"台鋼雄鷹","h":"中信兄弟","as":8,"hs":4,"v":"洲際"},{"n":37,"d":"2026-04-15","a":"味全龍","h":"富邦悍將","as":1,"hs":0,"v":"新莊"},{"n":38,"d":"2026-04-15","a":"台鋼雄鷹","h":"中信兄弟","as":4,"hs":0,"v":"洲際"},{"n":39,"d":"2026-04-15","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":5,"hs":1,"v":"樂天桃園"},{"n":40,"d":"2026-04-16","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":7,"hs":3,"v":"樂天桃園"},{"n":41,"d":"2026-04-17","a":"樂天桃猿","h":"台鋼雄鷹","as":6,"hs":3,"v":"澄清湖"},{"n":42,"d":"2026-04-17","a":"統一7-ELEVEn獅","h":"富邦悍將","as":9,"hs":5,"v":"新莊"},{"n":43,"d":"2026-04-17","a":"中信兄弟","h":"味全龍","as":5,"hs":3,"v":"天母"},{"n":44,"d":"2026-04-18","a":"樂天桃猿","h":"台鋼雄鷹","as":1,"hs":6,"v":"澄清湖"},{"n":45,"d":"2026-04-18","a":"統一7-ELEVEn獅","h":"富邦悍將","as":0,"hs":1,"v":"新莊"},{"n":46,"d":"2026-04-18","a":"中信兄弟","h":"味全龍","as":1,"hs":8,"v":"天母"},{"n":47,"d":"2026-04-19","a":"樂天桃猿","h":"台鋼雄鷹","as":4,"hs":5,"v":"澄清湖"},{"n":48,"d":"2026-04-19","a":"中信兄弟","h":"味全龍","as":3,"hs":9,"v":"天母"},{"n":49,"d":"2026-04-19","a":"統一7-ELEVEn獅","h":"富邦悍將","as":1,"hs":7,"v":"新莊"},{"n":50,"d":"2026-04-21","a":"中信兄弟","h":"統一7-ELEVEn獅","as":6,"hs":0,"v":"亞太主"},{"n":51,"d":"2026-04-21","a":"富邦悍將","h":"樂天桃猿","as":1,"hs":6,"v":"樂天桃園"},{"n":52,"d":"2026-04-22","a":"中信兄弟","h":"統一7-ELEVEn獅","as":7,"hs":2,"v":"亞太主"},{"n":53,"d":"2026-04-22","a":"富邦悍將","h":"樂天桃猿","as":2,"hs":4,"v":"樂天桃園"},{"n":54,"d":"2026-04-22","a":"味全龍","h":"台鋼雄鷹","as":8,"hs":0,"v":"嘉義市"},{"n":55,"d":"2026-04-23","a":"味全龍","h":"台鋼雄鷹","as":3,"hs":4,"v":"澄清湖"},{"n":56,"d":"2026-04-24","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":6,"hs":7,"v":"亞太主"},{"n":57,"d":"2026-06-23","a":"富邦悍將","h":"中信兄弟","as":3,"hs":6,"v":"洲際","od":"2026-04-24"},{"n":58,"d":"2026-06-24","a":"味全龍","h":"樂天桃猿","as":2,"hs":7,"v":"樂天桃園","od":"2026-04-24"},{"n":59,"d":"2026-04-25","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":4,"hs":6,"v":"亞太主"},{"n":60,"d":"2026-04-25","a":"富邦悍將","h":"中信兄弟","as":0,"hs":1,"v":"洲際"},{"n":61,"d":"2026-04-25","a":"味全龍","h":"樂天桃猿","as":4,"hs":1,"v":"樂天桃園"},{"n":62,"d":"2026-04-26","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":5,"hs":9,"v":"亞太主"},{"n":63,"d":"2026-04-26","a":"富邦悍將","h":"中信兄弟","as":8,"hs":5,"v":"洲際"},{"n":64,"d":"2026-04-26","a":"味全龍","h":"樂天桃猿","as":2,"hs":3,"v":"樂天桃園"},{"n":65,"d":"2026-04-28","a":"統一7-ELEVEn獅","h":"味全龍","as":3,"hs":5,"v":"天母"},{"n":66,"d":"2026-04-28","a":"台鋼雄鷹","h":"富邦悍將","as":0,"hs":6,"v":"新莊"},{"n":67,"d":"2026-04-29","a":"統一7-ELEVEn獅","h":"味全龍","as":0,"hs":1,"v":"天母"},{"n":68,"d":"2026-04-29","a":"台鋼雄鷹","h":"富邦悍將","as":5,"hs":1,"v":"新莊"},{"n":69,"d":"2026-04-29","a":"樂天桃猿","h":"中信兄弟","as":2,"hs":2,"v":"洲際"},{"n":70,"d":"2026-04-30","a":"樂天桃猿","h":"中信兄弟","as":3,"hs":1,"v":"洲際"},{"n":71,"d":"2026-05-01","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":0,"hs":3,"v":"亞太主"},{"n":72,"d":"2026-05-01","a":"中信兄弟","h":"台鋼雄鷹","as":2,"hs":0,"v":"大巨蛋"},{"n":73,"d":"2026-05-01","a":"富邦悍將","h":"味全龍","as":1,"hs":3,"v":"天母"},{"n":74,"d":"2026-05-02","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":2,"hs":9,"v":"亞太主"},{"n":75,"d":"2026-05-02","a":"中信兄弟","h":"台鋼雄鷹","as":0,"hs":2,"v":"大巨蛋"},{"n":76,"d":"2026-05-02","a":"富邦悍將","h":"味全龍","as":5,"hs":4,"v":"天母"},{"n":77,"d":"2026-05-03","a":"中信兄弟","h":"台鋼雄鷹","as":2,"hs":3,"v":"大巨蛋"},{"n":78,"d":"2026-05-03","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":1,"hs":4,"v":"亞太主"},{"n":79,"d":"2026-05-03","a":"富邦悍將","h":"味全龍","as":4,"hs":6,"v":"天母"},{"n":80,"d":"2026-06-26","a":"樂天桃猿","h":"富邦悍將","as":3,"hs":1,"v":"新莊","od":"2026-05-05"},{"n":81,"d":"2026-05-05","a":"中信兄弟","h":"味全龍","as":3,"hs":5,"v":"大巨蛋"},{"n":82,"d":"2026-05-06","a":"樂天桃猿","h":"富邦悍將","as":1,"hs":7,"v":"新莊"},{"n":83,"d":"2026-05-06","a":"中信兄弟","h":"味全龍","as":6,"hs":0,"v":"大巨蛋"},{"n":84,"d":"2026-05-06","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":1,"hs":4,"v":"嘉義市"},{"n":85,"d":"2026-05-08","a":"味全龍","h":"富邦悍將","as":1,"hs":2,"v":"新莊"},{"n":86,"d":"2026-05-08","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":1,"hs":2,"v":"樂天桃園"},{"n":87,"d":"2026-05-08","a":"台鋼雄鷹","h":"中信兄弟","as":6,"hs":0,"v":"洲際"},{"n":88,"d":"2026-05-09","a":"味全龍","h":"富邦悍將","as":8,"hs":2,"v":"新莊"},{"n":89,"d":"2026-05-09","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":1,"hs":0,"v":"樂天桃園"},{"n":90,"d":"2026-05-09","a":"台鋼雄鷹","h":"中信兄弟","as":2,"hs":4,"v":"洲際"},{"n":91,"d":"2026-05-10","a":"味全龍","h":"富邦悍將","as":7,"hs":8,"v":"新莊"},{"n":92,"d":"2026-05-10","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":2,"hs":7,"v":"樂天桃園"},{"n":93,"d":"2026-05-10","a":"台鋼雄鷹","h":"中信兄弟","as":2,"hs":0,"v":"洲際"},{"n":94,"d":"2026-05-12","a":"味全龍","h":"統一7-ELEVEn獅","as":3,"hs":5,"v":"亞太主"},{"n":95,"d":"2026-05-13","a":"味全龍","h":"統一7-ELEVEn獅","as":1,"hs":2,"v":"亞太主"},{"n":96,"d":"2026-05-13","a":"富邦悍將","h":"中信兄弟","as":17,"hs":2,"v":"洲際"},{"n":97,"d":"2026-05-13","a":"樂天桃猿","h":"台鋼雄鷹","as":3,"hs":1,"v":"嘉義市"},{"n":98,"d":"2026-05-14","a":"樂天桃猿","h":"台鋼雄鷹","as":2,"hs":3,"v":"澄清湖"},{"n":99,"d":"2026-05-15","a":"中信兄弟","h":"統一7-ELEVEn獅","as":7,"hs":4,"v":"亞太主"},{"n":100,"d":"2026-05-15","a":"樂天桃猿","h":"味全龍","as":1,"hs":3,"v":"天母"},{"n":101,"d":"2026-05-15","a":"台鋼雄鷹","h":"富邦悍將","as":1,"hs":3,"v":"新莊"},{"n":102,"d":"2026-05-16","a":"中信兄弟","h":"統一7-ELEVEn獅","as":1,"hs":0,"v":"亞太主"},{"n":103,"d":"2026-05-16","a":"樂天桃猿","h":"味全龍","as":1,"hs":3,"v":"天母"},{"n":104,"d":"2026-05-16","a":"台鋼雄鷹","h":"富邦悍將","as":3,"hs":6,"v":"新莊"},{"n":105,"d":"2026-05-17","a":"中信兄弟","h":"統一7-ELEVEn獅","as":3,"hs":4,"v":"亞太主"},{"n":106,"d":"2026-05-17","a":"樂天桃猿","h":"味全龍","as":0,"hs":2,"v":"天母"},{"n":107,"d":"2026-05-17","a":"台鋼雄鷹","h":"富邦悍將","as":6,"hs":5,"v":"新莊"},{"n":108,"d":"2026-05-19","a":"台鋼雄鷹","h":"味全龍","as":0,"hs":2,"v":"花蓮"},{"n":109,"d":"2026-05-20","a":"台鋼雄鷹","h":"味全龍","as":2,"hs":5,"v":"花蓮"},{"n":110,"d":"2026-05-20","a":"中信兄弟","h":"樂天桃猿","as":7,"hs":9,"v":"樂天桃園"},{"n":111,"d":"2026-05-20","a":"統一7-ELEVEn獅","h":"富邦悍將","as":2,"hs":9,"v":"新莊"},{"n":112,"d":"2026-05-21","a":"統一7-ELEVEn獅","h":"富邦悍將","as":2,"hs":6,"v":"新莊"},{"n":113,"d":"2026-05-22","a":"富邦悍將","h":"樂天桃猿","as":2,"hs":3,"v":"樂天桃園"},{"n":114,"d":"2026-05-22","a":"味全龍","h":"中信兄弟","as":7,"hs":2,"v":"大巨蛋"},{"n":115,"d":"2026-05-22","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":1,"hs":3,"v":"澄清湖"},{"n":116,"d":"2026-05-23","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":0,"hs":2,"v":"澄清湖"},{"n":117,"d":"2026-05-23","a":"富邦悍將","h":"樂天桃猿","as":3,"hs":1,"v":"樂天桃園"},{"n":118,"d":"2026-05-23","a":"味全龍","h":"中信兄弟","as":2,"hs":0,"v":"大巨蛋"},{"n":119,"d":"2026-05-24","a":"味全龍","h":"中信兄弟","as":5,"hs":0,"v":"大巨蛋"},{"n":120,"d":"2026-05-24","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":7,"hs":5,"v":"澄清湖"},{"n":121,"d":"2026-05-24","a":"富邦悍將","h":"樂天桃猿","as":1,"hs":4,"v":"樂天桃園"},{"n":122,"d":"2026-05-26","a":"富邦悍將","h":"味全龍","as":3,"hs":4,"v":"大巨蛋"},{"n":123,"d":"2026-05-26","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":1,"hs":0,"v":"嘉義市"},{"n":124,"d":"2026-05-27","a":"富邦悍將","h":"味全龍","as":5,"hs":1,"v":"大巨蛋"},{"n":125,"d":"2026-05-27","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":5,"hs":8,"v":"嘉義市"},{"n":126,"d":"2026-05-27","a":"中信兄弟","h":"台鋼雄鷹","as":0,"hs":6,"v":"澄清湖"},{"n":127,"d":"2026-05-28","a":"中信兄弟","h":"台鋼雄鷹","as":4,"hs":6,"v":"澄清湖"},{"n":128,"d":"2026-05-29","a":"統一7-ELEVEn獅","h":"味全龍","as":7,"hs":8,"v":"天母"},{"n":129,"d":"2026-05-29","a":"中信兄弟","h":"富邦悍將","as":2,"hs":4,"v":"大巨蛋"},{"n":130,"d":"2026-05-29","a":"台鋼雄鷹","h":"樂天桃猿","as":9,"hs":3,"v":"樂天桃園"},{"n":131,"d":"2026-05-30","a":"統一7-ELEVEn獅","h":"味全龍","as":0,"hs":2,"v":"天母"},{"n":132,"d":"2026-05-30","a":"中信兄弟","h":"富邦悍將","as":10,"hs":1,"v":"大巨蛋"},{"n":133,"d":"2026-05-30","a":"台鋼雄鷹","h":"樂天桃猿","as":5,"hs":3,"v":"樂天桃園"},{"n":134,"d":"2026-05-31","a":"統一7-ELEVEn獅","h":"味全龍","as":4,"hs":1,"v":"天母"},{"n":135,"d":"2026-05-31","a":"中信兄弟","h":"富邦悍將","as":6,"hs":3,"v":"大巨蛋"},{"n":136,"d":"2026-05-31","a":"台鋼雄鷹","h":"樂天桃猿","as":6,"hs":7,"v":"樂天桃園"},{"n":137,"d":"2026-06-02","a":"統一7-ELEVEn獅","h":"中信兄弟","as":7,"hs":3,"v":"大巨蛋"},{"n":138,"d":"2026-06-03","a":"統一7-ELEVEn獅","h":"中信兄弟","as":2,"hs":0,"v":"大巨蛋"},{"n":139,"d":"2026-06-03","a":"味全龍","h":"樂天桃猿","as":7,"hs":3,"v":"樂天桃園"},{"n":140,"d":"2026-06-03","a":"富邦悍將","h":"台鋼雄鷹","as":2,"hs":13,"v":"澄清湖"},{"n":141,"d":"2026-06-24","a":"富邦悍將","h":"台鋼雄鷹","as":3,"hs":1,"v":"澄清湖","od":"2026-06-04"},{"n":142,"d":"2026-06-05","a":"樂天桃猿","h":"中信兄弟","as":6,"hs":7,"v":"洲際"},{"n":143,"d":"2026-06-05","a":"富邦悍將","h":"統一7-ELEVEn獅","as":6,"hs":2,"v":"大巨蛋"},{"n":144,"d":"2026-06-23","a":"味全龍","h":"台鋼雄鷹","as":1,"hs":2,"v":"澄清湖","od":"2026-06-05"},{"n":145,"d":"2026-06-06","a":"富邦悍將","h":"統一7-ELEVEn獅","as":0,"hs":8,"v":"大巨蛋"},{"n":146,"d":"2026-06-06","a":"味全龍","h":"台鋼雄鷹","as":10,"hs":2,"v":"澄清湖"},{"n":147,"d":"2026-06-06","a":"樂天桃猿","h":"中信兄弟","as":4,"hs":8,"v":"洲際"},{"n":148,"d":"2026-06-07","a":"富邦悍將","h":"統一7-ELEVEn獅","as":4,"hs":1,"v":"大巨蛋"},{"n":149,"d":"2026-06-07","a":"味全龍","h":"台鋼雄鷹","as":1,"hs":2,"v":"澄清湖"},{"n":150,"d":"2026-06-28","a":"樂天桃猿","h":"中信兄弟","as":2,"hs":0,"v":"洲際","od":"2026-06-07","ok":"s"},{"n":151,"d":"2026-06-28","a":"味全龍","h":"富邦悍將","as":1,"hs":4,"v":"新莊","od":"2026-06-09"},{"n":152,"d":"2026-06-26","a":"台鋼雄鷹","h":"中信兄弟","as":2,"hs":3,"v":"洲際","od":"2026-06-09"},{"n":153,"d":"2026-06-23","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":1,"hs":0,"v":"樂天桃園","od":"2026-06-10"},{"n":154,"d":"2026-06-11","a":"中信兄弟","h":"味全龍","as":3,"hs":4,"v":"天母"},{"n":155,"d":"2026-06-11","a":"統一7-ELEVEn獅","h":"富邦悍將","as":1,"hs":6,"v":"新莊"},{"n":156,"d":"2026-06-17","a":"樂天桃猿","h":"台鋼雄鷹","as":9,"hs":7,"v":"澄清湖","od":"2026-06-11"},{"n":157,"d":"2026-06-30","a":"中信兄弟","h":"味全龍","as":1,"hs":9,"v":"天母","od":"2026-06-12"},{"n":158,"d":"2026-06-30","a":"統一7-ELEVEn獅","h":"富邦悍將","as":5,"hs":6,"v":"新莊","od":"2026-06-12"},{"n":159,"d":"2026-06-12","a":"樂天桃猿","h":"台鋼雄鷹","as":1,"hs":0,"v":"澄清湖"},{"n":160,"d":"2026-06-13","a":"統一7-ELEVEn獅","h":"味全龍","as":6,"hs":1,"v":"天母"},{"n":161,"d":"2026-06-13","a":"台鋼雄鷹","h":"富邦悍將","as":9,"hs":0,"v":"新莊"},{"n":162,"d":"2026-06-13","a":"樂天桃猿","h":"中信兄弟","as":9,"hs":9,"v":"洲際"},{"n":163,"d":"2026-06-14","a":"統一7-ELEVEn獅","h":"味全龍","as":7,"hs":5,"v":"天母"},{"n":164,"d":"2026-06-14","a":"台鋼雄鷹","h":"富邦悍將","as":0,"hs":7,"v":"新莊"},{"n":165,"d":"2026-07-02","a":"樂天桃猿","h":"中信兄弟","as":9,"hs":6,"v":"洲際","od":"2026-06-14"},{"n":166,"d":"2026-06-16","a":"中信兄弟","h":"台鋼雄鷹","as":1,"hs":6,"v":"澄清湖"},{"n":167,"d":"2026-07-01","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":0,"hs":1,"v":"亞太主","od":"2026-06-16"},{"n":168,"d":"2026-06-17","a":"富邦悍將","h":"味全龍","as":1,"hs":3,"v":"天母"},{"n":169,"d":"2026-06-18","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":1,"hs":7,"v":"亞太主"},{"n":170,"d":"2026-06-18","a":"味全龍","h":"樂天桃猿","as":7,"hs":0,"v":"樂天桃園"},{"n":171,"d":"2026-06-18","a":"富邦悍將","h":"中信兄弟","as":4,"hs":5,"v":"洲際"},{"n":172,"d":"2026-06-19","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":1,"hs":0,"v":"亞太主"},{"n":173,"d":"2026-06-19","a":"味全龍","h":"樂天桃猿","as":11,"hs":3,"v":"樂天桃園"},{"n":174,"d":"2026-06-19","a":"富邦悍將","h":"中信兄弟","as":11,"hs":6,"v":"洲際"},{"n":175,"d":"2026-06-20","a":"中信兄弟","h":"統一7-ELEVEn獅","as":7,"hs":1,"v":"亞太主"},{"n":176,"d":"2026-06-20","a":"味全龍","h":"台鋼雄鷹","as":4,"hs":0,"v":"澄清湖"},{"n":177,"d":"2026-06-20","a":"富邦悍將","h":"樂天桃猿","as":2,"hs":0,"v":"樂天桃園"},{"n":178,"d":"2026-06-21","a":"中信兄弟","h":"統一7-ELEVEn獅","as":6,"hs":4,"v":"亞太主"},{"n":179,"d":"2026-06-21","a":"味全龍","h":"台鋼雄鷹","as":7,"hs":5,"v":"澄清湖"},{"n":180,"d":"2026-06-21","a":"富邦悍將","h":"樂天桃猿","as":3,"hs":1,"v":"樂天桃園"},{"n":181,"d":"2026-07-03","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":3,"hs":6,"v":"澄清湖"},{"n":182,"d":"2026-07-03","a":"富邦悍將","h":"味全龍","as":6,"hs":3,"v":"天母"},{"n":183,"d":"2026-07-03","a":"樂天桃猿","h":"中信兄弟","as":5,"hs":3,"v":"洲際"},{"n":184,"d":"2026-07-04","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":5,"hs":4,"v":"澄清湖"},{"n":185,"d":"2026-07-04","a":"富邦悍將","h":"味全龍","as":2,"hs":11,"v":"天母"},{"n":186,"d":"2026-07-04","a":"樂天桃猿","h":"中信兄弟","as":1,"hs":2,"v":"洲際"},{"n":187,"d":"2026-07-05","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":1,"hs":4,"v":"澄清湖"},{"n":188,"d":"2026-07-05","a":"富邦悍將","h":"味全龍","as":3,"hs":5,"v":"天母"},{"n":189,"d":"2026-07-05","a":"樂天桃猿","h":"中信兄弟","as":4,"hs":2,"v":"洲際"},{"n":190,"d":"2026-07-07","a":"樂天桃猿","h":"富邦悍將","as":5,"hs":3,"v":"新莊"},{"n":191,"d":"2026-07-07","a":"中信兄弟","h":"統一7-ELEVEn獅","as":0,"hs":5,"v":"亞太主"},{"n":192,"d":"2026-07-08","a":"樂天桃猿","h":"富邦悍將","as":1,"hs":0,"v":"新莊"},{"n":193,"d":"2026-07-08","a":"中信兄弟","h":"統一7-ELEVEn獅","as":7,"hs":5,"v":"亞太主"},{"n":194,"d":"2026-07-08","a":"台鋼雄鷹","h":"味全龍","as":2,"hs":1,"v":"斗六"},{"n":195,"d":"2026-07-09","a":"台鋼雄鷹","h":"味全龍","as":5,"hs":0,"v":"斗六"},{"n":196,"d":"2026-09-22","a":"中信兄弟","h":"富邦悍將","as":9,"hs":8,"v":"新莊","od":"2026-07-10"},{"n":197,"d":"2026-09-22","a":"台鋼雄鷹","h":"樂天桃猿","as":5,"hs":6,"v":"樂天桃園","od":"2026-07-10"},{"n":198,"d":"2026-07-10","a":"味全龍","h":"統一7-ELEVEn獅","as":4,"hs":7,"v":"亞太主"},{"n":199,"d":"2026-10-03","a":"味全龍","h":"統一7-ELEVEn獅","as":3,"hs":5,"v":"亞太主","od":"2026-07-11"},{"n":200,"d":"2026-10-03","a":"中信兄弟","h":"富邦悍將","as":3,"hs":0,"v":"新莊","od":"2026-07-11"},{"n":201,"d":"2026-10-03","a":"台鋼雄鷹","h":"樂天桃猿","as":5,"hs":7,"v":"樂天桃園","od":"2026-07-11"},{"n":202,"d":"2026-07-12","a":"味全龍","h":"統一7-ELEVEn獅","as":6,"hs":11,"v":"亞太主"},{"n":203,"d":"2026-07-12","a":"中信兄弟","h":"富邦悍將","as":8,"hs":2,"v":"新莊"},{"n":204,"d":"2026-07-12","a":"台鋼雄鷹","h":"樂天桃猿","as":1,"hs":6,"v":"樂天桃園"},{"n":205,"d":"2026-07-14","a":"味全龍","h":"中信兄弟","as":2,"hs":1,"v":"嘉義市"},{"n":206,"d":"2026-07-14","a":"富邦悍將","h":"台鋼雄鷹","as":2,"hs":0,"v":"台東"},{"n":207,"d":"2026-07-15","a":"味全龍","h":"中信兄弟","as":4,"hs":0,"v":"嘉義市"},{"n":208,"d":"2026-07-15","a":"富邦悍將","h":"台鋼雄鷹","as":0,"hs":12,"v":"台東"},{"n":209,"d":"2026-07-15","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":3,"hs":2,"v":"樂天桃園"},{"n":210,"d":"2026-07-16","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":1,"hs":2,"v":"樂天桃園"},{"n":211,"d":"2026-07-21","a":"台鋼雄鷹","h":"中信兄弟","as":9,"hs":6,"v":"洲際"},{"n":212,"d":"2026-07-21","a":"樂天桃猿","h":"味全龍","as":2,"hs":3,"v":"大巨蛋"},{"n":213,"d":"2026-07-22","a":"台鋼雄鷹","h":"中信兄弟","as":4,"hs":19,"v":"洲際"},{"n":214,"d":"2026-07-22","a":"樂天桃猿","h":"味全龍","as":1,"hs":2,"v":"大巨蛋"},{"n":215,"d":"2026-07-22","a":"富邦悍將","h":"統一7-ELEVEn獅","as":3,"hs":1,"v":"亞太主"},{"n":216,"d":"2026-07-23","a":"富邦悍將","h":"統一7-ELEVEn獅","as":6,"hs":0,"v":"亞太主"},{"n":217,"d":"2026-07-24","a":"統一7-ELEVEn獅","h":"中信兄弟","as":5,"hs":2,"v":"洲際"},{"n":218,"d":"2026-07-24","a":"味全龍","h":"台鋼雄鷹","as":3,"hs":4,"v":"澄清湖"},{"n":219,"d":"2026-07-24","a":"富邦悍將","h":"樂天桃猿","as":6,"hs":5,"v":"大巨蛋"},{"n":220,"d":"2026-07-25","a":"味全龍","h":"台鋼雄鷹","as":5,"hs":4,"v":"澄清湖"},{"n":221,"d":"2026-07-25","a":"統一7-ELEVEn獅","h":"中信兄弟","as":4,"hs":3,"v":"洲際"},{"n":222,"d":"2026-07-25","a":"富邦悍將","h":"樂天桃猿","as":2,"hs":3,"v":"大巨蛋"},{"n":223,"d":"2026-07-26","a":"味全龍","h":"台鋼雄鷹","as":2,"hs":4,"v":"澄清湖"},{"n":224,"d":"2026-07-26","a":"統一7-ELEVEn獅","h":"中信兄弟","as":0,"hs":1,"v":"洲際"},{"n":225,"d":"2026-07-26","a":"富邦悍將","h":"樂天桃猿","as":0,"hs":2,"v":"大巨蛋"},{"n":226,"d":"2026-07-28","a":"味全龍","h":"富邦悍將","as":6,"hs":1,"v":"大巨蛋"},{"n":227,"d":"2026-07-28","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":1,"hs":3,"v":"亞太主"},{"n":228,"d":"2026-07-29","a":"味全龍","h":"富邦悍將","as":3,"hs":1,"v":"大巨蛋"},{"n":229,"d":"2026-07-29","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":5,"hs":4,"v":"亞太主"},{"n":230,"d":"2026-07-29","a":"中信兄弟","h":"樂天桃猿","as":5,"hs":12,"v":"樂天桃園"},{"n":231,"d":"2026-07-30","a":"中信兄弟","h":"樂天桃猿","as":10,"hs":5,"v":"樂天桃園"},{"n":232,"d":"2026-07-31","a":"台鋼雄鷹","h":"富邦悍將","as":6,"hs":9,"v":"新莊"},{"n":233,"d":"2026-07-31","a":"中信兄弟","h":"味全龍","as":2,"hs":4,"v":"大巨蛋"},{"n":234,"d":"2026-07-31","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":1,"hs":0,"v":"亞太主"},{"n":235,"d":"2026-08-01","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":3,"hs":2,"v":"亞太主"},{"n":236,"d":"2026-08-01","a":"台鋼雄鷹","h":"富邦悍將","as":1,"hs":3,"v":"新莊"},{"n":237,"d":"2026-08-01","a":"中信兄弟","h":"味全龍","as":1,"hs":4,"v":"大巨蛋"},{"n":238,"d":"2026-08-02","a":"中信兄弟","h":"味全龍","as":7,"hs":0,"v":"大巨蛋"},{"n":239,"d":"2026-08-02","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":0,"hs":2,"v":"亞太主"},{"n":240,"d":"2026-08-02","a":"台鋼雄鷹","h":"富邦悍將","as":10,"hs":3,"v":"新莊"},{"n":241,"d":"2026-08-04","a":"樂天桃猿","h":"台鋼雄鷹","as":8,"hs":1,"v":"嘉義市"},{"n":242,"d":"2026-08-04","a":"富邦悍將","h":"中信兄弟","as":0,"hs":5,"v":"洲際"},{"n":243,"d":"2026-08-05","a":"樂天桃猿","h":"台鋼雄鷹","as":6,"hs":7,"v":"澄清湖"},{"n":244,"d":"2026-08-05","a":"富邦悍將","h":"中信兄弟","as":10,"hs":2,"v":"洲際"},{"n":245,"d":"2026-08-05","a":"統一7-ELEVEn獅","h":"味全龍","as":0,"hs":3,"v":"天母"},{"n":246,"d":"2026-08-06","a":"統一7-ELEVEn獅","h":"味全龍","as":8,"hs":2,"v":"天母"},{"n":247,"d":"2026-08-07","a":"中信兄弟","h":"台鋼雄鷹","as":5,"hs":2,"v":"澄清湖"},{"n":248,"d":"2026-08-07","a":"味全龍","h":"樂天桃猿","as":1,"hs":3,"v":"樂天桃園"},{"n":249,"d":"2026-08-07","a":"統一7-ELEVEn獅","h":"富邦悍將","as":4,"hs":0,"v":"新莊"},{"n":250,"d":"2026-08-08","a":"中信兄弟","h":"台鋼雄鷹","as":6,"hs":1,"v":"澄清湖"},{"n":251,"d":"2026-10-04","a":"味全龍","h":"樂天桃猿","as":9,"hs":4,"v":"樂天桃園","od":"2026-08-08"},{"n":252,"d":"2026-10-04","a":"統一7-ELEVEn獅","h":"富邦悍將","as":6,"hs":1,"v":"新莊","od":"2026-08-08"},{"n":253,"d":"2026-08-09","a":"中信兄弟","h":"台鋼雄鷹","as":10,"hs":2,"v":"澄清湖"},{"n":254,"d":"2026-09-30","a":"味全龍","h":"樂天桃猿","as":5,"hs":3,"v":"樂天桃園","od":"2026-08-09"},{"n":255,"d":"2026-09-30","a":"統一7-ELEVEn獅","h":"富邦悍將","as":4,"hs":2,"v":"新莊","od":"2026-08-09"},{"n":256,"d":"2026-08-11","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":2,"hs":3,"v":"台東"},{"n":257,"d":"2026-08-11","a":"味全龍","h":"台鋼雄鷹","as":7,"hs":4,"v":"澄清湖"},{"n":258,"d":"2026-08-12","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":4,"hs":0,"v":"台東"},{"n":259,"d":"2026-08-12","a":"味全龍","h":"台鋼雄鷹","as":4,"hs":3,"v":"澄清湖"},{"n":260,"d":"2026-08-12","a":"中信兄弟","h":"富邦悍將","as":2,"hs":3,"v":"新莊"},{"n":261,"d":"2026-08-13","a":"中信兄弟","h":"富邦悍將","as":8,"hs":6,"v":"新莊"},{"n":262,"d":"2026-08-14","a":"富邦悍將","h":"統一7-ELEVEn獅","as":7,"hs":3,"v":"亞太主"},{"n":263,"d":"2026-08-14","a":"樂天桃猿","h":"味全龍","as":1,"hs":2,"v":"大巨蛋"},{"n":264,"d":"2026-08-14","a":"台鋼雄鷹","h":"中信兄弟","as":0,"hs":7,"v":"洲際"},{"n":265,"d":"2026-08-15","a":"富邦悍將","h":"統一7-ELEVEn獅","as":1,"hs":12,"v":"亞太主"},{"n":266,"d":"2026-08-15","a":"樂天桃猿","h":"味全龍","as":3,"hs":9,"v":"大巨蛋"},{"n":267,"d":"2026-08-15","a":"台鋼雄鷹","h":"中信兄弟","as":11,"hs":4,"v":"洲際"},{"n":268,"d":"2026-08-16","a":"樂天桃猿","h":"味全龍","as":5,"hs":1,"v":"大巨蛋"},{"n":269,"d":"2026-08-16","a":"富邦悍將","h":"統一7-ELEVEn獅","as":8,"hs":2,"v":"亞太主"},{"n":270,"d":"2026-10-04","a":"台鋼雄鷹","h":"中信兄弟","as":1,"hs":12,"v":"洲際","od":"2026-08-16"},{"n":271,"d":"2026-08-18","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":8,"hs":0,"v":"台東"},{"n":272,"d":"2026-08-18","a":"富邦悍將","h":"樂天桃猿","as":5,"hs":0,"v":"樂天桃園"},{"n":273,"d":"2026-08-19","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":6,"hs":8,"v":"台東"},{"n":274,"d":"2026-10-06","a":"富邦悍將","h":"樂天桃猿","as":6,"hs":1,"v":"樂天桃園","od":"2026-08-19"},{"n":275,"d":"2026-08-19","a":"中信兄弟","h":"味全龍","as":6,"hs":2,"v":"大巨蛋"},{"n":276,"d":"2026-08-20","a":"中信兄弟","h":"味全龍","as":4,"hs":3,"v":"大巨蛋"},{"n":277,"d":"2026-10-01","a":"樂天桃猿","h":"台鋼雄鷹","as":2,"hs":1,"v":"澄清湖","od":"2026-08-21"},{"n":278,"d":"2026-08-21","a":"中信兄弟","h":"統一7-ELEVEn獅","as":2,"hs":1,"v":"大巨蛋"},{"n":279,"d":"2026-10-02","a":"味全龍","h":"富邦悍將","as":2,"hs":1,"v":"新莊","od":"2026-08-21"},{"n":280,"d":"2026-09-14","a":"樂天桃猿","h":"台鋼雄鷹","as":2,"hs":1,"v":"澄清湖","od":"2026-08-22"},{"n":281,"d":"2026-08-22","a":"中信兄弟","h":"統一7-ELEVEn獅","as":3,"hs":5,"v":"大巨蛋"},{"n":282,"d":"2026-09-15","a":"味全龍","h":"富邦悍將","as":3,"hs":0,"v":"新莊","od":"2026-08-22"},{"n":283,"d":"2026-10-02","a":"樂天桃猿","h":"台鋼雄鷹","as":3,"hs":7,"v":"澄清湖","od":"2026-08-23"},{"n":284,"d":"2026-08-23","a":"中信兄弟","h":"統一7-ELEVEn獅","as":11,"hs":1,"v":"大巨蛋"},{"n":285,"d":"2026-08-23","a":"味全龍","h":"富邦悍將","as":3,"hs":2,"v":"新莊"},{"n":286,"d":"2026-08-25","a":"樂天桃猿","h":"中信兄弟","as":11,"hs":1,"v":"大巨蛋"},{"n":287,"d":"2026-09-22","a":"味全龍","h":"統一7-ELEVEn獅","as":13,"hs":1,"v":"亞太主","od":"2026-08-25"},{"n":288,"d":"2026-08-26","a":"樂天桃猿","h":"中信兄弟","as":0,"hs":2,"v":"大巨蛋"},{"n":289,"d":"2026-08-26","a":"味全龍","h":"統一7-ELEVEn獅","as":0,"hs":1,"v":"亞太主"},{"n":290,"d":"2026-08-26","a":"台鋼雄鷹","h":"富邦悍將","as":4,"hs":5,"v":"新莊"},{"n":291,"d":"2026-08-27","a":"台鋼雄鷹","h":"富邦悍將","as":2,"hs":0,"v":"新莊"},{"n":292,"d":"2026-08-28","a":"富邦悍將","h":"中信兄弟","as":4,"hs":5,"v":"洲際"},{"n":293,"d":"2026-08-28","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":4,"hs":0,"v":"大巨蛋"},{"n":294,"d":"2026-08-28","a":"台鋼雄鷹","h":"味全龍","as":7,"hs":4,"v":"天母"},{"n":295,"d":"2026-08-29","a":"富邦悍將","h":"中信兄弟","as":6,"hs":4,"v":"洲際"},{"n":296,"d":"2026-08-29","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":4,"hs":8,"v":"大巨蛋"},{"n":297,"d":"2026-08-29","a":"台鋼雄鷹","h":"味全龍","as":2,"hs":1,"v":"天母"},{"n":298,"d":"2026-08-30","a":"台鋼雄鷹","h":"味全龍","as":0,"hs":3,"v":"天母"},{"n":299,"d":"2026-08-30","a":"富邦悍將","h":"中信兄弟","as":1,"hs":6,"v":"洲際"},{"n":300,"d":"2026-08-30","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":5,"hs":4,"v":"大巨蛋"},{"n":301,"d":"2026-09-01","a":"統一7-ELEVEn獅","h":"富邦悍將","as":1,"hs":2,"v":"大巨蛋"},{"n":302,"d":"2026-09-30","a":"中信兄弟","h":"台鋼雄鷹","as":7,"hs":1,"v":"澄清湖","od":"2026-09-01"},{"n":303,"d":"2026-09-02","a":"統一7-ELEVEn獅","h":"富邦悍將","as":6,"hs":1,"v":"大巨蛋"},{"n":304,"d":"2026-09-07","a":"中信兄弟","h":"台鋼雄鷹","as":6,"hs":4,"v":"澄清湖","od":"2026-09-02"},{"n":305,"d":"2026-09-02","a":"味全龍","h":"樂天桃猿","as":4,"hs":5,"v":"樂天桃園"},{"n":306,"d":"2026-09-07","a":"味全龍","h":"樂天桃猿","as":2,"hs":0,"v":"樂天桃園","od":"2026-09-03"},{"n":307,"d":"2026-09-04","a":"樂天桃猿","h":"富邦悍將","as":0,"hs":13,"v":"大巨蛋"},{"n":308,"d":"2026-09-04","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":0,"hs":11,"v":"亞太主"},{"n":309,"d":"2026-09-04","a":"味全龍","h":"中信兄弟","as":6,"hs":5,"v":"洲際"},{"n":310,"d":"2026-09-05","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":0,"hs":3,"v":"亞太主"},{"n":311,"d":"2026-09-05","a":"樂天桃猿","h":"富邦悍將","as":4,"hs":0,"v":"大巨蛋"},{"n":312,"d":"2026-09-05","a":"味全龍","h":"中信兄弟","as":0,"hs":8,"v":"洲際"},{"n":313,"d":"2026-09-06","a":"樂天桃猿","h":"富邦悍將","as":3,"hs":2,"v":"大巨蛋"},{"n":314,"d":"2026-09-06","a":"台鋼雄鷹","h":"統一7-ELEVEn獅","as":2,"hs":9,"v":"亞太主"},{"n":315,"d":"2026-09-06","a":"味全龍","h":"中信兄弟","as":4,"hs":3,"v":"洲際"},{"n":316,"d":"2026-09-08","a":"富邦悍將","h":"味全龍","as":4,"hs":1,"v":"大巨蛋"},{"n":317,"d":"2026-09-08","a":"台鋼雄鷹","h":"樂天桃猿","as":2,"hs":3,"v":"樂天桃園"},{"n":318,"d":"2026-09-09","a":"富邦悍將","h":"味全龍","as":4,"hs":2,"v":"大巨蛋"},{"n":319,"d":"2026-09-09","a":"台鋼雄鷹","h":"樂天桃猿","as":0,"hs":4,"v":"樂天桃園"},{"n":320,"d":"2026-09-09","a":"統一7-ELEVEn獅","h":"中信兄弟","as":3,"hs":5,"v":"洲際"},{"n":321,"d":"2026-09-10","a":"統一7-ELEVEn獅","h":"中信兄弟","as":6,"hs":0,"v":"洲際"},{"n":322,"d":"2026-09-11","a":"統一7-ELEVEn獅","h":"味全龍","as":3,"hs":2,"v":"天母"},{"n":323,"d":"2026-09-11","a":"中信兄弟","h":"樂天桃猿","as":3,"hs":5,"v":"樂天桃園"},{"n":324,"d":"2026-09-11","a":"富邦悍將","h":"台鋼雄鷹","as":1,"hs":4,"v":"嘉義市"},{"n":325,"d":"2026-09-12","a":"富邦悍將","h":"台鋼雄鷹","as":3,"hs":8,"v":"澄清湖"},{"n":326,"d":"2026-10-01","a":"統一7-ELEVEn獅","h":"味全龍","as":4,"hs":3,"v":"天母","od":"2026-09-12","ok":"s"},{"n":327,"d":"2026-09-12","a":"中信兄弟","h":"樂天桃猿","as":6,"hs":0,"v":"樂天桃園"},{"n":328,"d":"2026-09-13","a":"富邦悍將","h":"台鋼雄鷹","as":3,"hs":9,"v":"澄清湖"},{"n":329,"d":"2026-09-13","a":"統一7-ELEVEn獅","h":"味全龍","as":12,"hs":1,"v":"天母"},{"n":330,"d":"2026-09-13","a":"中信兄弟","h":"樂天桃猿","as":9,"hs":3,"v":"樂天桃園"},{"n":331,"d":"2026-09-15","a":"中信兄弟","h":"台鋼雄鷹","as":5,"hs":1,"v":"澄清湖"},{"n":332,"d":"2026-09-15","a":"樂天桃猿","h":"統一7-ELEVEn獅","as":5,"hs":2,"v":"嘉義市"},{"n":333,"d":"2026-09-16","a":"富邦悍將","h":"味全龍","as":6,"hs":0,"v":"天母"},{"n":334,"d":"2026-09-17","a":"統一7-ELEVEn獅","h":"中信兄弟","as":2,"hs":4,"v":"大巨蛋"},{"n":335,"d":"2026-09-17","a":"樂天桃猿","h":"富邦悍將","as":0,"hs":1,"v":"新莊"},{"n":336,"d":"2026-09-17","a":"台鋼雄鷹","h":"味全龍","as":6,"hs":1,"v":"天母"},{"n":337,"d":"2026-09-18","a":"統一7-ELEVEn獅","h":"中信兄弟","as":4,"hs":5,"v":"大巨蛋"},{"n":338,"d":"2026-09-18","a":"樂天桃猿","h":"富邦悍將","as":1,"hs":2,"v":"新莊"},{"n":339,"d":"2026-09-18","a":"台鋼雄鷹","h":"味全龍","as":2,"hs":3,"v":"天母"},{"n":340,"d":"2026-09-19","a":"富邦悍將","h":"統一7-ELEVEn獅","as":3,"hs":4,"v":"亞太主"},{"n":341,"d":"2026-09-19","a":"味全龍","h":"中信兄弟","as":3,"hs":4,"v":"大巨蛋"},{"n":342,"d":"2026-09-19","a":"台鋼雄鷹","h":"樂天桃猿","as":11,"hs":5,"v":"樂天桃園"},{"n":343,"d":"2026-09-20","a":"味全龍","h":"中信兄弟","as":1,"hs":2,"v":"大巨蛋"},{"n":344,"d":"2026-09-20","a":"富邦悍將","h":"統一7-ELEVEn獅","as":4,"hs":3,"v":"亞太主"},{"n":345,"d":"2026-09-20","a":"台鋼雄鷹","h":"樂天桃猿","as":1,"hs":10,"v":"樂天桃園"},{"n":346,"d":"2026-09-24","a":"富邦悍將","h":"台鋼雄鷹","as":8,"hs":0,"v":"大巨蛋"},{"n":347,"d":"2026-09-24","a":"中信兄弟","h":"樂天桃猿","as":5,"hs":6,"v":"樂天桃園"},{"n":348,"d":"2026-09-24","a":"味全龍","h":"統一7-ELEVEn獅","as":2,"hs":4,"v":"亞太主"},{"n":349,"d":"2026-09-25","a":"富邦悍將","h":"台鋼雄鷹","as":1,"hs":2,"v":"大巨蛋"},{"n":350,"d":"2026-09-25","a":"中信兄弟","h":"樂天桃猿","as":0,"hs":6,"v":"樂天桃園"},{"n":351,"d":"2026-09-25","a":"味全龍","h":"統一7-ELEVEn獅","as":2,"hs":3,"v":"亞太主"},{"n":352,"d":"2026-09-26","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":3,"hs":2,"v":"大巨蛋"},{"n":353,"d":"2026-09-26","a":"樂天桃猿","h":"味全龍","as":5,"hs":3,"v":"天母"},{"n":354,"d":"2026-09-26","a":"中信兄弟","h":"富邦悍將","as":7,"hs":3,"v":"新莊"},{"n":355,"d":"2026-09-27","a":"統一7-ELEVEn獅","h":"台鋼雄鷹","as":2,"hs":4,"v":"大巨蛋"},{"n":356,"d":"2026-09-27","a":"樂天桃猿","h":"味全龍","as":4,"hs":2,"v":"天母"},{"n":357,"d":"2026-09-27","a":"中信兄弟","h":"富邦悍將","as":1,"hs":2,"v":"新莊"},{"n":358,"d":"2026-09-28","a":"台鋼雄鷹","h":"中信兄弟","as":10,"hs":19,"v":"洲際"},{"n":359,"d":"2026-09-28","a":"統一7-ELEVEn獅","h":"樂天桃猿","as":7,"hs":4,"v":"樂天桃園"},{"n":360,"d":"2026-09-28","a":"味全龍","h":"富邦悍將","as":4,"hs":2,"v":"新莊"}];
 const POSTSEASON_GAMES = [{"series":"challenge","g":1,"d":"2026-10-09","a":"統一7-ELEVEn獅","h":"中信兄弟","as":1,"hs":4,"v":"洲際","wp":"勝騎士","lp":"布雷克","sv":"呂彥青","rbi":"王威晨","mvp":"勝騎士"},{"series":"challenge","g":2,"d":"2026-10-10","a":"中信兄弟","h":"統一7-ELEVEn獅","as":0,"hs":1,"v":"亞太主","wp":"喬登","lp":"菲力士","sv":"鍾允華","rbi":"邱智呈","mvp":"喬登"},{"series":"challenge","g":3,"d":"2026-10-11","a":"統一7-ELEVEn獅","h":"中信兄弟","as":4,"hs":2,"v":"洲際","wp":"獅帝芬","lp":"羅戈","sv":"鍾允華","rbi":"林佳緯","mvp":"獅帝芬"},{"series":"challenge","g":4,"d":"2026-10-12","a":"統一7-ELEVEn獅","h":"中信兄弟","as":2,"hs":8,"v":"洲際","dur":"3H27M","wp":"鄭浩均","lp":"布雷克","sv":"","rbi":"江坤宇","mvp":"鄭浩均"}].map(g => ({...g, ps:true}));
-const TAIWAN_SERIES_GAMES = [{"year":2026,"series":"taiwan","g":1,"demo":true,"dataReady":true,"date":"2026-10-17","time":"17:05","startsAt":"2026-10-17T17:05:00+08:00","sourceDate":"2026-09-19","testSourceGame":341,"venue":"大巨蛋","away":"中信兄弟","home":"味全龍","awayScore":4,"homeScore":3,"seriesRecord":{"中信兄弟":"0勝0敗","味全龍":"0勝0敗"},"innings":{"away":[0,0,2,0,0,0,0,0,0,2],"home":[0,0,0,1,0,0,0,1,0,1]},"rhe":{"away":[4,6,0],"home":[3,9,1]},"duration":"02:40","attendance":33691,"winningRbi":"岳東華","mvp":{"name":"岳東華","line":"4 打數 · 1 安打 · 1 打點"},"decisions":{"win":"呂彥青","loss":"林凱威","save":""},"homeRuns":[],"moments":["岳東華生涯第 3 支再見安打","中信兄弟拿下 6 連勝、大巨蛋 4 連勝","梅賽鍶生涯 200 投球局數達成，單場投 9 局寫下個人新高"],"teams":{"中信兄弟":{"batters":[{"order":"1","name":"張士綸","pos":"3B","ab":4,"r":1,"h":1,"rbi":0,"hr":0,"bb":0,"so":0,"extra":"2B"},{"order":"2","name":"張仁瑋","pos":"RF","ab":4,"r":0,"h":2,"rbi":2,"hr":0,"bb":0,"so":0},{"order":"3","name":"曾頌恩","pos":"DH","ab":4,"r":0,"h":0,"rbi":0,"hr":0,"bb":0,"so":0},{"order":"4","name":"王威晨","pos":"1B","ab":4,"r":0,"h":1,"rbi":0,"hr":0,"bb":0,"so":0},{"order":"4","name":"劉貴元","pos":"PR","ab":0,"r":1,"h":0,"rbi":0,"hr":0,"bb":0,"so":0},{"order":"5","name":"宋晟睿","pos":"CF","ab":2,"r":0,"h":0,"rbi":0,"hr":0,"bb":0,"so":1,"extra":"SH"},{"order":"5","name":"岳政華","pos":"PH","ab":1,"r":1,"h":1,"rbi":0,"hr":0,"bb":0,"so":0},{"order":"6","name":"江坤宇","pos":"SS","ab":3,"r":0,"h":0,"rbi":1,"hr":0,"bb":0,"so":1,"extra":"SF"},{"order":"7","name":"岳東華","pos":"2B","ab":4,"r":0,"h":1,"rbi":1,"hr":0,"bb":0,"so":0},{"order":"8","name":"高宇杰","pos":"C","ab":3,"r":0,"h":0,"rbi":0,"hr":0,"bb":0,"so":0},{"order":"9","name":"許庭綸","pos":"LF","ab":2,"r":1,"h":0,"rbi":0,"hr":0,"bb":1,"so":0}],"pitchers":[{"name":"鄭浩均","decision":"","ip":"7","h":6,"r":1,"er":0,"bb":1,"so":7,"pitches":"95-63"},{"name":"江忠城","decision":"","ip":"⅔","h":0,"r":1,"er":1,"bb":3,"so":0,"pitches":"18-6"},{"name":"余謙","decision":"","ip":"⅓","h":2,"r":0,"er":0,"bb":0,"so":0,"pitches":"8-4"},{"name":"蔡齊哲","decision":"","ip":"1⅔","h":1,"r":1,"er":0,"bb":0,"so":1,"pitches":"17-11"},{"name":"呂彥青","decision":"W","ip":"⅓","h":0,"r":0,"er":0,"bb":0,"so":0,"pitches":"3-2"}]},"味全龍":{"batters":[{"order":"1","name":"郭天信","pos":"CF","ab":4,"r":1,"h":1,"rbi":0,"hr":0,"bb":1,"so":0,"extra":"2B"},{"order":"2","name":"朱育賢","pos":"1B","ab":3,"r":0,"h":0,"rbi":0,"hr":0,"bb":0,"so":2},{"order":"2","name":"劉俊緯","pos":"3B","ab":2,"r":0,"h":1,"rbi":0,"hr":0,"bb":0,"so":0,"extra":"GDP"},{"order":"3","name":"張政禹","pos":"SS","ab":2,"r":2,"h":1,"rbi":1,"hr":0,"bb":2,"so":1,"extra":"SF"},{"order":"4","name":"吉力吉撈．鞏冠","pos":"DH","ab":3,"r":0,"h":2,"rbi":1,"hr":0,"bb":1,"so":0},{"order":"4","name":"張祐嘉","pos":"PR / DH","ab":1,"r":0,"h":0,"rbi":0,"hr":0,"bb":0,"so":0},{"order":"5","name":"李凱威","pos":"2B","ab":5,"r":0,"h":1,"rbi":1,"hr":0,"bb":0,"so":0},{"order":"6","name":"張祐銘","pos":"LF","ab":2,"r":0,"h":0,"rbi":0,"hr":0,"bb":0,"so":1},{"order":"6","name":"陳子豪","pos":"PH / LF","ab":2,"r":0,"h":1,"rbi":0,"hr":0,"bb":0,"so":1},{"order":"7","name":"曾聖安","pos":"RF","ab":4,"r":0,"h":0,"rbi":0,"hr":0,"bb":0,"so":1},{"order":"8","name":"蔣少宏","pos":"C","ab":4,"r":0,"h":1,"rbi":0,"hr":0,"bb":0,"so":0},{"order":"9","name":"拿莫．伊漾","pos":"3B / 1B","ab":4,"r":0,"h":1,"rbi":0,"hr":0,"bb":0,"so":2}],"pitchers":[{"name":"梅賽鍶","decision":"","ip":"9","h":4,"r":2,"er":2,"bb":1,"so":2,"pitches":"104-75"},{"name":"林凱威","decision":"L","ip":"⅓","h":2,"r":2,"er":0,"bb":0,"so":0,"pitches":"12-7"}]}},"source":"https://www.cpbl.com.tw/box?year=2026&kindCode=A&gameSno=341"},{"year":2026,"series":"taiwan","g":2,"dataReady":false,"date":"2026-10-18","time":"17:05","startsAt":"2026-10-18T17:05:00+08:00","away":"中信兄弟","home":"味全龍"},{"year":2026,"series":"taiwan","g":3,"dataReady":false,"date":"2026-10-20","time":"18:35","startsAt":"2026-10-20T18:35:00+08:00","away":"味全龍","home":"中信兄弟"},{"year":2026,"series":"taiwan","g":4,"dataReady":false,"date":"2026-10-21","time":"18:35","startsAt":"2026-10-21T18:35:00+08:00","away":"味全龍","home":"中信兄弟"},{"year":2026,"series":"taiwan","g":5,"dataReady":false,"date":"2026-10-23","time":"18:35","startsAt":"2026-10-23T18:35:00+08:00","away":"中信兄弟","home":"味全龍"},{"year":2026,"series":"taiwan","g":6,"dataReady":false,"date":"2026-10-24","time":"17:05","startsAt":"2026-10-24T17:05:00+08:00","away":"中信兄弟","home":"味全龍"},{"year":2026,"series":"taiwan","g":7,"dataReady":false,"date":"2026-10-25","time":"17:05","startsAt":"2026-10-25T17:05:00+08:00","away":"中信兄弟","home":"味全龍"}];
+const TAIWAN_SERIES_GAMES = [{"year":2026,"series":"taiwan","g":1,"dataReady":false,"date":"2026-10-17","time":"17:05","startsAt":"2026-10-17T17:05:00+08:00","away":"中信兄弟","home":"味全龍"},{"year":2026,"series":"taiwan","g":2,"dataReady":false,"date":"2026-10-18","time":"17:05","startsAt":"2026-10-18T17:05:00+08:00","away":"中信兄弟","home":"味全龍"},{"year":2026,"series":"taiwan","g":3,"dataReady":false,"date":"2026-10-20","time":"18:35","startsAt":"2026-10-20T18:35:00+08:00","away":"味全龍","home":"中信兄弟"},{"year":2026,"series":"taiwan","g":4,"dataReady":false,"date":"2026-10-21","time":"18:35","startsAt":"2026-10-21T18:35:00+08:00","away":"味全龍","home":"中信兄弟"},{"year":2026,"series":"taiwan","g":5,"dataReady":false,"date":"2026-10-23","time":"18:35","startsAt":"2026-10-23T18:35:00+08:00","away":"中信兄弟","home":"味全龍"},{"year":2026,"series":"taiwan","g":6,"dataReady":false,"date":"2026-10-24","time":"17:05","startsAt":"2026-10-24T17:05:00+08:00","away":"中信兄弟","home":"味全龍"},{"year":2026,"series":"taiwan","g":7,"dataReady":false,"date":"2026-10-25","time":"17:05","startsAt":"2026-10-25T17:05:00+08:00","away":"中信兄弟","home":"味全龍"}];
 const TAIWAN_SERIES_ROSTERS = {"year":2026,"series":"taiwan","teams":{"味全龍":{"pitchers":["李超","陳禹勳","林柏佑","黃暐傑","蔣銲","鋼龍","呂偉晟","趙璟榮","伍鐸","陳冠偉","曹祐齊","林子昱","林鋅杰","梅賽鍶","林凱威"],"catchers":["林辰勳","蔣少宏","姚冠瑋"],"infielders":["朱育賢","李凱威","劉俊緯","張政禹","李展毅","劉基鴻","拿莫．伊漾","石翔宇"],"outfielders":["陳子豪","郭天信","王順和","張祐銘","曾聖安","張祐嘉"]},"中信兄弟":{"pitchers":["魏碩成","鄭凱文","江忠城","李振昌","勝騎士","羅戈","鄭浩均","菲力士","余謙","蔡齊哲","曾品洋","呂彥青","陳琥","謝榮豪","伍立辰"],"catchers":["林吳晉瑋","陳統恩","高宇杰"],"infielders":["張士綸","王威晨","張仁瑋","陳俊秀","王政順","黃韋盛","江坤宇","岳東華"],"outfielders":["曾頌恩","許庭綸","詹子賢","林志綱","宋晟睿","岳政華"]}}};
 const ALL_GAMES = [...GAMES, ...POSTSEASON_GAMES];
 const BY_N = new Map(GAMES.map(g => [g.n, g]));
@@ -3042,19 +3020,21 @@ document.getElementById("recap-photo").onclick = () => { if (photo) openEditor(p
 const wallMQ = matchMedia("(max-width: 780px)");
 wallMQ.addEventListener && wallMQ.addEventListener("change", buildWall);
 
-// Taiwan Series predictions and recaps. Everything runs in this browser; both
-// picks and photos stay on this device.
+// Taiwan Series predictions and recaps. Names, photos, and the saved answer
+// copy stay on this device; only anonymous prediction fields reach the API.
 let tsSelectedGame = TAIWAN_SERIES_GAMES[0] || null;
 let tsThemeTeam = tsSelectedGame ? tsSelectedGame.away : null;
 let tsSelectedPlayer = "";
 let tsUploadContext = "prediction";
 let tsPhoto = null, tsPhotoURL = "", tsOutputURLs = [], tsPredictionURL = "", tsSeriesURL = "";
 let tsPredictionBg = "default";
-const TS_PREDICTION_KEY = "cpbl2026-taiwan-series-predictions";
-const TS_NAME_KEY = "cpbl2026-taiwan-series-name";
+const TS_PREDICTION_KEY = "cpbl2026-taiwan-series-predictions-v2";
+const TS_NAME_KEY = "cpbl2026-taiwan-series-name-v2";
+const TS_SERIES_NAME_KEY = "cpbl2026-taiwan-series-score-name-v2";
 const ANONYMOUS_ID_KEY = "cpbl-anonymous-voter-id";
 const turnstileState = {
   prediction:{container:"ts-pred-turnstile",token:"",widget:null},
+  series:{container:"ts-series-turnstile",token:"",widget:null},
   community:{container:"community-turnstile",token:"",widget:null},
 };
 let apiConfigPromise = null, turnstileScriptPromise = null;
@@ -3062,9 +3042,17 @@ const isLocalPreview = ["localhost","127.0.0.1",""].includes(location.hostname);
 let tsPredictionState = (() => {
   try{ return JSON.parse(localStorage.getItem(TS_PREDICTION_KEY)) || {}; }catch(e){ return {}; }
 })();
-const tsPhotoKey = game => game ? `taiwan-series-photo-${game.year}-${game.g}` : "taiwan-series-photo";
+const tsPhotoKey = game => game ? `taiwan-series-v2-photo-${game.year}-${game.g}` : "taiwan-series-v2-photo";
 const tsPredictionKey = game => game ? `${game.year}-g${game.g}` : "demo";
 const tsFanName = () => (document.getElementById("ts-fan-name")?.value || "").trim().slice(0,16);
+const tsSeriesName = () => (document.getElementById("ts-series-name")?.value || "").trim().slice(0,16);
+const TS_SERIES_SCORES = [[4,0],[4,1],[4,2],[4,3],[0,4],[1,4],[2,4],[3,4]];
+function tsGamePhase(game, now=Date.now()){
+  if(game?.dataReady)return "answer";
+  const start=Date.parse(game?.startsAt||"");
+  return Number.isFinite(start)&&now>=start?"locked":"open";
+}
+function tsGameTime(game){return `${game.date.slice(5).replace("-","/")} ${game.time}`;}
 function tsDownloadStamp(now = new Date()){
   const pad = value => String(value).padStart(2,"0");
   return `${now.getFullYear()}.${pad(now.getMonth()+1)}.${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
@@ -3072,6 +3060,8 @@ function tsDownloadStamp(now = new Date()){
 
 const apiErrorText = code => ({
   prediction_closed:"這場比賽目前不在預測開放時間。",
+  series_prediction_closed:"系列賽預測已在 G1 開賽時鎖定。",
+  invalid_series_score:"請選擇一組有效的系列賽比分。",
   community_coming_soon:"社群功能正在準備中，目前不開放作品讀取或投稿。",
   turnstile_failed:"匿名驗證已失效，請重新完成驗證。",
   invalid_threads_url:"請貼上公開的 Threads 貼文連結。",
@@ -3109,7 +3099,8 @@ async function initTurnstile(kind){
   if(!config.writesEnabled||!config.turnstileSiteKey){container.textContent="測試站完成安全設定後，匿名送出功能才會開放；圖卡仍可在裝置上產生。";return;}
   try{
     await loadTurnstileScript();container.textContent="";
-    state.widget=window.turnstile.render(container,{sitekey:config.turnstileSiteKey,action:kind==="prediction"?"submit_prediction":"submit_community",callback:token=>{state.token=token;},"expired-callback":()=>{state.token="";},"error-callback":()=>{state.token="";}});
+    const action={prediction:"submit_prediction",series:"submit_series_prediction",community:"submit_community"}[kind];
+    state.widget=window.turnstile.render(container,{sitekey:config.turnstileSiteKey,action,callback:token=>{state.token=token;},"expired-callback":()=>{state.token="";},"error-callback":()=>{state.token="";}});
   }catch(e){container.textContent="匿名驗證暫時無法載入；請稍後再試。";}
 }
 function resetTurnstile(kind){
@@ -3124,12 +3115,12 @@ async function apiPost(path,payload){
 }
 
 function tsPredictionDefaults(game){
-  if (!game) return {awayScore:3,homeScore:2,rbi:"",win:"",loss:"",mvp:"",bg:"default"};
+  if (!game) return {awayScore:3,homeScore:2,rbi:"",win:"",loss:"",mvp:"",bg:"default",savedAt:""};
   const awayRoster = tsPredictionRoster(game.away), homeRoster = tsPredictionRoster(game.home);
   const awayBatter = awayRoster.batters[0]?.name || "";
   const awayPitcher = awayRoster.pitchers[0]?.name || "";
   const homePitcher = homeRoster.pitchers[0]?.name || "";
-  return {awayScore:3,homeScore:2,rbi:awayBatter,win:awayPitcher,loss:homePitcher,mvp:awayPitcher,bg:"default"};
+  return {awayScore:3,homeScore:2,rbi:awayBatter,win:awayPitcher,loss:homePitcher,mvp:awayPitcher,bg:"default",savedAt:""};
 }
 function tsCurrentPrediction(){
   const key = tsPredictionKey(tsSelectedGame);
@@ -3138,6 +3129,11 @@ function tsCurrentPrediction(){
 }
 function tsSavePredictions(){
   localStorage.setItem(TS_PREDICTION_KEY, JSON.stringify(tsPredictionState));
+}
+function tsCurrentSeries(){
+  const series=tsPredictionState.series||(tsPredictionState.series={brothersWins:4,dragonsWins:2,savedAt:""});
+  if(!TS_SERIES_SCORES.some(([b,w])=>b===Number(series.brothersWins)&&w===Number(series.dragonsWins))){series.brothersWins=4;series.dragonsWins=2;}
+  return series;
 }
 
 function tsSetPhoto(p){
@@ -3167,21 +3163,17 @@ function tsResetPredictionOutput(){
 function tsResetSeriesOutput(){
   if (tsSeriesURL) URL.revokeObjectURL(tsSeriesURL);
   tsSeriesURL = "";
-  document.getElementById("ts-series-output").innerHTML = `<figure><div class="output-placeholder output-data away"><span>SERIES</span><b>系列賽預言</b><i></i><i></i><i></i><i></i></div><figcaption>結束場次與每戰勝方</figcaption></figure>`;
+  document.getElementById("ts-series-output").innerHTML = `<figure><div class="output-placeholder output-data away"><span>SERIES</span><b>系列賽預言</b><i></i><i></i><i></i><i></i></div><figcaption>兩隊最終勝場預測</figcaption></figure>`;
   document.getElementById("ts-series-status").textContent = "";
 }
 async function tsLoadStoredPhoto(){
   tsSetPhoto(null);
-  let p = await PhotoDB.run("readonly", s => s.get(tsPhotoKey(tsSelectedGame))).catch(() => null);
-  if (!p){
-    p = await PhotoDB.run("readonly", s => s.get("taiwan-series-photo")).catch(() => null);
-    if (p) PhotoDB.run("readwrite", s => s.put(p, tsPhotoKey(tsSelectedGame))).catch(() => {});
-  }
+  const p = await PhotoDB.run("readonly", s => s.get(tsPhotoKey(tsSelectedGame))).catch(() => null);
   if (p && p.blob) tsSetPhoto(p);
 }
 
 function tsPlayers(game){
-  if (!game) return [];
+  if (!game?.dataReady||!game.teams) return [];
   return [game.away, game.home].flatMap(team => {
     const t = game.teams[team];
     return [
@@ -3205,22 +3197,24 @@ function tsPredictionRoster(team){
 }
 function tsDefaultPlayer(game){
   const players = tsPlayers(game);
-  return (players.find(p => p.data.name === game.mvp.name) || players[0] || {}).id || "";
+  return (players.find(p => p.data.name === game.mvp?.name) || players[0] || {}).id || "";
 }
 
 function tsGameButtons(kind){
   const available = new Map(TAIWAN_SERIES_GAMES.map(g => [g.g, g]));
   return Array.from({length:7}, (_, i) => {
     const n = i + 1, g = available.get(n), selected = g === tsSelectedGame;
-    const status = n >= 5 ? "若有比賽" : "尚未開放";
-    if (!g) return `<button class="series-game" disabled><b>G${n}</b><span>${status}</span><small>${status}</small></button>`;
-    if (!g.dataReady){
-      const dateTime = `${g.date.slice(5).replace("-","/")} · ${g.time}`;
+    const optional=n>=5,phase=g?tsGamePhase(g):"open",dateTime=g?`${g.date.slice(5).replace("-","/")} · ${g.time}`:"";
+    if (!g) return `<button class="series-game" disabled><b>G${n}</b><span>尚未排定</span><small>${optional?"若有比賽":"尚未排定"}</small></button>`;
+    if(kind==="prediction"){
+      const status=phase==="answer"?"可以對答案":phase==="locked"?"已鎖定 · 等待賽果":optional?"若有比賽 · 可預測":"預測開放中";
+      return `<button class="series-game${selected?" preview":""}" data-ts-pred-game="${n}" aria-pressed="${selected}"><b>G${n}</b><span>${dateTime}</span><small>${status}</small></button>`;
+    }
+    if(!g.dataReady){
+      const status=phase==="locked"?"等待賽果":optional?"若有比賽":"尚未開賽";
       return `<button class="series-game" disabled><b>G${n}</b><span>${dateTime}</span><small>${status}</small></button>`;
     }
-    const dataAttr = kind === "prediction" ? "data-ts-pred-game" : "data-ts-review-game";
-    const sub = kind === "prediction" ? `${g.date.slice(5).replace("-","/")} · ${g.time}` : `${g.awayScore} : ${g.homeScore} · ${g.venue}`;
-    return `<button class="series-game${selected ? " preview" : ""}" ${dataAttr}="${n}" aria-pressed="${selected}"><b>G${n}</b><span>${sub}</span><small>${g.testSourceGame ? `例行賽 ${g.testSourceGame} 場測試` : `${g.year} 已完賽`}</small></button>`;
+    return `<button class="series-game${selected?" preview":""}" data-ts-review-game="${n}" aria-pressed="${selected}"><b>G${n}</b><span>${g.awayScore} : ${g.homeScore} · ${g.venue}</span><small>${g.year} 已完賽</small></button>`;
   }).join("");
 }
 function tsOptionList(values, selected){
@@ -3267,16 +3261,8 @@ function tsRenderControls(){
   document.getElementById("ts-prediction-games").innerHTML = tsGameButtons("prediction");
   document.getElementById("ts-review-games").innerHTML = tsGameButtons("review");
   if (!tsSelectedGame) return;
+  const phase=tsGamePhase(tsSelectedGame),prediction=tsCurrentPrediction(),hasPrediction=!!prediction.savedAt;
   document.getElementById("prediction-builder-title").textContent = `你的 G${tsSelectedGame.g} 預測`;
-  document.getElementById("ts-theme-options").innerHTML = [tsSelectedGame.away, tsSelectedGame.home].map((team, i) =>
-    `<button data-ts-team="${team}" aria-pressed="${team === tsThemeTeam}">${teamDisplayName(team)}版</button>`
-  ).join("");
-  const players = tsPlayers(tsSelectedGame);
-  if (!players.some(p => p.id === tsSelectedPlayer)) tsSelectedPlayer = tsDefaultPlayer(tsSelectedGame);
-  document.getElementById("ts-player-select").innerHTML = players.map(p =>
-    `<option value="${p.id}"${p.id === tsSelectedPlayer ? " selected" : ""}>${teamDisplayName(p.team)}｜${p.data.name}（${p.role === "pitcher" ? "投手" : p.data.pos}）</option>`
-  ).join("");
-  const prediction = tsCurrentPrediction();
   tsPredictionBg = prediction.bg || "default";
   document.getElementById("ts-pred-away-name").textContent = teamDisplayName(tsSelectedGame.away);
   document.getElementById("ts-pred-home-name").textContent = teamDisplayName(tsSelectedGame.home);
@@ -3284,16 +3270,35 @@ function tsRenderControls(){
   document.getElementById("ts-pred-home-score").value = prediction.homeScore;
   tsRenderPredictionChoices();
   document.querySelectorAll("[data-ts-bg]").forEach(b => b.setAttribute("aria-pressed",String(b.dataset.tsBg === tsPredictionBg)));
+  const phaseTitle=document.getElementById("ts-prediction-window-title"),phaseCopy=document.getElementById("ts-prediction-window-copy"),phaseIntro=document.getElementById("ts-prediction-phase-copy"),predButton=document.getElementById("ts-pred-generate");
+  if(phase==="open"){
+    phaseTitle.textContent="預測開放中";phaseCopy.textContent=`G${tsSelectedGame.g} 將於 ${tsGameTime(tsSelectedGame)} 開賽時鎖定。`;phaseIntro.textContent="開賽前可以更新預測；開賽後鎖定，賽果更新後再回來對答案。";predButton.textContent="匿名送出並產生 1.賽前預言圖";predButton.disabled=false;
+  }else if(phase==="locked"){
+    phaseTitle.textContent="本場預測已鎖定";phaseCopy.textContent=hasPrediction?"你的賽前預測已保存在這台裝置，等待賽果更新後即可對答案。":"這台裝置沒有留下本場賽前預測。";phaseIntro.textContent="比賽已開打，現在不能新增或修改預測；賽果更新後會進入對答案模式。";predButton.textContent=hasPrediction?"重新產生已鎖定的預言圖":"本場預測已鎖定";predButton.disabled=!hasPrediction;
+  }else{
+    phaseTitle.textContent="對答案模式";phaseCopy.textContent=hasPrediction?"已找到這台裝置保存的賽前預測，可以產生對答案圖。":"這台裝置沒有找到本場的賽前預測。";phaseIntro.textContent="賽果已更新；使用同一台裝置且瀏覽器資料仍保留，就能查看預測與實際結果。";predButton.textContent=hasPrediction?"產生 1.賽前預言對答案圖":"沒有可對照的賽前預測";predButton.disabled=!hasPrediction;
+  }
+  const predictionLocked=phase!=="open";
+  ["ts-fan-name","ts-pred-away-score","ts-pred-home-score","ts-pred-rbi","ts-pred-win","ts-pred-loss","ts-pred-mvp"].forEach(id=>document.getElementById(id).disabled=predictionLocked);
+  document.querySelectorAll("#ts-prediction-view [data-ts-bg],#ts-prediction-view [data-ts-upload]").forEach(button=>button.disabled=predictionLocked);
+  document.getElementById("ts-pred-turnstile").hidden=predictionLocked;
 
-  const series = tsPredictionState.series || (tsPredictionState.series = {finish:6,winners:{}});
-  if (![4,5,6,7].includes(Number(series.finish))) series.finish = 6;
-  series.winners = series.winners || {};
-  for (let n=1;n<=7;n++) if (![tsSelectedGame.away,tsSelectedGame.home].includes(series.winners[n])) series.winners[n] = n % 2 ? tsSelectedGame.away : tsSelectedGame.home;
-  document.getElementById("ts-finish-options").innerHTML = [4,5,6,7].map(n => `<button data-ts-finish="${n}" aria-pressed="${series.finish === n}">G${n} 結束</button>`).join("");
-  document.getElementById("ts-series-picks").innerHTML = Array.from({length:7},(_,i) => {
-    const n=i+1, winner=series.winners[n];
-    return `<div class="series-pick"><b>G${n}</b><div class="series-winner-options"><button data-ts-series-game="${n}" data-ts-series-winner="${tsSelectedGame.away}" aria-pressed="${winner === tsSelectedGame.away}">${TEAMS[tsSelectedGame.away].abbr}</button><button data-ts-series-game="${n}" data-ts-series-winner="${tsSelectedGame.home}" aria-pressed="${winner === tsSelectedGame.home}">${TEAMS[tsSelectedGame.home].abbr}</button></div></div>`;
-  }).join("");
+  const series=tsCurrentSeries(),seriesPhase=tsGamePhase(TAIWAN_SERIES_GAMES[0]);
+  document.getElementById("ts-series-score-options").innerHTML=TS_SERIES_SCORES.map(([b,w])=>`<button class="series-score-option" data-ts-series-score="${b}-${w}" aria-pressed="${series.brothersWins===b&&series.dragonsWins===w}"${seriesPhase!=="open"?" disabled":""}><span>中信兄弟</span><b>${b} : ${w}</b><span>味全龍</span></button>`).join("");
+  const seriesButton=document.getElementById("ts-series-generate"),seriesStored=!!series.savedAt;
+  document.getElementById("ts-series-name").disabled=seriesPhase!=="open";
+  document.getElementById("ts-series-turnstile").hidden=seriesPhase!=="open";
+  document.querySelector(".series-prediction .prediction-lock").textContent=seriesPhase==="open"?`系列賽預測會在 ${tsGameTime(TAIWAN_SERIES_GAMES[0])} 鎖定`:seriesStored?"系列賽預測已鎖定，這台裝置仍保留你的選擇":"系列賽預測已鎖定";
+  seriesButton.textContent=seriesPhase==="open"?"匿名送出並產生系列賽預言圖":seriesStored?"重新產生已鎖定的系列賽預言圖":"系列賽預測已鎖定";
+  seriesButton.disabled=seriesPhase!=="open"&&!seriesStored;
+
+  const reviewReady=!!tsSelectedGame.dataReady,reviewBuilder=document.getElementById("ts-review-builder");
+  document.getElementById("ts-review-empty").hidden=reviewReady;reviewBuilder.hidden=!reviewReady;
+  if(reviewReady){
+    document.getElementById("ts-theme-options").innerHTML=[tsSelectedGame.away,tsSelectedGame.home].map(team=>`<button data-ts-team="${team}" aria-pressed="${team===tsThemeTeam}">${teamDisplayName(team)}版</button>`).join("");
+    const players=tsPlayers(tsSelectedGame);if(!players.some(p=>p.id===tsSelectedPlayer))tsSelectedPlayer=tsDefaultPlayer(tsSelectedGame);
+    document.getElementById("ts-player-select").innerHTML=players.map(p=>`<option value="${p.id}"${p.id===tsSelectedPlayer?" selected":""}>${teamDisplayName(p.team)}｜${p.data.name}（${p.role==="pitcher"?"投手":p.data.pos}）</option>`).join("");
+  }
 }
 
 function tsDate(iso){
@@ -3398,9 +3403,30 @@ async function tsSubmitPrediction(prediction){
   tsLoadPoll();
   return {submitted:true,message:"已匿名納入球迷預測；同一裝置再次送出會更新這一票。",data};
 }
+async function tsLoadSeriesPoll(){
+  const chart=document.getElementById("ts-series-poll-chart"),meta=document.getElementById("ts-series-poll-meta"),year=TAIWAN_SERIES_GAMES[0]?.year;
+  if(!chart||!year)return;
+  if(isLocalPreview){chart.innerHTML='<div class="community-empty">本機預覽不連接測試站資料庫；部署後才會顯示系列賽比分預測。</div>';meta.textContent="";return;}
+  chart.innerHTML='<div class="community-empty">正在讀取匿名預測…</div>';meta.textContent="";
+  try{
+    const response=await fetch(`/api/series-predictions/summary?year=${encodeURIComponent(year)}`,{headers:{accept:"application/json"}});if(!response.ok)throw new Error("poll_unavailable");
+    const data=await response.json();
+    if(!data.visible){chart.innerHTML=`<div class="community-empty">目前累積 ${Number(data.total)||0} 份預測，滿 ${Number(data.minimum)||5} 份後公開比例。</div>`;return;}
+    chart.innerHTML=(data.scores||[]).map(score=>{const percent=data.total?Math.round(Number(score.votes)/data.total*100):0;return `<div class="poll-row"><b>中信 ${score.brothersWins} : ${score.dragonsWins} 味全</b><span class="poll-track"><i style="--poll:${percent}%;--team-color:${score.brothersWins>score.dragonsWins?TEAMS["中信兄弟"].c:TEAMS["味全龍"].c}"></i></span><strong>${percent}%</strong></div>`;}).join("");
+    meta.textContent=`共 ${data.total} 份有效預測 · 同一裝置只計一票`;
+  }catch(e){chart.innerHTML='<div class="community-empty">測試站資料庫連線後，這裡會顯示系列賽比分預測。</div>';}
+}
+async function tsSubmitSeriesPrediction(series){
+  const config=await getApiConfig();
+  if(!config.writesEnabled)return {submitted:false,message:"目前是本機預覽，圖卡未納入公開投票。"};
+  if(!turnstileState.series.token)return {submitted:false,message:"請先完成上方的匿名驗證。",requiresVerification:true};
+  const data=await apiPost("/api/series-predictions",{year:TAIWAN_SERIES_GAMES[0].year,anonymousId:getAnonymousId(),turnstileToken:turnstileState.series.token,prediction:{brothersWins:series.brothersWins,dragonsWins:series.dragonsWins}});
+  resetTurnstile("series");track("series_prediction_submit",{score:`${series.brothersWins}-${series.dragonsWins}`});tsLoadSeriesPoll();
+  return {submitted:true,message:"已匿名納入系列賽比分預測；同一裝置再次送出會更新這一票。",data};
+}
 async function tsDrawPrediction(game, prediction, stamp = tsDownloadStamp()){
   await loadFontsFor(`${game.away}${game.home}${prediction.rbi}${prediction.win}${prediction.loss}${prediction.mvp}${tsFanName()}`);
-  const winner = prediction.awayScore >= prediction.homeScore ? game.away : game.home;
+  const winner = prediction.awayScore > prediction.homeScore ? game.away : game.home;
   const {c,ctx,accent}=tsBase(game,winner),L=70,R=SW-66;
   if (prediction.bg === "photo" && tsPhoto) await tsDrawPhotoStage(ctx,winner,1040);
   else {
@@ -3411,7 +3437,7 @@ async function tsDrawPrediction(game, prediction, stamp = tsDownloadStamp()){
     const fade=ctx.createLinearGradient(0,600,0,1080);fade.addColorStop(0,"rgba(8,9,13,0)");fade.addColorStop(1,"#0B0D12");ctx.fillStyle=fade;ctx.fillRect(0,600,SW,480);
   }
   tsHeader(ctx,game,`1.賽前預言 · G${game.g}`,accent);
-  ctx.fillStyle=accent.f;ctx.font=`800 23px ${F_NUM}`;spacing(ctx,4);ctx.fillText(`${tsDate(game.date)} · ${game.venue}`,L,715);spacing(ctx,0);
+  ctx.fillStyle=accent.f;ctx.font=`800 23px ${F_NUM}`;spacing(ctx,4);ctx.fillText(`${tsDate(game.date)} · ${game.time} 開賽`,L,715);spacing(ctx,0);
   tsTeamMark(ctx,game.away,L+36,810,36);tsTeamMark(ctx,game.home,R-36,810,36);
   ctx.fillStyle="#F7F3E8";ctx.font=`700 31px ${F_TC}`;ctx.fillText(teamDisplayName(game.away),L+86,821);ctx.textAlign="right";ctx.fillText(teamDisplayName(game.home),R-86,821);ctx.textAlign="center";
   ctx.font=`800 118px ${F_NUM}`;ctx.fillText(`${prediction.awayScore} : ${prediction.homeScore}`,SW/2,962);
@@ -3420,34 +3446,36 @@ async function tsDrawPrediction(game, prediction, stamp = tsDownloadStamp()){
   ctx.fillStyle=accent.f;ctx.font=`800 20px ${F_NUM}`;spacing(ctx,3);ctx.fillText("MY PICKS",L,1120);spacing(ctx,0);
   const picks=[["勝利打點",prediction.rbi],["勝投",prediction.win],["敗投",prediction.loss],["單場 MVP",prediction.mvp]];
   picks.forEach((row,i)=>{const y=1170+i*78;ctx.fillStyle=i%2?"rgba(255,255,255,.035)":"rgba(255,255,255,.065)";ctx.fillRect(L-12,y-40,R-L+24,62);ctx.fillStyle="rgba(247,243,232,.48)";ctx.font=`600 20px ${F_TC}`;ctx.fillText(row[0],L+8,y);ctx.textAlign="right";ctx.fillStyle="#F7F3E8";ctx.font=`700 26px ${F_TC}`;ctx.fillText(row[1],R-8,y);ctx.textAlign="left";});
-  const answers=[prediction.awayScore===game.awayScore&&prediction.homeScore===game.homeScore,prediction.rbi===game.winningRbi,prediction.win===game.decisions.win,prediction.loss===game.decisions.loss,prediction.mvp===game.mvp.name];
-  const hits=answers.filter(Boolean).length;
   ctx.fillStyle="rgba(255,255,255,.14)";ctx.fillRect(L,1518,R-L,1);
   ctx.fillStyle=accent.f;ctx.font=`800 19px ${F_NUM}`;spacing(ctx,3);ctx.fillText("AFTER THE GAME",L,1570);spacing(ctx,0);
-  ctx.fillStyle="#F7F3E8";ctx.font=`700 34px ${F_TC}`;ctx.fillText(`實際賽果 ${game.awayScore} : ${game.homeScore}`,L,1623);
-  ctx.textAlign="right";ctx.fillStyle=accent.f;ctx.font=`800 48px ${F_NUM}`;ctx.fillText(`${hits} / 5`,R,1625);ctx.textAlign="left";
-  ctx.fillStyle="rgba(247,243,232,.62)";ctx.font=`500 20px ${F_TC}`;ctx.fillText("G1 測試資料已完賽，因此直接顯示對答案結果。",L,1670);
-  tsCardFooter(ctx,game,stamp);return c;
+  if(game.dataReady){
+    const answers=[prediction.awayScore===game.awayScore&&prediction.homeScore===game.homeScore,prediction.rbi===game.winningRbi,prediction.win===game.decisions.win,prediction.loss===game.decisions.loss,prediction.mvp===game.mvp.name],hits=answers.filter(Boolean).length;
+    ctx.fillStyle="#F7F3E8";ctx.font=`700 34px ${F_TC}`;ctx.fillText(`實際賽果 ${game.awayScore} : ${game.homeScore}`,L,1623);
+    ctx.textAlign="right";ctx.fillStyle=accent.f;ctx.font=`800 48px ${F_NUM}`;ctx.fillText(`${hits} / 5`,R,1625);ctx.textAlign="left";
+    ctx.fillStyle="rgba(247,243,232,.62)";ctx.font=`500 20px ${F_TC}`;ctx.fillText("比分與四項球員預測，共五項對答案。",L,1670);
+  }else{
+    ctx.fillStyle="#F7F3E8";ctx.font=`700 34px ${F_TC}`;ctx.fillText(`G${game.g} 開賽時鎖定`,L,1623);
+    ctx.fillStyle="rgba(247,243,232,.62)";ctx.font=`500 20px ${F_TC}`;ctx.fillText("賽果更新後，用同一台裝置回來對答案。",L,1670);
+  }
+  ctx.fillStyle="rgba(255,255,255,.14)";ctx.fillRect(L,1742,R-L,1);ctx.fillStyle="rgba(247,243,232,.58)";ctx.font=`500 18px ${F_TC}`;ctx.fillText(`下載時間 ${stamp}`,L,1782);
+  const fan=tsFanName();if(fan){ctx.textAlign="right";ctx.font=`700 20px ${F_TC}`;ctx.fillText(`球迷 ${fan}`,R,1782);ctx.textAlign="left";}
+  ctx.textAlign="center";ctx.fillStyle="rgba(247,243,232,.75)";ctx.font=`700 24px ${F_NUM}`;ctx.fillText("mybaseballgame.com",SW/2,1850);ctx.fillStyle="rgba(247,243,232,.42)";ctx.font=`500 16px ${F_TC}`;ctx.fillText("2026 台灣大賽預測 · 非官方球迷網站",SW/2,1884);return c;
 }
 async function tsDrawSeriesPrediction(game, series, stamp = tsDownloadStamp()){
-  await loadFontsFor(`${game.away}${game.home}${tsFanName()}`);
-  const {c,ctx,accent}=tsBase(game,game.away),L=70,R=SW-66;
-  if (tsPredictionBg === "photo" && tsPhoto) await tsDrawPhotoStage(ctx,game.away,720);
-  else {ctx.fillStyle=TEAMS[game.away].c;ctx.fillRect(0,0,SW/2,720);ctx.fillStyle=TEAMS[game.home].c;ctx.fillRect(SW/2,0,SW/2,720);}
+  const brothers="中信兄弟",dragons="味全龍",winner=series.brothersWins>series.dragonsWins?brothers:dragons;
+  await loadFontsFor(`${brothers}${dragons}${tsSeriesName()}`);
+  const {c,ctx,accent}=tsBase(game,winner),L=70,R=SW-66;
+  ctx.fillStyle=TEAMS[brothers].c;ctx.fillRect(0,0,SW/2,720);ctx.fillStyle=TEAMS[dragons].c;ctx.fillRect(SW/2,0,SW/2,720);
   const fade=ctx.createLinearGradient(0,260,0,800);fade.addColorStop(0,"rgba(8,9,13,0)");fade.addColorStop(1,"#0B0D12");ctx.fillStyle=fade;ctx.fillRect(0,260,SW,540);
   tsHeader(ctx,game,"SERIES PREDICTION",accent);
-  ctx.textAlign="center";ctx.fillStyle="#F7F3E8";ctx.font=`700 36px ${F_TC}`;ctx.fillText(`${teamDisplayName(game.away)}　VS　${teamDisplayName(game.home)}`,SW/2,500);
-  ctx.fillStyle=accent.f;ctx.font=`800 92px ${F_NUM}`;ctx.fillText(`G${series.finish}`,SW/2,625);ctx.fillStyle="rgba(247,243,232,.66)";ctx.font=`600 24px ${F_TC}`;ctx.fillText("我猜系列賽會在這一戰結束",SW/2,675);ctx.textAlign="left";
-  ctx.fillStyle=accent.f;ctx.font=`800 20px ${F_NUM}`;spacing(ctx,3);ctx.fillText("MY GAME-BY-GAME PICKS",L,835);spacing(ctx,0);
-  for(let n=1;n<=7;n++){
-    const y=900+(n-1)*105,winner=series.winners[n],active=n<=series.finish;
-    ctx.fillStyle=active?(n%2?"rgba(255,255,255,.07)":"rgba(255,255,255,.035)"):"rgba(255,255,255,.015)";ctx.fillRect(L-12,y-52,R-L+24,82);
-    ctx.fillStyle=active?accent.f:"rgba(247,243,232,.25)";ctx.font=`800 25px ${F_NUM}`;ctx.fillText(`G${n}`,L+8,y);
-    if(active){tsTeamMark(ctx,winner,R-185,y-22,24);ctx.textAlign="right";ctx.fillStyle="#F7F3E8";ctx.font=`700 25px ${F_TC}`;ctx.fillText(`${teamDisplayName(winner)}拿下`,R-8,y);ctx.textAlign="left";}
-    else{ctx.textAlign="right";ctx.fillStyle="rgba(247,243,232,.32)";ctx.font=`600 21px ${F_TC}`;ctx.fillText("預測不會進行",R-8,y);ctx.textAlign="left";}
-  }
+  tsTeamMark(ctx,brothers,L+52,510,42);tsTeamMark(ctx,dragons,R-52,510,42);
+  ctx.fillStyle="#F7F3E8";ctx.font=`700 34px ${F_TC}`;ctx.textAlign="left";ctx.fillText(teamDisplayName(brothers),L+112,524);ctx.textAlign="right";ctx.fillText(teamDisplayName(dragons),R-112,524);
+  ctx.textAlign="center";ctx.fillStyle=accent.f;ctx.font=`800 126px ${F_NUM}`;ctx.fillText(`${series.brothersWins} : ${series.dragonsWins}`,SW/2,690);ctx.fillStyle="rgba(247,243,232,.68)";ctx.font=`600 24px ${F_TC}`;ctx.fillText(`我猜 ${teamDisplayName(winner)}拿下 2026 台灣大賽`,SW/2,748);
+  ctx.textAlign="left";ctx.fillStyle=accent.f;ctx.font=`800 20px ${F_NUM}`;spacing(ctx,3);ctx.fillText("MY SERIES PICK",L,880);spacing(ctx,0);
+  const cardW=(R-L-20)/2;[[brothers,series.brothersWins],[dragons,series.dragonsWins]].forEach(([team,wins],i)=>{const x=L+i*(cardW+20);rr(ctx,x,930,cardW,330,18);ctx.fillStyle=team===winner?TEAMS[team].c:"rgba(255,255,255,.045)";ctx.fill();tsTeamMark(ctx,team,x+58,995,34);ctx.fillStyle="#F7F3E8";ctx.font=`700 28px ${F_TC}`;ctx.fillText(teamDisplayName(team),x+108,1005);ctx.textAlign="center";ctx.fillStyle=team===winner?"#F7F3E8":"rgba(247,243,232,.72)";ctx.font=`800 112px ${F_NUM}`;ctx.fillText(String(wins),x+cardW/2,1155);ctx.font=`700 24px ${F_TC}`;ctx.fillText("勝",x+cardW/2,1205);ctx.textAlign="left";});
+  ctx.fillStyle="rgba(255,255,255,.14)";ctx.fillRect(L,1345,R-L,1);ctx.fillStyle="#F7F3E8";ctx.font=`700 34px ${F_TC}`;ctx.fillText(`系列賽打滿 ${series.brothersWins+series.dragonsWins} 場`,L,1415);ctx.fillStyle="rgba(247,243,232,.62)";ctx.font=`500 22px ${F_TC}`;ctx.fillText("G1 開賽後鎖定這張預測",L,1465);
   ctx.fillStyle="rgba(255,255,255,.14)";ctx.fillRect(L,1680,R-L,1);ctx.fillStyle="rgba(247,243,232,.56)";ctx.font=`500 19px ${F_TC}`;ctx.fillText("系列賽預測將在 G1 開賽時鎖定",L,1726);
-  const fan=tsFanName();ctx.fillStyle="rgba(247,243,232,.58)";ctx.font=`500 18px ${F_TC}`;ctx.fillText(`下載時間 ${stamp}`,L,1780);
+  const fan=tsSeriesName();ctx.fillStyle="rgba(247,243,232,.58)";ctx.font=`500 18px ${F_TC}`;ctx.fillText(`下載時間 ${stamp}`,L,1780);
   if(fan){ctx.textAlign="right";ctx.font=`700 20px ${F_TC}`;ctx.fillText(`球迷 ${fan}`,R,1780);ctx.textAlign="left";}
   ctx.textAlign="center";ctx.fillStyle="rgba(247,243,232,.75)";ctx.font=`700 24px ${F_NUM}`;ctx.fillText("mybaseballgame.com",SW/2,1850);ctx.fillStyle="rgba(247,243,232,.42)";ctx.font=`500 16px ${F_TC}`;ctx.fillText("2026 台灣大賽預測 · 非官方球迷網站",SW/2,1884);return c;
 }
@@ -3491,7 +3519,7 @@ function tsCardFooter(ctx, game, stamp = tsDownloadStamp()){
   ctx.fillStyle="rgba(247,243,232,.48)";ctx.font=`500 16px ${F_TC}`;ctx.fillText(`下載時間 ${stamp}`,L,1818);
   ctx.textAlign="center"; ctx.fillStyle="rgba(247,243,232,.75)"; ctx.font=`700 24px ${F_NUM}`; ctx.fillText("mybaseballgame.com",SW/2,1850);
   ctx.fillStyle="rgba(247,243,232,.42)"; ctx.font=`500 16px ${F_TC}`;
-  ctx.fillText(game.testSourceGame ? `例行賽第 ${game.testSourceGame} 場測試資料 · 非官方球迷網站` : "球迷自製 · 非 CPBL 官方網站",SW/2,1884);
+  ctx.fillText("球迷自製 · 非 CPBL 官方網站",SW/2,1884);
 }
 
 async function tsDrawScoreboard(game, team, stamp = tsDownloadStamp()){
@@ -3599,7 +3627,7 @@ async function tsDrawPlayer(game, player, stamp = tsDownloadStamp()){
 }
 function tsCanvasBlob(canvas){ return new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej(new Error("encode")), "image/png")); }
 async function tsGenerate(){
-  if (!tsSelectedGame) return;
+  if (!tsSelectedGame?.dataReady) return;
   const status = document.getElementById("ts-status"), btn = document.getElementById("ts-generate");
   btn.disabled = true; status.textContent = "正在整理賽事摘要與球員資料…";
   try{
@@ -3623,42 +3651,60 @@ async function tsGenerate(){
 async function tsGeneratePrediction(){
   if (!tsSelectedGame) return;
   const status=document.getElementById("ts-pred-status"),btn=document.getElementById("ts-pred-generate");
+  const phase=tsGamePhase(tsSelectedGame),existing=tsCurrentPrediction();
+  if(phase!=="open"&&!existing.savedAt){status.textContent="這台裝置沒有可重新產生的賽前預測。";return;}
   if(!tsPredictedTeams()){status.textContent="台灣大賽不會出現和局，請調整預測比分。";return;}
   btn.disabled=true;status.textContent="正在整理你的預測…";
   try{
     const prediction=tsReadPrediction();
-    let submission;
-    try{submission=await tsSubmitPrediction(prediction);}catch(error){resetTurnstile("prediction");submission={submitted:false,message:apiErrorText(error.message)};}
-    if(submission.requiresVerification){status.textContent=submission.message;return;}
+    let submission={submitted:false,message:""};
+    if(phase==="open"){
+      try{submission=await tsSubmitPrediction(prediction);}catch(error){resetTurnstile("prediction");if(error.message==="prediction_closed"){status.textContent=apiErrorText(error.message);tsRenderControls();return;}submission={submitted:false,message:apiErrorText(error.message)};}
+      if(submission.requiresVerification){status.textContent=submission.message;return;}
+      prediction.savedAt=new Date().toISOString();tsSavePredictions();
+    }
     const canvas=await tsDrawPrediction(tsSelectedGame,prediction,tsDownloadStamp()),blob=await tsCanvasBlob(canvas);canvas.width=canvas.height=0;
     if(tsPredictionURL)URL.revokeObjectURL(tsPredictionURL);tsPredictionURL=URL.createObjectURL(blob);
-    document.getElementById("ts-pred-output").innerHTML=`<figure><img src="${tsPredictionURL}" alt="1.賽前預言與對答案預覽"><figcaption>1.賽前預言 · G1 測試資料對答案</figcaption><button class="output-download" id="ts-pred-download">下載 PNG</button></figure>`;
+    const caption=phase==="answer"?`1.賽前預言 · G${tsSelectedGame.g} 對答案`:`1.賽前預言 · G${tsSelectedGame.g}`;
+    document.getElementById("ts-pred-output").innerHTML=`<figure><img src="${tsPredictionURL}" alt="${caption}預覽"><figcaption>${caption}</figcaption><button class="output-download" id="ts-pred-download">下載 PNG</button></figure>`;
     document.getElementById("ts-pred-download").onclick=()=>{const a=document.createElement("a");a.href=tsPredictionURL;a.download=`cpbl-${tsSelectedGame.year}-taiwan-series-g${tsSelectedGame.g}-prediction.png`;a.click();};
-    status.textContent=`1.賽前預言圖已完成。${submission.message}`;
+    status.textContent=phase==="answer"?"對答案圖已完成。":phase==="locked"?"已用這台裝置保存的內容重新產生預言圖。":`1.賽前預言圖已完成。${submission.message}`;
+    tsRenderControls();
   }catch(e){console.error(e);status.textContent="預測圖產生失敗，請重新整理後再試一次。";}
-  finally{btn.disabled=false;}
+  finally{tsRenderControls();}
 }
 async function tsGenerateSeries(){
-  if(!tsSelectedGame)return;
+  const game=TAIWAN_SERIES_GAMES[0];if(!game)return;
   const status=document.getElementById("ts-series-status"),btn=document.getElementById("ts-series-generate");
+  const phase=tsGamePhase(game),series=tsCurrentSeries();
+  if(phase!=="open"&&!series.savedAt){status.textContent="這台裝置沒有可重新產生的系列賽預測。";return;}
   btn.disabled=true;status.textContent="正在整理系列賽預測…";
   try{
-    const series=tsPredictionState.series,canvas=await tsDrawSeriesPrediction(tsSelectedGame,series,tsDownloadStamp()),blob=await tsCanvasBlob(canvas);canvas.width=canvas.height=0;
+    let submission={submitted:false,message:""};
+    if(phase==="open"){
+      try{submission=await tsSubmitSeriesPrediction(series);}catch(error){resetTurnstile("series");if(error.message==="series_prediction_closed"){status.textContent=apiErrorText(error.message);tsRenderControls();return;}submission={submitted:false,message:apiErrorText(error.message)};}
+      if(submission.requiresVerification){status.textContent=submission.message;return;}
+      series.savedAt=new Date().toISOString();tsSavePredictions();
+    }
+    const canvas=await tsDrawSeriesPrediction(game,series,tsDownloadStamp()),blob=await tsCanvasBlob(canvas);canvas.width=canvas.height=0;
     if(tsSeriesURL)URL.revokeObjectURL(tsSeriesURL);tsSeriesURL=URL.createObjectURL(blob);tsSavePredictions();
     document.getElementById("ts-series-output").innerHTML=`<figure><img src="${tsSeriesURL}" alt="系列賽預測圖預覽"><figcaption>系列賽預測</figcaption><button class="output-download" id="ts-series-download">下載 PNG</button></figure>`;
-    document.getElementById("ts-series-download").onclick=()=>{const a=document.createElement("a");a.href=tsSeriesURL;a.download=`cpbl-${tsSelectedGame.year}-taiwan-series-series-prediction.png`;a.click();};
-    status.textContent="系列賽預測圖已完成。";
+    document.getElementById("ts-series-download").onclick=()=>{const a=document.createElement("a");a.href=tsSeriesURL;a.download=`cpbl-${game.year}-taiwan-series-series-prediction.png`;a.click();};
+    status.textContent=phase==="open"?`系列賽預測圖已完成。${submission.message}`:"已用這台裝置保存的內容重新產生系列賽預言圖。";tsRenderControls();
   }catch(e){console.error(e);status.textContent="系列賽預測圖產生失敗。";}
-  finally{btn.disabled=false;}
+  finally{tsRenderControls();}
 }
 
 const tsPhotoInput = document.getElementById("ts-photo-input");
 const tsFanNameInput = document.getElementById("ts-fan-name");
+const tsSeriesNameInput = document.getElementById("ts-series-name");
 try{ tsFanNameInput.value = localStorage.getItem(TS_NAME_KEY) || ""; }catch(e){}
+try{ tsSeriesNameInput.value = localStorage.getItem(TS_SERIES_NAME_KEY) || ""; }catch(e){}
 tsFanNameInput.addEventListener("input", () => {
   try{ localStorage.setItem(TS_NAME_KEY, tsFanName()); }catch(e){}
-  tsResetPredictionOutput();tsResetSeriesOutput();tsResetOutputs();
+  tsResetPredictionOutput();tsResetOutputs();
 });
+tsSeriesNameInput.addEventListener("input",()=>{try{localStorage.setItem(TS_SERIES_NAME_KEY,tsSeriesName());}catch(e){}tsResetSeriesOutput();});
 document.querySelectorAll("[data-ts-upload]").forEach(btn => btn.onclick = () => {
   tsUploadContext = btn.closest("#ts-review-view") ? "review" : "prediction";
   tsPhotoInput.click();
@@ -3690,14 +3736,13 @@ document.getElementById("view-taiwan-series").addEventListener("click", e => {
   if (theme){ tsThemeTeam = theme.dataset.tsTeam; document.querySelectorAll("[data-ts-team]").forEach(b => b.setAttribute("aria-pressed", String(b === theme))); tsResetOutputs(); return; }
   const bg=e.target.closest("[data-ts-bg]");
   if(bg){tsPredictionBg=bg.dataset.tsBg;tsCurrentPrediction().bg=tsPredictionBg;tsSavePredictions();document.querySelectorAll("[data-ts-bg]").forEach(b=>b.setAttribute("aria-pressed",String(b===bg)));tsResetPredictionOutput();tsResetSeriesOutput();return;}
-  const finish=e.target.closest("[data-ts-finish]");
-  if(finish){tsPredictionState.series.finish=Number(finish.dataset.tsFinish);tsSavePredictions();tsRenderControls();tsResetSeriesOutput();return;}
-  const seriesPick=e.target.closest("[data-ts-series-winner]");
-  if(seriesPick){tsPredictionState.series.winners[Number(seriesPick.dataset.tsSeriesGame)]=seriesPick.dataset.tsSeriesWinner;tsSavePredictions();tsRenderControls();tsResetSeriesOutput();return;}
+  const seriesScore=e.target.closest("[data-ts-series-score]");
+  if(seriesScore){const [brothersWins,dragonsWins]=seriesScore.dataset.tsSeriesScore.split("-").map(Number),series=tsCurrentSeries();series.brothersWins=brothersWins;series.dragonsWins=dragonsWins;tsSavePredictions();tsRenderControls();tsResetSeriesOutput();return;}
   const nav = e.target.closest("[data-go]"); if (nav) go(nav.dataset.go);
 });
 tsRenderControls();
 tsLoadStoredPhoto();
+tsLoadSeriesPoll();
 
 const COMMUNITY_FEATURE_ENABLED=false;
 function loadThreadsEmbedScript(){
@@ -3792,7 +3837,7 @@ function render(v){
   if (v === "intro") renderIntro();
   else if (v === "pick"){ buildFilters(); renderList(); }
   else if (v === "result") renderResult();
-  else if (v === "taiwan-series"){ tsLoadPoll(); initTurnstile("prediction"); }
+  else if (v === "taiwan-series"){ tsLoadPoll();tsLoadSeriesPoll();initTurnstile("prediction");initTurnstile("series"); }
   else if (v === "community") initCommunity();
   else if (v === "admin"){document.title="社群管理｜CPBL 進場戰績";loadAdmin();}
   window.scrollTo({top:0});

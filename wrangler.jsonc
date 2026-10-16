@@ -19,7 +19,6 @@
   ],
   "vars": {
     "ENVIRONMENT": "staging",
-    "ALLOW_DEMO_SUBMISSIONS": "true",
     "POLL_MIN_SAMPLE": "5"
   },
   "env": {
@@ -35,7 +34,6 @@
       ],
       "vars": {
         "ENVIRONMENT": "production",
-        "ALLOW_DEMO_SUBMISSIONS": "false",
         "POLL_MIN_SAMPLE": "5"
       }
     }
