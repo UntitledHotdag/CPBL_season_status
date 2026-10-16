@@ -60,7 +60,9 @@ CPBL_season_status/
 ├── src/
 │   ├── app.html           ← 網站原始碼（唯一要手改的前端檔案；含 /*__GAMES_JSON__*/、/*__GA_ID__*/ 佔位符）
 │   ├── games.json         ← 360 場例行賽精簡資料（由 parse_cpbl_pdf.py 產生）
-│   └── postseason.json    ← 已完賽季後挑戰賽資料（比分與單場獎項）
+│   ├── postseason.json    ← 已完賽季後挑戰賽資料（比分與單場獎項）
+│   ├── taiwan-series.json ← 台灣大賽賽程與已完賽圖卡資料
+│   └── taiwan-series-rosters.json ← 2026 台灣大賽兩隊 32 人出賽名單（賽前預測候選人）
 ├── tools/
 │   ├── build.py           ← src → docs/index.html（嵌入資料與 GA ID）
 │   ├── parse_cpbl_pdf.py  ← 官方月份 PDF → cpbl_2026.csv、standings、src/games.json

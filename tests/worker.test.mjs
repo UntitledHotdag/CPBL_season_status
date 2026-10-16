@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import taiwanSeriesGames from "../src/taiwan-series.json" with { type: "json" };
+import taiwanSeriesRosters from "../src/taiwan-series-rosters.json" with { type: "json" };
 import { normalizeThreadsUrl, sanitizeThreadsEmbed, validatePrediction, verifyAdminAccess } from "../worker/index.js";
 
 const game = taiwanSeriesGames[0];
@@ -21,6 +22,30 @@ test("2026 Taiwan Series schedule contains G1-G7 in order", () => {
   assert.equal(game.testSourceGame, 341);
   assert.equal(game.dataReady, true);
   assert.equal(taiwanSeriesGames.slice(1).every((item) => item.dataReady === false), true);
+});
+
+test("Taiwan Series rosters contain 32 unique players per team", () => {
+  assert.equal(taiwanSeriesRosters.year, 2026);
+  for (const roster of Object.values(taiwanSeriesRosters.teams)) {
+    assert.equal(roster.pitchers.length, 15);
+    assert.equal(roster.catchers.length, 3);
+    assert.equal(roster.infielders.length, 8);
+    assert.equal(roster.outfielders.length, 6);
+    const names = [...roster.pitchers, ...roster.catchers, ...roster.infielders, ...roster.outfielders];
+    assert.equal(new Set(names).size, 32);
+  }
+});
+
+test("prediction validation accepts registered players outside the G1 test box score", () => {
+  const result = validatePrediction(game, {
+    awayScore: 5,
+    homeScore: 2,
+    rbi: "陳俊秀",
+    win: "勝騎士",
+    loss: "鋼龍",
+    mvp: "菲力士",
+  });
+  assert.equal(result.value.winnerTeam, "中信兄弟");
 });
 
 test("prediction candidates must come from the correct teams", () => {

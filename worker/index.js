@@ -1,4 +1,5 @@
 import taiwanSeriesGames from "../src/taiwan-series.json" with { type: "json" };
+import taiwanSeriesRosters from "../src/taiwan-series-rosters.json" with { type: "json" };
 
 const JSON_HEADERS = {
   "content-type": "application/json; charset=utf-8",
@@ -147,13 +148,14 @@ export function validatePrediction(game, input) {
 
   const winnerTeam = awayScore > homeScore ? game.away : game.home;
   const loserTeam = winnerTeam === game.away ? game.home : game.away;
-  const winner = game.teams[winnerTeam];
-  const loser = game.teams[loserTeam];
+  const rosterTeams = taiwanSeriesRosters.year === game.year ? taiwanSeriesRosters.teams : {};
+  const winner = rosterTeams[winnerTeam];
+  const loser = rosterTeams[loserTeam];
   if (!winner || !loser) return { error: "invalid_game_roster" };
 
-  const winnerBatters = new Set(winner.batters.map((player) => player.name));
-  const winnerPitchers = new Set(winner.pitchers.map((player) => player.name));
-  const loserPitchers = new Set(loser.pitchers.map((player) => player.name));
+  const winnerBatters = new Set([...winner.catchers, ...winner.infielders, ...winner.outfielders]);
+  const winnerPitchers = new Set(winner.pitchers);
+  const loserPitchers = new Set(loser.pitchers);
   const winnerPlayers = new Set([...winnerBatters, ...winnerPitchers]);
   const rbi = String(input.rbi || "");
   const winningPitcher = String(input.win || "");

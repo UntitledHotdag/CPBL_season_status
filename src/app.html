@@ -1179,6 +1179,7 @@
                 <label><span id="ts-pred-loss-label">敗投</span><select id="ts-pred-loss"></select></label>
                 <label><span id="ts-pred-mvp-label">單場 MVP</span><select id="ts-pred-mvp"></select></label>
               </div>
+              <span class="prediction-help">候選選手已更新為 2026 台灣大賽 32 人名單；勝利打點、勝投與 MVP 會依預測勝方切換。</span>
               <div class="prediction-group">
                 <span class="prediction-label">圖卡底圖</span>
                 <div class="bg-options" id="ts-bg-options">
@@ -1511,6 +1512,7 @@
 const GAMES = /*__GAMES_JSON__*/;
 const POSTSEASON_GAMES = /*__POSTSEASON_JSON__*/.map(g => ({...g, ps:true}));
 const TAIWAN_SERIES_GAMES = /*__TAIWAN_SERIES_JSON__*/;
+const TAIWAN_SERIES_ROSTERS = /*__TAIWAN_SERIES_ROSTERS_JSON__*/;
 const ALL_GAMES = [...GAMES, ...POSTSEASON_GAMES];
 const BY_N = new Map(GAMES.map(g => [g.n, g]));
 const gameKey = g => g.ps ? `E${g.g}` : String(g.n);
@@ -3127,9 +3129,10 @@ async function apiPost(path,payload){
 
 function tsPredictionDefaults(game){
   if (!game) return {awayScore:3,homeScore:2,rbi:"",win:"",loss:"",mvp:"",bg:"default"};
-  const awayBatter = game.teams[game.away].batters[0]?.name || "";
-  const awayPitcher = game.teams[game.away].pitchers[0]?.name || "";
-  const homePitcher = game.teams[game.home].pitchers[0]?.name || "";
+  const awayRoster = tsPredictionRoster(game.away), homeRoster = tsPredictionRoster(game.home);
+  const awayBatter = awayRoster.batters[0]?.name || "";
+  const awayPitcher = awayRoster.pitchers[0]?.name || "";
+  const homePitcher = homeRoster.pitchers[0]?.name || "";
   return {awayScore:3,homeScore:2,rbi:awayBatter,win:awayPitcher,loss:homePitcher,mvp:awayPitcher,bg:"default"};
 }
 function tsCurrentPrediction(){
@@ -3191,6 +3194,19 @@ function tsPlayers(game){
     ];
   });
 }
+function tsPredictionRoster(team){
+  const roster = TAIWAN_SERIES_ROSTERS.teams[team];
+  if (!roster) return {batters:[],pitchers:[]};
+  const withPosition = (names, pos) => names.map(name => ({name,pos}));
+  return {
+    pitchers:withPosition(roster.pitchers,"投手"),
+    batters:[
+      ...withPosition(roster.catchers,"捕手"),
+      ...withPosition(roster.infielders,"內野手"),
+      ...withPosition(roster.outfielders,"外野手"),
+    ],
+  };
+}
 function tsDefaultPlayer(game){
   const players = tsPlayers(game);
   return (players.find(p => p.data.name === game.mvp.name) || players[0] || {}).id || "";
@@ -3240,7 +3256,7 @@ function tsRenderPredictionChoices(){
     return;
   }
   if (status.textContent.includes("不會出現和局")) status.textContent = "";
-  const winnerData=tsSelectedGame.teams[sides.winner], loserData=tsSelectedGame.teams[sides.loser];
+  const winnerData=tsPredictionRoster(sides.winner), loserData=tsPredictionRoster(sides.loser);
   const winnerBatters=winnerData.batters.map(p=>p.name), winnerPitchers=winnerData.pitchers.map(p=>p.name), loserPitchers=loserData.pitchers.map(p=>p.name);
   prediction.rbi=tsSetPredictionSelect("ts-pred-rbi",winnerBatters,prediction.rbi);
   prediction.win=tsSetPredictionSelect("ts-pred-win",winnerPitchers,prediction.win);
