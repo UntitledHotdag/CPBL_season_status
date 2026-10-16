@@ -1,0 +1,474 @@
+{
+ "_note": "Hero sample for #taiwan-series. The box score is CPBL 2026 regular-season game 341 (2026-09-19), relabelled as G1 — the page shows it with a 範例圖卡 · 非實際賽果 tag. Replace with a real game once Taiwan Series results are in.",
+ "game": {
+  "year": 2026,
+  "series": "taiwan",
+  "g": 1,
+  "dataReady": true,
+  "date": "2026-10-17",
+  "time": "17:05",
+  "startsAt": "2026-10-17T17:05:00+08:00",
+  "venue": "大巨蛋",
+  "away": "中信兄弟",
+  "home": "味全龍",
+  "awayScore": 4,
+  "homeScore": 3,
+  "seriesRecord": {
+   "中信兄弟": "1勝0敗",
+   "味全龍": "0勝1敗"
+  },
+  "innings": {
+   "away": [
+    0,
+    0,
+    2,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    2
+   ],
+   "home": [
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1
+   ]
+  },
+  "rhe": {
+   "away": [
+    4,
+    6,
+    0
+   ],
+   "home": [
+    3,
+    9,
+    1
+   ]
+  },
+  "duration": "02:40",
+  "attendance": 33691,
+  "winningRbi": "岳東華",
+  "mvp": {
+   "name": "岳東華",
+   "line": "4 打數 · 1 安打 · 1 打點"
+  },
+  "decisions": {
+   "win": "呂彥青",
+   "loss": "林凱威",
+   "save": ""
+  },
+  "homeRuns": [],
+  "moments": [
+   "延長 10 局，岳東華敲出超前安打",
+   "鄭浩均先發 7 局 7 次三振、無自責分",
+   "梅賽鍶獨撐 9 局，雙方鏖戰到第 10 局"
+  ],
+  "teams": {
+   "中信兄弟": {
+    "batters": [
+     {
+      "order": "1",
+      "name": "張士綸",
+      "pos": "3B",
+      "ab": 4,
+      "r": 1,
+      "h": 1,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 0,
+      "extra": "2B"
+     },
+     {
+      "order": "2",
+      "name": "張仁瑋",
+      "pos": "RF",
+      "ab": 4,
+      "r": 0,
+      "h": 2,
+      "rbi": 2,
+      "hr": 0,
+      "bb": 0,
+      "so": 0
+     },
+     {
+      "order": "3",
+      "name": "曾頌恩",
+      "pos": "DH",
+      "ab": 4,
+      "r": 0,
+      "h": 0,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 0
+     },
+     {
+      "order": "4",
+      "name": "王威晨",
+      "pos": "1B",
+      "ab": 4,
+      "r": 0,
+      "h": 1,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 0
+     },
+     {
+      "order": "4",
+      "name": "劉貴元",
+      "pos": "PR",
+      "ab": 0,
+      "r": 1,
+      "h": 0,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 0
+     },
+     {
+      "order": "5",
+      "name": "宋晟睿",
+      "pos": "CF",
+      "ab": 2,
+      "r": 0,
+      "h": 0,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 1,
+      "extra": "SH"
+     },
+     {
+      "order": "5",
+      "name": "岳政華",
+      "pos": "PH",
+      "ab": 1,
+      "r": 1,
+      "h": 1,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 0
+     },
+     {
+      "order": "6",
+      "name": "江坤宇",
+      "pos": "SS",
+      "ab": 3,
+      "r": 0,
+      "h": 0,
+      "rbi": 1,
+      "hr": 0,
+      "bb": 0,
+      "so": 1,
+      "extra": "SF"
+     },
+     {
+      "order": "7",
+      "name": "岳東華",
+      "pos": "2B",
+      "ab": 4,
+      "r": 0,
+      "h": 1,
+      "rbi": 1,
+      "hr": 0,
+      "bb": 0,
+      "so": 0
+     },
+     {
+      "order": "8",
+      "name": "高宇杰",
+      "pos": "C",
+      "ab": 3,
+      "r": 0,
+      "h": 0,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 0
+     },
+     {
+      "order": "9",
+      "name": "許庭綸",
+      "pos": "LF",
+      "ab": 2,
+      "r": 1,
+      "h": 0,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 1,
+      "so": 0
+     }
+    ],
+    "pitchers": [
+     {
+      "name": "鄭浩均",
+      "decision": "",
+      "ip": "7",
+      "h": 6,
+      "r": 1,
+      "er": 0,
+      "bb": 1,
+      "so": 7,
+      "pitches": "95-63"
+     },
+     {
+      "name": "江忠城",
+      "decision": "",
+      "ip": "⅔",
+      "h": 0,
+      "r": 1,
+      "er": 1,
+      "bb": 3,
+      "so": 0,
+      "pitches": "18-6"
+     },
+     {
+      "name": "余謙",
+      "decision": "",
+      "ip": "⅓",
+      "h": 2,
+      "r": 0,
+      "er": 0,
+      "bb": 0,
+      "so": 0,
+      "pitches": "8-4"
+     },
+     {
+      "name": "蔡齊哲",
+      "decision": "",
+      "ip": "1⅔",
+      "h": 1,
+      "r": 1,
+      "er": 0,
+      "bb": 0,
+      "so": 1,
+      "pitches": "17-11"
+     },
+     {
+      "name": "呂彥青",
+      "decision": "W",
+      "ip": "⅓",
+      "h": 0,
+      "r": 0,
+      "er": 0,
+      "bb": 0,
+      "so": 0,
+      "pitches": "3-2"
+     }
+    ]
+   },
+   "味全龍": {
+    "batters": [
+     {
+      "order": "1",
+      "name": "郭天信",
+      "pos": "CF",
+      "ab": 4,
+      "r": 1,
+      "h": 1,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 1,
+      "so": 0,
+      "extra": "2B"
+     },
+     {
+      "order": "2",
+      "name": "朱育賢",
+      "pos": "1B",
+      "ab": 3,
+      "r": 0,
+      "h": 0,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 2
+     },
+     {
+      "order": "2",
+      "name": "劉俊緯",
+      "pos": "3B",
+      "ab": 2,
+      "r": 0,
+      "h": 1,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 0,
+      "extra": "GDP"
+     },
+     {
+      "order": "3",
+      "name": "張政禹",
+      "pos": "SS",
+      "ab": 2,
+      "r": 2,
+      "h": 1,
+      "rbi": 1,
+      "hr": 0,
+      "bb": 2,
+      "so": 1,
+      "extra": "SF"
+     },
+     {
+      "order": "4",
+      "name": "吉力吉撈．鞏冠",
+      "pos": "DH",
+      "ab": 3,
+      "r": 0,
+      "h": 2,
+      "rbi": 1,
+      "hr": 0,
+      "bb": 1,
+      "so": 0
+     },
+     {
+      "order": "4",
+      "name": "張祐嘉",
+      "pos": "PR / DH",
+      "ab": 1,
+      "r": 0,
+      "h": 0,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 0
+     },
+     {
+      "order": "5",
+      "name": "李凱威",
+      "pos": "2B",
+      "ab": 5,
+      "r": 0,
+      "h": 1,
+      "rbi": 1,
+      "hr": 0,
+      "bb": 0,
+      "so": 0
+     },
+     {
+      "order": "6",
+      "name": "張祐銘",
+      "pos": "LF",
+      "ab": 2,
+      "r": 0,
+      "h": 0,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 1
+     },
+     {
+      "order": "6",
+      "name": "陳子豪",
+      "pos": "PH / LF",
+      "ab": 2,
+      "r": 0,
+      "h": 1,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 1
+     },
+     {
+      "order": "7",
+      "name": "曾聖安",
+      "pos": "RF",
+      "ab": 4,
+      "r": 0,
+      "h": 0,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 1
+     },
+     {
+      "order": "8",
+      "name": "蔣少宏",
+      "pos": "C",
+      "ab": 4,
+      "r": 0,
+      "h": 1,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 0
+     },
+     {
+      "order": "9",
+      "name": "拿莫．伊漾",
+      "pos": "3B / 1B",
+      "ab": 4,
+      "r": 0,
+      "h": 1,
+      "rbi": 0,
+      "hr": 0,
+      "bb": 0,
+      "so": 2
+     }
+    ],
+    "pitchers": [
+     {
+      "name": "梅賽鍶",
+      "decision": "",
+      "ip": "9",
+      "h": 4,
+      "r": 2,
+      "er": 2,
+      "bb": 1,
+      "so": 2,
+      "pitches": "104-75"
+     },
+     {
+      "name": "林凱威",
+      "decision": "L",
+      "ip": "⅓",
+      "h": 2,
+      "r": 2,
+      "er": 0,
+      "bb": 0,
+      "so": 0,
+      "pitches": "12-7"
+     }
+    ]
+   }
+  }
+ },
+ "prediction": {
+  "awayScore": 4,
+  "homeScore": 2,
+  "rbi": "岳東華",
+  "win": "鄭浩均",
+  "loss": "林凱威",
+  "mvp": "岳東華",
+  "bg": "photo"
+ },
+ "before": {
+  "photo": "stadium",
+  "fx": 0.5,
+  "fy": 0.42,
+  "z": 1.0,
+  "stamp": "2026.10.17 16:42"
+ },
+ "after": {
+  "photo": "brothers",
+  "team": "中信兄弟",
+  "fx": 0.5,
+  "fy": 0.36,
+  "z": 1.0,
+  "stamp": "2026.10.17 21:08"
+ }
+}
