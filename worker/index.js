@@ -17,6 +17,7 @@ const TEAM_NAMES = new Set([
 ]);
 const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 const ADMIN_STATUSES = new Set(["pending", "approved", "rejected"]);
+export const COMMUNITY_FEATURE_ENABLED = false;
 const textEncoder = new TextEncoder();
 const textDecoder = new TextDecoder();
 const accessKeysCache = new Map();
@@ -408,6 +409,7 @@ async function moderateCommunity(request, env, admin, id) {
 }
 
 async function handleAdminApi(request, env) {
+  if (!COMMUNITY_FEATURE_ENABLED) return apiError("community_coming_soon", 503);
   const admin = await verifyAdminAccess(request, env);
   if (!admin) return apiError("admin_unauthorized", 401);
   const url = new URL(request.url);
@@ -430,10 +432,14 @@ async function handleApi(request, env) {
       environment: env.ENVIRONMENT || "unknown",
       turnstileSiteKey: env.TURNSTILE_SITE_KEY || "",
       writesEnabled: Boolean(env.TURNSTILE_SITE_KEY && env.TURNSTILE_SECRET_KEY && env.ANON_HASH_SALT),
+      communityEnabled: COMMUNITY_FEATURE_ENABLED,
     });
   }
   if (request.method === "GET" && url.pathname === "/api/predictions/summary") return predictionSummary(url, env);
   if (request.method === "POST" && url.pathname === "/api/predictions") return submitPrediction(request, env);
+  if ((url.pathname === "/api/community" || url.pathname === "/api/community-submissions") && !COMMUNITY_FEATURE_ENABLED) {
+    return apiError("community_coming_soon", 503);
+  }
   if (request.method === "GET" && url.pathname === "/api/community") return listCommunity(url, env);
   if (request.method === "POST" && url.pathname === "/api/community-submissions") return submitCommunity(request, env);
   return apiError("not_found", 404);

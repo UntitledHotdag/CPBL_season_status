@@ -262,6 +262,7 @@ git add src docs && git commit -m "Short imperative summary" && git push
 - **快取**：推送後若看不到新版，先確認 Cloudflare 部署完成，再強制重新整理或用無痕視窗。
 - 範例照片中可見球員與贊助商標誌（現場自拍）；啦啦隊員特寫因肖像權風險**未使用**。
 - 季後挑戰賽完賽資料放在 `src/postseason.json`；單場獎項以官方 PDF 的 `wp`、`lp`、`sv`、`mvp` 為準，另有可靠來源時可補選填的 `rbi`。尚未完賽的場次不要寫入即時比分。台灣大賽仍保留「DATA TBD」區塊。
+- **社群功能暫停中**：前端只顯示「即將上線」，`worker/index.js` 的 `COMMUNITY_FEATURE_ENABLED` 維持 `false`，公開作品、Threads 投稿與管理 API 都回傳 `503 community_coming_soon`。確認資料寫入與審核流程穩定前，不要開啟。
 
 ---
 

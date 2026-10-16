@@ -805,6 +805,20 @@
   .community-agree input{margin-top:3px;accent-color:var(--accent-fill)}
   .community-submit .cta{align-self:flex-start}
   .community-submit-status{min-height:20px;color:var(--accent);font-size:11px;line-height:1.65}
+  .community-coming-hero{min-height:calc(100svh - 210px);align-items:center}
+  .community-coming-hero .community-intro{padding-bottom:0}
+  .community-coming{padding:58px 0 72px}
+  .community-coming-head{display:flex;align-items:end;justify-content:space-between;gap:28px;margin-bottom:28px}
+  .community-coming-head h2{font-size:clamp(25px,4vw,40px);line-height:1.2;margin-top:8px}
+  .community-coming-head p{max-width:34em;color:var(--muted);font-size:12px;line-height:1.75}
+  .community-coming-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .community-coming-item{min-width:0;padding:26px 24px}
+  .community-coming-item:first-child{padding-left:0}.community-coming-item:last-child{padding-right:0}
+  .community-coming-item+.community-coming-item{border-left:1px solid var(--rule)}
+  .community-coming-item small{font:800 9px "Manrope",sans-serif;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+  .community-coming-item h3{font-size:17px;margin-top:10px}
+  .community-coming-item p{margin-top:7px;color:var(--ink-dim);font-size:12px;line-height:1.75}
+  .community-coming-note{margin-top:24px;padding-left:14px;border-left:3px solid var(--accent-fill);color:var(--ink-dim);font-size:12px;line-height:1.75}
 
   /* Admin moderation */
   html.admin-mode .site-nav{display:none}
@@ -855,6 +869,7 @@
     .series-picks{grid-template-columns:repeat(4,minmax(0,1fr))}
     .community-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     .community-how{grid-template-columns:1fr;gap:30px}.community-how .cta{grid-column:1}
+    .community-coming-hero{min-height:auto;padding-bottom:54px}
     .admin-grid{grid-template-columns:1fr}
   }
   @media (max-width:640px){
@@ -882,6 +897,12 @@
     .builder-controls{padding-top:0}.output-set{gap:7px}.output-set figure>.output-placeholder{padding:10px;border-radius:8px}.output-set b{font-size:12px}.output-set figcaption{font-size:8.5px}
     .next-path{align-items:flex-start;flex-direction:column;padding:42px 0}.next-path h2{font-size:20px}
     .community-hero{padding:40px 0 34px;gap:24px}
+    .community-coming-hero{min-height:auto;padding-bottom:54px}
+    .community-coming{padding:44px 0 54px}
+    .community-coming-head{display:block}.community-coming-head p{margin-top:12px}
+    .community-coming-grid{grid-template-columns:1fr}
+    .community-coming-item,.community-coming-item:first-child,.community-coming-item:last-child{padding:20px 0}
+    .community-coming-item+.community-coming-item{border-left:0;border-top:1px solid var(--rule)}
     .community-tools{display:block}.community-tools>span{display:block;margin-top:12px}
     .community-filters{margin-inline:-14px;padding-inline:14px}
     .community-grid{grid-template-columns:1fr;gap:22px}
@@ -1088,7 +1109,7 @@
         </div>
         <div class="legal-item">
           <div class="legal-k">免責聲明</div>
-          <p>本站為球迷自製的非官方網站，與中華職棒大聯盟及各球團無任何隸屬、授權或贊助關係。球隊名稱僅供辨識，標誌以英文字母與代表色自行設計，未使用任何官方商標或 Logo。統計結果僅供娛樂參考。首頁範例照片為站長於球場自行拍攝。你的勾選紀錄、名字與照片只存在你的裝置，本站不會蒐集或保存；只有在你主動送出台灣大賽預測或 Threads 投稿時，才會保存匿名預測欄位或公開貼文網址。本站使用 Google Analytics 以 Cookie 蒐集匿名的瀏覽與操作統計（例如頁面瀏覽、按鈕點擊），用來改善網站，不含可識別個人的資料。</p>
+          <p>本站為球迷自製的非官方網站，與中華職棒大聯盟及各球團無任何隸屬、授權或贊助關係。球隊名稱僅供辨識，標誌以英文字母與代表色自行設計，未使用任何官方商標或 Logo。統計結果僅供娛樂參考。首頁範例照片為站長於球場自行拍攝。你的勾選紀錄、名字與照片只存在你的裝置，本站不會蒐集或保存；只有在你主動送出台灣大賽預測時，才會保存匿名預測欄位。社群功能目前尚未開放，不會接收或保存 Threads 貼文網址。本站使用 Google Analytics 以 Cookie 蒐集匿名的瀏覽與操作統計（例如頁面瀏覽、按鈕點擊），用來改善網站，不含可識別個人的資料。</p>
         </div>
       </div>
       <div class="hero-ctas" id="end-ctas" style="margin-top:0"></div>
@@ -1273,74 +1294,41 @@
 
     <div class="next-path">
       <div><span>完成圖卡之後</span><h2>分享到 Threads，也讓其他球迷看見。</h2></div>
-      <button class="btn-ghost" data-go="community">前往社群 →</button>
+      <button class="btn-ghost" data-go="community">社群即將上線 →</button>
     </div>
     <p class="page-foot">目前使用 2026 例行賽第 341 場官方資料測試 G1 功能 · 台灣大賽開放時間與賽果以 CPBL 官方公布內容為準</p>
   </section>
 
   <!-- ==================== Community ==================== -->
   <section id="view-community" class="view" hidden>
-    <div class="community-hero">
+    <div class="community-hero community-coming-hero">
       <div>
-        <div class="intro-eyebrow">Community</div>
-        <span class="prototype-label">公開測試</span>
-        <h1>看看球迷如何<br>記住這個球季</h1>
+        <div class="intro-eyebrow">Community · Coming soon</div>
+        <span class="prototype-label">即將上線</span>
+        <h1>球迷社群，<br>正在準備中</h1>
       </div>
       <div class="community-intro">
-        <p>從整季觀賽回顧，到台灣大賽的每一場比賽。依照球隊找到同隊球迷的作品，再回到 Threads 看完整分享。</p>
-        <button class="btn-ghost" data-community-how>投稿方式 ↓</button>
+        <p>我們正在重新整理作品投稿、審核與資料管理流程。完成前暫不開放 Threads 連結投稿與作品牆，避免球迷送出的內容遺失，或出現審核狀態不一致。</p>
+        <button class="btn-ghost" data-go="taiwan-series">先做一張台灣大賽圖卡 →</button>
       </div>
     </div>
 
-    <div class="community-tools">
-      <div class="community-filters" role="group" aria-label="依球隊篩選作品">
-        <button aria-pressed="true" data-community-filter="all">全部</button>
-        <button data-community-filter="中信兄弟">兄弟</button>
-        <button data-community-filter="樂天桃猿">桃猿</button>
-        <button data-community-filter="味全龍">味全龍</button>
-        <button data-community-filter="台鋼雄鷹">雄鷹</button>
-        <button data-community-filter="統一7-ELEVEn獅">統一7-11獅</button>
-        <button data-community-filter="富邦悍將">悍將</button>
+    <section class="community-coming" aria-labelledby="community-coming-title">
+      <div class="community-coming-head">
+        <div>
+          <div class="intro-eyebrow">Before launch</div>
+          <h2 id="community-coming-title">先把三件事做好</h2>
+        </div>
+        <p>等投稿、分類與審核流程都穩定後，社群會再一次完整開放。</p>
       </div>
-      <span id="community-count">載入中</span>
-    </div>
-
-    <div class="community-grid" id="community-grid">
-      <div class="community-empty">正在載入審核後的球迷作品…</div>
-    </div>
-    <div class="community-empty" id="community-empty" hidden>這個分類目前還沒有審核後的作品。</div>
-
-    <section class="community-how" id="community-how">
-      <div>
-        <div class="intro-eyebrow">Share your story</div>
-        <h2>讓你的作品出現在社群</h2>
-        <p>網站不接收圖片檔。先把圖卡分享到公開的 Threads 貼文，再貼上連結；經站長審核後，貼文會以 Threads 官方嵌入方式出現在對應球隊分類。</p>
+      <div class="community-coming-grid">
+        <article class="community-coming-item"><small>01 · 投稿</small><h3>作品投稿</h3><p>暫停接收 Threads 連結，先確認每一筆內容都能穩定寫入。</p></article>
+        <article class="community-coming-item"><small>02 · 分類</small><h3>球隊作品牆</h3><p>作品牆與球隊篩選完成整理後，再和投稿功能一起開放。</p></article>
+        <article class="community-coming-item"><small>03 · 管理</small><h3>投稿審核</h3><p>確認審核、撤下與重新上架流程一致，避免作品狀態出錯。</p></article>
       </div>
-      <form class="community-submit" id="community-submit-form">
-        <label>Threads 公開貼文連結
-          <input id="community-url" type="url" inputmode="url" autocomplete="url" placeholder="https://www.threads.com/@你的帳號/post/..." required>
-        </label>
-        <label>作品所屬球隊
-          <select id="community-team" required>
-            <option value="">請選擇球隊</option>
-            <option>中信兄弟</option><option>樂天桃猿</option><option>味全龍</option>
-            <option>台鋼雄鷹</option><option>統一7-ELEVEn獅</option><option>富邦悍將</option>
-          </select>
-        </label>
-        <label>作品類型
-          <select id="community-game">
-            <option value="season-2026">2026 賽季回顧</option>
-            <option value="2026-taiwan">2026 台灣大賽</option>
-            <option value="2026-playoff">2026 季後挑戰賽</option>
-          </select>
-        </label>
-        <label class="community-agree"><input id="community-agree" type="checkbox" required><span>我確認這是公開貼文，且同意本站嵌入展示；貼文刪除或改為私人後將無法顯示。</span></label>
-        <div class="turnstile-slot" id="community-turnstile">正在確認投稿功能…</div>
-        <button class="cta" id="community-submit" type="submit">送出審核</button>
-        <div class="community-submit-status" id="community-submit-status" aria-live="polite"></div>
-      </form>
+      <p class="community-coming-note"><b>目前狀態：</b>網站不會讀取作品資料，也不會將任何 Threads 連結寫入資料庫。</p>
     </section>
-    <p class="page-foot">投稿預設不會立即公開，經站長確認為球迷圖卡與公開貼文後才會顯示。</p>
+    <p class="page-foot">社群功能即將上線 · 你仍可照常製作與下載觀賽回顧、賽前預言與賽後回顧圖卡</p>
   </section>
 
   <!-- ==================== Admin moderation ==================== -->
@@ -1349,8 +1337,8 @@
       <header class="admin-hero">
         <div>
           <div class="intro-eyebrow">Private moderation</div>
-          <h1>社群投稿審核</h1>
-          <p>確認 Threads 貼文為公開的球迷作品後再通過。已通過的投稿會出現在社群頁；拒絕或撤下不會刪除原始紀錄。</p>
+          <h1>社群功能即將上線</h1>
+          <p>投稿、作品讀取與審核操作目前全部暫停，待資料寫入與管理流程穩定後再重新開放。</p>
         </div>
         <div class="admin-session">
           <span>登入帳號 <b id="admin-email">驗證中…</b></span>
@@ -3077,6 +3065,7 @@ function tsDownloadStamp(now = new Date()){
 
 const apiErrorText = code => ({
   prediction_closed:"這場比賽目前不在預測開放時間。",
+  community_coming_soon:"社群功能正在準備中，目前不開放作品讀取或投稿。",
   turnstile_failed:"匿名驗證已失效，請重新完成驗證。",
   invalid_threads_url:"請貼上公開的 Threads 貼文連結。",
   threads_embed_unavailable:"目前讀不到這篇 Threads 貼文，請確認貼文是公開狀態。",
@@ -3703,52 +3692,14 @@ document.getElementById("view-taiwan-series").addEventListener("click", e => {
 tsRenderControls();
 tsLoadStoredPhoto();
 
-let communityActiveTeam="all";
+const COMMUNITY_FEATURE_ENABLED=false;
 function loadThreadsEmbedScript(){
   const old=document.getElementById("threads-embed-script");if(old)old.remove();
   const script=document.createElement("script");script.id="threads-embed-script";script.src="https://www.threads.com/embed.js";script.async=true;document.body.appendChild(script);
 }
-async function loadCommunity(team=communityActiveTeam){
-  communityActiveTeam=team;const grid=document.getElementById("community-grid"),empty=document.getElementById("community-empty"),count=document.getElementById("community-count");
-  grid.innerHTML='<div class="community-empty">正在載入審核後的球迷作品…</div>';empty.hidden=true;count.textContent="載入中";
-  try{
-    const query=team==="all"?"":`?team=${encodeURIComponent(team)}`;
-    const response=await fetch(`/api/community${query}`,{headers:{accept:"application/json"}});if(!response.ok)throw new Error("community_unavailable");
-    const data=await response.json(),items=Array.isArray(data.items)?data.items:[];
-    grid.innerHTML=items.map(item=>`<article class="community-card" data-community-team="${esc(item.team)}"><div class="community-embed">${item.embed_html}</div><div class="community-card-meta"><div><small>${esc(item.game_id||"球迷作品")}</small><b>${esc(item.author_name||"Threads 球迷")}</b><span>${esc(teamDisplayName(item.team))}</span></div><a href="${esc(item.threads_url)}" target="_blank" rel="noopener noreferrer">前往 Threads ↗</a></div></article>`).join("");
-    count.textContent=`${items.length} 件作品`;empty.hidden=items.length!==0;
-    if(items.length)loadThreadsEmbedScript();
-  }catch(e){grid.innerHTML="";count.textContent="尚未連接";empty.textContent="測試站資料庫連線後，這裡會顯示審核通過的 Threads 作品。";empty.hidden=false;}
-}
-async function initCommunity(){
-  loadCommunity();
-  initTurnstile("community");
-}
+function initCommunity(){}
 document.getElementById("view-community").addEventListener("click", e => {
-  const how = e.target.closest("[data-community-how]");
-  if (how){
-    document.getElementById("community-how").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
-    return;
-  }
-  const filter = e.target.closest("[data-community-filter]");
-  if (!filter) return;
-  const team = filter.dataset.communityFilter;
-  document.querySelectorAll("[data-community-filter]").forEach(b => b.setAttribute("aria-pressed", String(b === filter)));
-  loadCommunity(team);
-});
-document.getElementById("community-submit-form").addEventListener("submit",async e=>{
-  e.preventDefault();const button=document.getElementById("community-submit"),status=document.getElementById("community-submit-status");
-  const config=await getApiConfig();
-  if(!config.writesEnabled){status.textContent="測試站完成資料庫與安全驗證設定後才會開放投稿。";return;}
-  if(!turnstileState.community.token){status.textContent="請先完成匿名驗證。";return;}
-  const team=document.getElementById("community-team").value;
-  button.disabled=true;status.textContent="正在讀取公開貼文並送出審核…";
-  try{
-    await apiPost("/api/community-submissions",{url:document.getElementById("community-url").value,team,gameId:document.getElementById("community-game").value,turnstileToken:turnstileState.community.token});
-    status.textContent="已送出審核。確認為公開的球迷圖卡後，就會出現在社群頁面。";
-    e.currentTarget.reset();track("community_submit",{team:TEAMS[team]?.abbr||"unknown"});
-  }catch(error){status.textContent=apiErrorText(error.message);}
-  finally{resetTurnstile("community");button.disabled=false;}
+  const nav=e.target.closest("[data-go]");if(nav)go(nav.dataset.go);
 });
 
 // Admin moderation is served from /admin and protected by Cloudflare Access.
@@ -3777,6 +3728,13 @@ function renderAdminItems(items){
   loadThreadsEmbedScript();
 }
 async function loadAdmin(status=adminActiveStatus){
+  if(!COMMUNITY_FEATURE_ENABLED){
+    document.getElementById("admin-email").textContent="暫停開放";
+    document.querySelector(".admin-toolbar").hidden=true;
+    document.getElementById("admin-notice").textContent="";
+    document.getElementById("admin-grid").innerHTML='<div class="admin-empty">社群功能正在整理中，目前不讀取投稿，也不開放審核或狀態更新。</div>';
+    return;
+  }
   if(adminLoading)return;adminLoading=true;adminActiveStatus=status;
   const grid=document.getElementById("admin-grid"),notice=document.getElementById("admin-notice");
   grid.innerHTML='<div class="admin-empty">正在讀取投稿…</div>';notice.textContent="";
@@ -3811,7 +3769,7 @@ document.getElementById("admin-refresh").addEventListener("click",()=>loadAdmin(
 // ================================================================
 // Router — #intro → #pick ⇄ #result (browser back works)
 // ================================================================
-const PAGE_NAME = {intro:"首頁", pick:"選擇賽事", result:"我的戰績", "taiwan-series":"台灣大賽", community:"社群", admin:"社群投稿審核"};
+const PAGE_NAME = {intro:"首頁", pick:"選擇賽事", result:"我的戰績", "taiwan-series":"台灣大賽", community:"社群即將上線", admin:"社群管理"};
 function go(v){ if (location.hash !== "#" + v) location.hash = v; else render(v); }
 function render(v){
   if(IS_ADMIN_PATH)v="admin";
@@ -3829,7 +3787,7 @@ function render(v){
   else if (v === "result") renderResult();
   else if (v === "taiwan-series"){ tsLoadPoll(); initTurnstile("prediction"); }
   else if (v === "community") initCommunity();
-  else if (v === "admin"){document.title="社群投稿審核｜CPBL 進場戰績";loadAdmin();}
+  else if (v === "admin"){document.title="社群管理｜CPBL 進場戰績";loadAdmin();}
   window.scrollTo({top:0});
 }
 addEventListener("hashchange", () => render(IS_ADMIN_PATH?"admin":location.hash.slice(1)));

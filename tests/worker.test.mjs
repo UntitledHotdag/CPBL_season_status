@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import taiwanSeriesGames from "../src/taiwan-series.json" with { type: "json" };
 import taiwanSeriesRosters from "../src/taiwan-series-rosters.json" with { type: "json" };
-import { normalizeThreadsUrl, sanitizeThreadsEmbed, validatePrediction, verifyAdminAccess } from "../worker/index.js";
+import worker, { COMMUNITY_FEATURE_ENABLED, normalizeThreadsUrl, sanitizeThreadsEmbed, validatePrediction, verifyAdminAccess } from "../worker/index.js";
 
 const game = taiwanSeriesGames[0];
 
@@ -130,6 +130,21 @@ test("Threads embed HTML drops scripts and rejects event handlers", () => {
   const clean = sanitizeThreadsEmbed('<blockquote class="text-post-media"><a href="https://www.threads.com/t/ABC/">post</a></blockquote><script src="https://www.threads.com/embed.js"></script>');
   assert.equal(clean, '<blockquote class="text-post-media"><a href="https://www.threads.com/t/ABC/">post</a></blockquote>');
   assert.equal(sanitizeThreadsEmbed('<blockquote class="text-post-media" onclick="alert(1)"></blockquote>'), null);
+});
+
+test("community reads and submissions stay disabled while the feature is coming soon", async () => {
+  assert.equal(COMMUNITY_FEATURE_ENABLED, false);
+  for (const request of [
+    new Request("https://staging.mybaseballgame.com/api/community"),
+    new Request("https://staging.mybaseballgame.com/api/community-submissions", { method: "POST" }),
+    new Request("https://staging.mybaseballgame.com/admin/api/community"),
+  ]) {
+    const response = await worker.fetch(request, {});
+    assert.equal(response.status, 503);
+    assert.equal((await response.json()).error, "community_coming_soon");
+  }
+  const config = await worker.fetch(new Request("https://staging.mybaseballgame.com/api/config"), {});
+  assert.equal((await config.json()).communityEnabled, false);
 });
 
 function base64Url(value) {
