@@ -656,9 +656,6 @@
   .ts-copy>p{max-width:35em;margin-top:20px;color:var(--ink-dim);font-size:16px;line-height:1.8}
   .ts-promises{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0}
   .ts-promises span{padding:7px 11px;border-radius:99px;background:var(--panel);border:1px solid var(--rule);font-size:11px;font-weight:700;color:var(--ink-dim)}
-  .ts-mode-switch{display:inline-grid;grid-template-columns:1fr 1fr;gap:3px;margin:0 0 18px;padding:3px;border:1px solid var(--rule);border-radius:10px;background:var(--panel)}
-  .ts-mode-switch button{min-height:42px;padding:8px 18px;border-radius:7px;color:var(--muted);font-size:12px;font-weight:700}
-  .ts-mode-switch button[aria-pressed="true"]{background:var(--panel-2);color:var(--ink);box-shadow:0 4px 16px rgba(0,0,0,.12)}
   .ts-mode-note{max-width:44em;margin:0 0 30px;color:var(--muted);font-size:12px;line-height:1.75}
   .ts-stack{position:relative;width:min(100%,420px);aspect-ratio:4/5;margin-inline:auto;perspective:900px}
   .ts-card{position:absolute;inset:7% 13%;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.14);box-shadow:0 30px 70px -30px rgba(0,0,0,.65);color:#F8F5EC;background:#11131A;padding:24px;display:flex;flex-direction:column}
@@ -678,9 +675,14 @@
   .ts-card-caption b{font-size:22px;line-height:1.28}
   .ts-stack .sample-tag{top:2%;right:3%}
 
-  .ts-poll{display:grid;grid-template-columns:.78fr 1.22fr;gap:52px;align-items:end;padding:54px 0;border-bottom:1px solid var(--rule)}
+  .ts-poll{display:grid;grid-template-columns:.72fr 1.28fr;gap:52px;align-items:start;padding:54px 0;border-bottom:1px solid var(--rule)}
   .ts-poll h2{font-size:clamp(25px,4vw,38px);line-height:1.2;margin-top:9px}
   .ts-poll-copy p{max-width:34em;margin-top:12px;color:var(--muted);font-size:12px;line-height:1.75}
+  .ts-poll-main{display:flex;flex-direction:column;gap:24px}
+  .ts-poll-result{padding-top:22px;border-top:1px solid var(--rule)}
+  .ts-poll-result h3{margin-bottom:18px;font-size:17px}
+  .ts-poll-games .series-game{min-height:102px;padding:13px 9px}
+  .ts-poll-games .series-game b{font-size:21px}
   .ts-poll-chart{display:flex;flex-direction:column;gap:16px}
   .poll-row{display:grid;grid-template-columns:minmax(110px,auto) 1fr 48px;gap:12px;align-items:center}
   .poll-row b{font-size:12px;white-space:nowrap}.poll-row strong{font:800 16px "Manrope",sans-serif;text-align:right}
@@ -690,6 +692,8 @@
 
   .series-picker,.series-builder{padding:72px 0;border-bottom:1px solid var(--rule)}
   .series-flow{padding-top:54px}
+  .ts-phase-block{padding-top:18px}
+  .ts-review-phase{margin-top:86px;padding-top:0;border-top:2px solid var(--ink)}
   .series-section-head{display:flex;justify-content:space-between;align-items:end;gap:28px;margin-bottom:30px}
   .series-section-head h2{font-size:clamp(26px,4vw,40px);line-height:1.2;margin-top:9px}
   .series-section-head>p{max-width:30em;text-align:right;color:var(--muted);font-size:12px;line-height:1.7}
@@ -719,11 +723,14 @@
   .builder-note b{color:var(--ink)}
   .builder-status{min-height:20px;font-size:11px;line-height:1.6;color:var(--accent)}
   .builder-controls>.cta{align-self:flex-start}
-  .prediction-layout{display:grid;grid-template-columns:.86fr 1.14fr;gap:42px;align-items:start}
-  .prediction-panel{display:flex;flex-direction:column;gap:24px;padding:22px 0}
+  .prediction-layout{display:grid;grid-template-columns:.86fr 1.14fr;gap:42px;align-items:start;width:100%;padding:clamp(18px,3vw,34px);border:1px solid color-mix(in srgb,var(--rule) 82%,transparent);border-radius:22px;background:linear-gradient(135deg,color-mix(in srgb,var(--panel) 64%,transparent),color-mix(in srgb,var(--panel) 34%,transparent));box-shadow:0 28px 80px -58px rgba(0,0,0,.7);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);overflow:hidden}
+  .prediction-panel{display:flex;flex-direction:column;gap:24px;padding:0}
   .prediction-group{display:flex;flex-direction:column;gap:10px}
   .prediction-label{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--muted)}
   .prediction-help{font-size:11px;line-height:1.65;color:var(--muted)}
+  .prediction-name{display:flex;flex-direction:column;gap:8px}
+  .prediction-name input{width:100%;min-height:50px;padding:0 14px;border:1px solid var(--rule);border-radius:9px;background:color-mix(in srgb,var(--panel) 68%,transparent);color:var(--ink);font:700 14px "Noto Sans TC",sans-serif}
+  .prediction-name small{color:var(--muted);font-size:10px;line-height:1.6}
   .prediction-score{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:12px}
   .prediction-score label{display:flex;flex-direction:column;gap:8px;color:var(--ink-dim);font-size:12px;font-weight:700}
   .prediction-score input{width:100%;height:62px;padding:0 10px;border:1px solid var(--rule);border-radius:10px;background:var(--panel);color:var(--ink);font:800 28px "Manrope",sans-serif;text-align:center}
@@ -739,6 +746,9 @@
   .prediction-window b{display:block;font-size:12px}.prediction-window span{display:block;margin-top:2px;color:var(--muted);font-size:10px;line-height:1.55}
   .series-prediction{padding:30px 0;border-top:1px solid var(--rule)}
   .series-prediction h3{font-size:21px}.series-prediction>p{max-width:48em;margin-top:7px;color:var(--muted);font-size:12px;line-height:1.7}
+  .series-prediction-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,280px);gap:38px;align-items:start;margin-top:18px}
+  .series-prediction-controls{min-width:0}
+  .series-prediction-layout>.output-set{grid-template-columns:1fr}
   .series-picks{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;margin-top:18px}
   .series-pick{padding:11px 8px;border:1px solid var(--rule);border-radius:9px;background:var(--panel)}
   .series-pick>b{display:block;font:800 16px "Manrope",sans-serif;margin-bottom:8px}
@@ -841,7 +851,7 @@
     .ts-hero,.community-hero,.ts-poll{grid-template-columns:1fr;gap:38px}
     .ts-hero{padding-top:44px}.ts-stack{width:min(86vw,400px)}
     .series-games{grid-template-columns:repeat(4,minmax(0,1fr))}
-    .builder-layout,.prediction-layout{grid-template-columns:1fr;gap:24px}
+    .builder-layout,.prediction-layout,.series-prediction-layout{grid-template-columns:1fr;gap:24px}
     .series-picks{grid-template-columns:repeat(4,minmax(0,1fr))}
     .community-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     .community-how{grid-template-columns:1fr;gap:30px}.community-how .cta{grid-column:1}
@@ -861,12 +871,14 @@
     .ts-stack{width:min(82vw,340px)}
     .series-picker,.series-builder{padding:50px 0}
     .series-section-head{display:block;margin-bottom:22px}.series-section-head>p{text-align:left;margin-top:10px}
-    .series-games{display:flex;overflow-x:auto;margin-inline:-14px;padding-inline:14px;scrollbar-width:none}.series-games::-webkit-scrollbar{display:none}
-    .series-game{flex:0 0 118px;min-height:112px}
+    .series-games{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+    .series-game{min-width:0;min-height:108px;padding:12px 8px}
+    .series-game span{font-size:10px}.series-game small{font-size:7.5px;letter-spacing:.07em}
+    .ts-poll-games{grid-template-columns:repeat(4,minmax(0,1fr))}
     .prediction-grid{grid-template-columns:1fr}
     .ts-poll{padding:42px 0;gap:25px}.poll-row{grid-template-columns:92px 1fr 42px;gap:9px}.poll-row b{font-size:11px}
-    .series-picks{display:flex;overflow-x:auto;margin-inline:-14px;padding-inline:14px;scrollbar-width:none}.series-picks::-webkit-scrollbar{display:none}
-    .series-pick{flex:0 0 112px}
+    .series-picks{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+    .series-pick{min-width:0;padding:9px 6px}
     .builder-controls{padding-top:0}.output-set{gap:7px}.output-set figure>.output-placeholder{padding:10px;border-radius:8px}.output-set b{font-size:12px}.output-set figcaption{font-size:8.5px}
     .next-path{align-items:flex-start;flex-direction:column;padding:42px 0}.next-path h2{font-size:20px}
     .community-hero{padding:40px 0 34px;gap:24px}
@@ -1114,44 +1126,33 @@
       </div>
     </div>
 
-    <section class="ts-poll" aria-labelledby="ts-poll-title">
+    <section class="ts-poll" aria-labelledby="ts-fan-title">
       <div class="ts-poll-copy">
         <div class="intro-eyebrow">Fan prediction</div>
-        <h2 id="ts-poll-title">G1 球迷預測</h2>
+        <h2 id="ts-fan-title">G1–G7 球迷預測</h2>
         <p>匿名送出後，同一裝置、同一場比賽只計一票；開賽前可以更新。姓名與照片都不會上傳。</p>
       </div>
-      <div>
-        <div class="ts-poll-chart" id="ts-poll-chart" aria-live="polite">
-          <div class="community-empty">連接測試站資料庫後顯示球迷預測。</div>
+      <div class="ts-poll-main">
+        <div class="series-games ts-poll-games" id="ts-prediction-games" aria-label="預測場次"></div>
+        <div class="ts-poll-result">
+          <h3 id="ts-poll-title">G1 球迷預測</h3>
+          <div class="ts-poll-chart" id="ts-poll-chart" aria-live="polite">
+            <div class="community-empty">連接測試站資料庫後顯示球迷預測。</div>
+          </div>
+          <div class="poll-meta" id="ts-poll-meta"></div>
         </div>
-        <div class="poll-meta" id="ts-poll-meta"></div>
       </div>
     </section>
 
     <section class="series-flow" id="series-picker" aria-label="台灣大賽功能">
-      <div class="ts-mode-switch" aria-label="選擇台灣大賽功能">
-        <button data-ts-mode="prediction" aria-pressed="true">賽前預測</button>
-        <button data-ts-mode="review" aria-pressed="false">賽後回顧</button>
-      </div>
       <p class="ts-mode-note">正式上線後，系統會依賽事時間自動切換狀態。目前以 2026 例行賽第 341 場資料作為 G1 測試內容。</p>
       <input id="ts-photo-input" type="file" accept="image/jpeg,image/png,image/webp" hidden>
 
-      <div id="ts-prediction-view">
-        <section class="series-picker" aria-labelledby="prediction-picker-title">
-          <div class="series-section-head">
-            <div>
-              <div class="intro-eyebrow">1.賽前預言</div>
-              <h2 id="prediction-picker-title">選一場，留下你的賽前答案</h2>
-            </div>
-            <p>預測只在公布先發後到開賽前開放；開賽後內容會鎖定，完賽後可直接顯示實際結果。</p>
-          </div>
-          <div class="series-games" id="ts-prediction-games" aria-label="預測場次"></div>
-        </section>
-
+      <div id="ts-prediction-view" class="ts-phase-block">
         <section class="series-builder" aria-labelledby="prediction-builder-title">
           <div class="series-section-head">
             <div>
-              <div class="intro-eyebrow">Make your pick</div>
+              <div class="intro-eyebrow">1.賽前預言 · Make your pick</div>
               <h2 id="prediction-builder-title">你的 G1 預測</h2>
             </div>
             <p>G1 測試資料會直接進入「對答案」狀態；正式比賽在開賽前只顯示你的預測。</p>
@@ -1159,6 +1160,11 @@
           <div class="prediction-layout">
             <div class="prediction-panel">
               <div class="prediction-window"><i></i><div><b>功能預覽：已完賽，可模擬預測並對答案</b><span>正式環境將顯示「開放預測至 18:34」或「等待先發公布」。</span></div></div>
+              <label class="prediction-name" for="ts-fan-name">
+                <span class="prediction-label">圖卡姓名（選填）</span>
+                <input id="ts-fan-name" type="text" maxlength="16" autocomplete="name" placeholder="輸入想顯示在圖卡上的名字">
+                <small>姓名只保存在這台裝置並押在下載圖上，不會送進公開投票。</small>
+              </label>
               <div class="prediction-group">
                 <span class="prediction-label">預測比分</span>
                 <div class="prediction-score">
@@ -1195,25 +1201,29 @@
           <div class="series-prediction">
             <div class="intro-eyebrow">Series prediction</div>
             <h3>整個系列賽，你猜會打幾場？</h3>
-            <p>先選系列賽會在 G4–G7 的哪一場結束，再預測每一戰由哪一隊拿下；尚未進行的場次會保留在圖上。</p>
-            <div class="prediction-group" style="margin-top:18px">
-              <span class="prediction-label">預測結束場次</span>
-              <div class="finish-options" id="ts-finish-options"></div>
-            </div>
-            <div class="series-picks" id="ts-series-picks"></div>
-            <span class="prediction-lock">系列賽預測會在 G1 開賽時一起鎖定</span>
-            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px">
-              <button class="cta" id="ts-series-generate">產生系列賽預測圖</button>
-              <span class="builder-status" id="ts-series-status" aria-live="polite"></span>
-            </div>
-            <div class="output-set" id="ts-series-output" aria-label="系列賽預測圖預覽" style="max-width:260px;margin-top:22px">
-              <figure><div class="output-placeholder output-data away"><span>SERIES</span><b>系列賽預測</b><i></i><i></i><i></i><i></i></div><figcaption>結束場次與每戰勝方</figcaption></figure>
+            <p>沿用上方姓名與底圖；只要選結束場次與每一戰勝方，不需要填勝投、敗投、勝利打點或 MVP。</p>
+            <div class="series-prediction-layout">
+              <div class="series-prediction-controls">
+                <div class="prediction-group">
+                  <span class="prediction-label">預測結束場次</span>
+                  <div class="finish-options" id="ts-finish-options"></div>
+                </div>
+                <div class="series-picks" id="ts-series-picks"></div>
+                <span class="prediction-lock">系列賽預測會在 G1 開賽時一起鎖定</span>
+                <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px">
+                  <button class="cta" id="ts-series-generate">產生系列賽預言圖</button>
+                  <span class="builder-status" id="ts-series-status" aria-live="polite"></span>
+                </div>
+              </div>
+              <div class="output-set" id="ts-series-output" aria-label="系列賽預測圖預覽">
+                <figure><div class="output-placeholder output-data away"><span>SERIES</span><b>系列賽預言</b><i></i><i></i><i></i><i></i></div><figcaption>結束場次與每戰勝方</figcaption></figure>
+              </div>
             </div>
           </div>
         </section>
       </div>
 
-      <div id="ts-review-view" hidden>
+      <div id="ts-review-view" class="ts-phase-block ts-review-phase">
         <section class="series-picker" aria-labelledby="review-picker-title">
           <div class="series-section-head">
             <div>
@@ -3040,21 +3050,28 @@ wallMQ.addEventListener && wallMQ.addEventListener("change", buildWall);
 let tsSelectedGame = TAIWAN_SERIES_GAMES[0] || null;
 let tsThemeTeam = tsSelectedGame ? tsSelectedGame.away : null;
 let tsSelectedPlayer = "";
-let tsMode = "prediction";
+let tsUploadContext = "prediction";
 let tsPhoto = null, tsPhotoURL = "", tsOutputURLs = [], tsPredictionURL = "", tsSeriesURL = "";
 let tsPredictionBg = "default";
 const TS_PREDICTION_KEY = "cpbl2026-taiwan-series-predictions";
+const TS_NAME_KEY = "cpbl2026-taiwan-series-name";
 const ANONYMOUS_ID_KEY = "cpbl-anonymous-voter-id";
 const turnstileState = {
   prediction:{container:"ts-pred-turnstile",token:"",widget:null},
   community:{container:"community-turnstile",token:"",widget:null},
 };
 let apiConfigPromise = null, turnstileScriptPromise = null;
+const isLocalPreview = ["localhost","127.0.0.1",""].includes(location.hostname);
 let tsPredictionState = (() => {
   try{ return JSON.parse(localStorage.getItem(TS_PREDICTION_KEY)) || {}; }catch(e){ return {}; }
 })();
 const tsPhotoKey = game => game ? `taiwan-series-photo-${game.year}-${game.g}` : "taiwan-series-photo";
 const tsPredictionKey = game => game ? `${game.year}-g${game.g}` : "demo";
+const tsFanName = () => (document.getElementById("ts-fan-name")?.value || "").trim().slice(0,16);
+function tsDownloadStamp(now = new Date()){
+  const pad = value => String(value).padStart(2,"0");
+  return `${now.getFullYear()}.${pad(now.getMonth()+1)}.${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+}
 
 const apiErrorText = code => ({
   prediction_closed:"這場比賽目前不在預測開放時間。",
@@ -3067,6 +3084,7 @@ const apiErrorText = code => ({
 })[code] || "目前無法完成，請稍後再試。";
 
 async function getApiConfig(){
+  if (isLocalPreview) return {ok:true,writesEnabled:false,turnstileSiteKey:""};
   if (!apiConfigPromise) apiConfigPromise = fetch("/api/config",{headers:{accept:"application/json"}})
     .then(async response => { if(!response.ok) throw new Error("api_unavailable"); return response.json(); })
     .catch(() => ({ok:false,writesEnabled:false,turnstileSiteKey:""}));
@@ -3147,6 +3165,12 @@ function tsResetPredictionOutput(){
   document.getElementById("ts-pred-output").innerHTML = `<figure><div class="output-placeholder output-cover"><span>1.賽前預言</span><b>我的預測</b></div><figcaption>完賽後用同一張圖對答案</figcaption></figure>`;
   document.getElementById("ts-pred-status").textContent = "";
 }
+function tsResetSeriesOutput(){
+  if (tsSeriesURL) URL.revokeObjectURL(tsSeriesURL);
+  tsSeriesURL = "";
+  document.getElementById("ts-series-output").innerHTML = `<figure><div class="output-placeholder output-data away"><span>SERIES</span><b>系列賽預言</b><i></i><i></i><i></i><i></i></div><figcaption>結束場次與每戰勝方</figcaption></figure>`;
+  document.getElementById("ts-series-status").textContent = "";
+}
 async function tsLoadStoredPhoto(){
   tsSetPhoto(null);
   let p = await PhotoDB.run("readonly", s => s.get(tsPhotoKey(tsSelectedGame))).catch(() => null);
@@ -3176,10 +3200,11 @@ function tsGameButtons(kind){
   const available = new Map(TAIWAN_SERIES_GAMES.map(g => [g.g, g]));
   return Array.from({length:7}, (_, i) => {
     const n = i + 1, g = available.get(n), selected = g === tsSelectedGame;
-    if (!g) return `<button class="series-game" disabled><b>G${n}</b><span>${n > 4 ? "視需要進行" : "等待賽程"}</span><small>${kind === "prediction" ? "WAITING" : "LOCKED"}</small></button>`;
+    const status = n >= 5 ? "若有比賽" : "尚未開放";
+    if (!g) return `<button class="series-game" disabled><b>G${n}</b><span>${status}</span><small>${status}</small></button>`;
     if (!g.dataReady){
       const dateTime = `${g.date.slice(5).replace("-","/")} · ${g.time}`;
-      return `<button class="series-game" disabled><b>G${n}</b><span>${dateTime}</span><small>${kind === "prediction" ? "等待先發名單" : "尚未開賽"}</small></button>`;
+      return `<button class="series-game" disabled><b>G${n}</b><span>${dateTime}</span><small>${status}</small></button>`;
     }
     const dataAttr = kind === "prediction" ? "data-ts-pred-game" : "data-ts-review-game";
     const sub = kind === "prediction" ? `${g.date.slice(5).replace("-","/")} · ${g.time}` : `${g.awayScore} : ${g.homeScore} · ${g.venue}`;
@@ -3249,7 +3274,9 @@ function tsRenderControls(){
   document.querySelectorAll("[data-ts-bg]").forEach(b => b.setAttribute("aria-pressed",String(b.dataset.tsBg === tsPredictionBg)));
 
   const series = tsPredictionState.series || (tsPredictionState.series = {finish:6,winners:{}});
-  if (!Object.keys(series.winners || {}).length) for (let n=1;n<=7;n++) series.winners[n] = n % 2 ? tsSelectedGame.away : tsSelectedGame.home;
+  if (![4,5,6,7].includes(Number(series.finish))) series.finish = 6;
+  series.winners = series.winners || {};
+  for (let n=1;n<=7;n++) if (![tsSelectedGame.away,tsSelectedGame.home].includes(series.winners[n])) series.winners[n] = n % 2 ? tsSelectedGame.away : tsSelectedGame.home;
   document.getElementById("ts-finish-options").innerHTML = [4,5,6,7].map(n => `<button data-ts-finish="${n}" aria-pressed="${series.finish === n}">G${n} 結束</button>`).join("");
   document.getElementById("ts-series-picks").innerHTML = Array.from({length:7},(_,i) => {
     const n=i+1, winner=series.winners[n];
@@ -3334,6 +3361,7 @@ async function tsLoadPoll(){
   if(!tsSelectedGame)return;
   const chart=document.getElementById("ts-poll-chart"),meta=document.getElementById("ts-poll-meta"),title=document.getElementById("ts-poll-title");
   title.textContent=`G${tsSelectedGame.g} 球迷預測`;
+  if(isLocalPreview){chart.innerHTML='<div class="community-empty">本機預覽不連接測試站資料庫；部署後才會顯示網友預測。</div>';meta.textContent="";return;}
   chart.innerHTML='<div class="community-empty">正在讀取匿名預測…</div>';meta.textContent="";
   try{
     const response=await fetch(`/api/predictions/summary?year=${encodeURIComponent(tsSelectedGame.year)}&game=${encodeURIComponent(tsSelectedGame.g)}`,{headers:{accept:"application/json"}});
@@ -3358,8 +3386,8 @@ async function tsSubmitPrediction(prediction){
   tsLoadPoll();
   return {submitted:true,message:"已匿名納入球迷預測；同一裝置再次送出會更新這一票。",data};
 }
-async function tsDrawPrediction(game, prediction){
-  await loadFontsFor(`${game.away}${game.home}${prediction.rbi}${prediction.win}${prediction.loss}${prediction.mvp}`);
+async function tsDrawPrediction(game, prediction, stamp = tsDownloadStamp()){
+  await loadFontsFor(`${game.away}${game.home}${prediction.rbi}${prediction.win}${prediction.loss}${prediction.mvp}${tsFanName()}`);
   const winner = prediction.awayScore >= prediction.homeScore ? game.away : game.home;
   const {c,ctx,accent}=tsBase(game,winner),L=70,R=SW-66;
   if (prediction.bg === "photo" && tsPhoto) await tsDrawPhotoStage(ctx,winner,1040);
@@ -3387,12 +3415,13 @@ async function tsDrawPrediction(game, prediction){
   ctx.fillStyle="#F7F3E8";ctx.font=`700 34px ${F_TC}`;ctx.fillText(`實際賽果 ${game.awayScore} : ${game.homeScore}`,L,1623);
   ctx.textAlign="right";ctx.fillStyle=accent.f;ctx.font=`800 48px ${F_NUM}`;ctx.fillText(`${hits} / 5`,R,1625);ctx.textAlign="left";
   ctx.fillStyle="rgba(247,243,232,.62)";ctx.font=`500 20px ${F_TC}`;ctx.fillText("G1 測試資料已完賽，因此直接顯示對答案結果。",L,1670);
-  tsCardFooter(ctx,game);return c;
+  tsCardFooter(ctx,game,stamp);return c;
 }
-async function tsDrawSeriesPrediction(game, series){
-  await loadFontsFor(`${game.away}${game.home}`);
+async function tsDrawSeriesPrediction(game, series, stamp = tsDownloadStamp()){
+  await loadFontsFor(`${game.away}${game.home}${tsFanName()}`);
   const {c,ctx,accent}=tsBase(game,game.away),L=70,R=SW-66;
-  ctx.fillStyle=TEAMS[game.away].c;ctx.fillRect(0,0,SW/2,720);ctx.fillStyle=TEAMS[game.home].c;ctx.fillRect(SW/2,0,SW/2,720);
+  if (tsPredictionBg === "photo" && tsPhoto) await tsDrawPhotoStage(ctx,game.away,720);
+  else {ctx.fillStyle=TEAMS[game.away].c;ctx.fillRect(0,0,SW/2,720);ctx.fillStyle=TEAMS[game.home].c;ctx.fillRect(SW/2,0,SW/2,720);}
   const fade=ctx.createLinearGradient(0,260,0,800);fade.addColorStop(0,"rgba(8,9,13,0)");fade.addColorStop(1,"#0B0D12");ctx.fillStyle=fade;ctx.fillRect(0,260,SW,540);
   tsHeader(ctx,game,"SERIES PREDICTION",accent);
   ctx.textAlign="center";ctx.fillStyle="#F7F3E8";ctx.font=`700 36px ${F_TC}`;ctx.fillText(`${teamDisplayName(game.away)}　VS　${teamDisplayName(game.home)}`,SW/2,500);
@@ -3405,11 +3434,13 @@ async function tsDrawSeriesPrediction(game, series){
     if(active){tsTeamMark(ctx,winner,R-185,y-22,24);ctx.textAlign="right";ctx.fillStyle="#F7F3E8";ctx.font=`700 25px ${F_TC}`;ctx.fillText(`${teamDisplayName(winner)}拿下`,R-8,y);ctx.textAlign="left";}
     else{ctx.textAlign="right";ctx.fillStyle="rgba(247,243,232,.32)";ctx.font=`600 21px ${F_TC}`;ctx.fillText("預測不會進行",R-8,y);ctx.textAlign="left";}
   }
-  ctx.fillStyle="rgba(255,255,255,.14)";ctx.fillRect(L,1680,R-L,1);ctx.fillStyle="rgba(247,243,232,.56)";ctx.font=`500 19px ${F_TC}`;ctx.fillText("系列賽預測將在 G1 開賽時鎖定",L,1730);
+  ctx.fillStyle="rgba(255,255,255,.14)";ctx.fillRect(L,1680,R-L,1);ctx.fillStyle="rgba(247,243,232,.56)";ctx.font=`500 19px ${F_TC}`;ctx.fillText("系列賽預測將在 G1 開賽時鎖定",L,1726);
+  const fan=tsFanName();ctx.fillStyle="rgba(247,243,232,.58)";ctx.font=`500 18px ${F_TC}`;ctx.fillText(`下載時間 ${stamp}`,L,1780);
+  if(fan){ctx.textAlign="right";ctx.font=`700 20px ${F_TC}`;ctx.fillText(`球迷 ${fan}`,R,1780);ctx.textAlign="left";}
   ctx.textAlign="center";ctx.fillStyle="rgba(247,243,232,.75)";ctx.font=`700 24px ${F_NUM}`;ctx.fillText("mybaseballgame.com",SW/2,1850);ctx.fillStyle="rgba(247,243,232,.42)";ctx.font=`500 16px ${F_TC}`;ctx.fillText("2026 台灣大賽預測 · 非官方球迷網站",SW/2,1884);return c;
 }
-async function tsDrawCover(game, team){
-  await loadFontsFor(Object.keys(game.teams).join("") + game.moments.join("") + game.mvp.name);
+async function tsDrawCover(game, team, stamp = tsDownloadStamp()){
+  await loadFontsFor(Object.keys(game.teams).join("") + game.moments.join("") + game.mvp.name + tsFanName());
   const {c, ctx, accent} = tsBase(game, team), L = 70, R = SW - 66;
   await tsDrawPhotoStage(ctx, team, 1040);
   tsHeader(ctx, game, `2.賽時回顧 · G${game.g}`, accent);
@@ -3435,22 +3466,23 @@ async function tsDrawCover(game, team){
   ctx.fillStyle = accent.f; ctx.font = `700 21px ${F_NUM}`; spacing(ctx, 3); ctx.fillText("KEY MOMENTS", L, y0 + 318); spacing(ctx, 0);
   ctx.fillStyle = "rgba(247,243,232,.82)"; ctx.font = `500 24px ${F_TC}`;
   game.moments.forEach((m, i) => { ctx.fillStyle = i === 0 ? accent.f : "rgba(247,243,232,.82)"; ctx.fillText(`${String(i+1).padStart(2,"0")}　${m}`, L, y0 + 368 + i * 55); });
-  ctx.fillStyle = "rgba(247,243,232,.55)"; ctx.font = `500 20px ${F_TC}`; ctx.fillText(`比賽時間 ${game.duration}　·　觀眾 ${game.attendance.toLocaleString("zh-TW")} 人`, L, 1770);
-  ctx.textAlign = "center"; ctx.fillStyle = "rgba(247,243,232,.75)"; ctx.font = `700 24px ${F_NUM}`; ctx.fillText("mybaseballgame.com", SW/2, 1850);
-  ctx.fillStyle = "rgba(247,243,232,.42)"; ctx.font = `500 16px ${F_TC}`; ctx.fillText(game.testSourceGame ? `例行賽第 ${game.testSourceGame} 場測試資料 · 非官方球迷網站` : "球迷自製 · 非 CPBL 官方網站", SW/2, 1884);
+  ctx.fillStyle = "rgba(247,243,232,.55)"; ctx.font = `500 20px ${F_TC}`; ctx.fillText(`比賽時間 ${game.duration}　·　觀眾 ${game.attendance.toLocaleString("zh-TW")} 人`, L, 1695);
+  tsCardFooter(ctx, game, stamp);
   return c;
 }
-function tsCardFooter(ctx, game){
+function tsCardFooter(ctx, game, stamp = tsDownloadStamp()){
   const L = 70, R = SW - 66;
   ctx.textAlign="left"; ctx.fillStyle="rgba(255,255,255,.14)"; ctx.fillRect(L,1742,R-L,1);
   ctx.fillStyle="rgba(247,243,232,.58)"; ctx.font=`500 19px ${F_TC}`;
-  ctx.fillText(`${tsDate(game.date)} · ${game.away} ${game.awayScore} : ${game.homeScore} ${game.home}`,L,1794);
+  ctx.fillText(`${tsDate(game.date)} · ${game.away} ${game.awayScore} : ${game.homeScore} ${game.home}`,L,1784);
+  const fan=tsFanName();if(fan){ctx.textAlign="right";ctx.font=`700 20px ${F_TC}`;ctx.fillText(`球迷 ${fan}`,R,1784);ctx.textAlign="left";}
+  ctx.fillStyle="rgba(247,243,232,.48)";ctx.font=`500 16px ${F_TC}`;ctx.fillText(`下載時間 ${stamp}`,L,1818);
   ctx.textAlign="center"; ctx.fillStyle="rgba(247,243,232,.75)"; ctx.font=`700 24px ${F_NUM}`; ctx.fillText("mybaseballgame.com",SW/2,1850);
   ctx.fillStyle="rgba(247,243,232,.42)"; ctx.font=`500 16px ${F_TC}`;
   ctx.fillText(game.testSourceGame ? `例行賽第 ${game.testSourceGame} 場測試資料 · 非官方球迷網站` : "球迷自製 · 非 CPBL 官方網站",SW/2,1884);
 }
 
-async function tsDrawScoreboard(game, team){
+async function tsDrawScoreboard(game, team, stamp = tsDownloadStamp()){
   await loadFontsFor(`${game.away}${game.home}${game.mvp.name}${game.moments.join("")}`);
   const {c, ctx, accent} = tsBase(game, team), L = 70, R = SW - 66;
   await tsDrawPhotoStage(ctx, team, 1040);
@@ -3490,7 +3522,7 @@ async function tsDrawScoreboard(game, team){
   ctx.fillText([`敗投 ${game.decisions.loss}`, game.decisions.save ? `救援 ${game.decisions.save}` : "", `勝利打點 ${game.winningRbi}`].filter(Boolean).join("　·　"), L, 1545);
   ctx.fillText(`${game.homeRuns.length ? `全壘打 ${game.homeRuns.join("、")}` : "無全壘打"}　·　${game.mvp.line}`, L, 1587);
   ctx.fillStyle = "rgba(247,243,232,.52)"; ctx.font = `500 19px ${F_TC}`; ctx.fillText(`比賽時間 ${game.duration}　·　觀眾 ${game.attendance.toLocaleString("zh-TW")} 人`, L, 1662);
-  tsCardFooter(ctx, game);
+  tsCardFooter(ctx, game, stamp);
   return c;
 }
 
@@ -3503,9 +3535,9 @@ function tsPlayerHighlights(game, player){
   return [...new Set(out)];
 }
 
-async function tsDrawPlayer(game, player){
+async function tsDrawPlayer(game, player, stamp = tsDownloadStamp()){
   const {team, role, data} = player, {c, ctx, accent} = tsBase(game, team), L = 70, R = SW - 66;
-  await loadFontsFor(`${team}${data.name}${game.moments.join("")}`);
+  await loadFontsFor(`${team}${data.name}${game.moments.join("")}${tsFanName()}`);
   await tsDrawPhotoStage(ctx, team, 1040);
   tsHeader(ctx, game, `3.最愛的球員 · G${game.g}`, accent);
   tsTeamMark(ctx, team, L + 36, 770, 36);
@@ -3550,7 +3582,7 @@ async function tsDrawPlayer(game, player){
   ctx.fillStyle = "rgba(255,255,255,.14)"; ctx.fillRect(L,1635,R-L,1);
   ctx.fillStyle="#F7F3E8"; ctx.font=`600 22px ${F_TC}`;
   tsWrap(ctx, personalMoments[0] || `${teamDisplayName(team)}在 G${game.g} 的單場表現`, L, 1680, R-L, 32, 1);
-  tsCardFooter(ctx, game);
+  tsCardFooter(ctx, game, stamp);
   return c;
 }
 function tsCanvasBlob(canvas){ return new Promise((res, rej) => canvas.toBlob(b => b ? res(b) : rej(new Error("encode")), "image/png")); }
@@ -3561,7 +3593,8 @@ async function tsGenerate(){
   try{
     const game = tsSelectedGame;
     const player = tsPlayers(game).find(p => p.id === tsSelectedPlayer) || tsPlayers(game)[0];
-    const canvases = [await tsDrawCover(game, tsThemeTeam), await tsDrawPlayer(game, player)];
+    const stamp = tsDownloadStamp();
+    const canvases = [await tsDrawCover(game, tsThemeTeam, stamp), await tsDrawPlayer(game, player, stamp)];
     const blobs = await Promise.all(canvases.map(tsCanvasBlob)); canvases.forEach(c => { c.width = c.height = 0; });
     tsOutputURLs.forEach(URL.revokeObjectURL); tsOutputURLs = blobs.map(URL.createObjectURL);
     const names = ["2.賽時回顧", `3.最愛的球員・${player.data.name}`];
@@ -3585,7 +3618,7 @@ async function tsGeneratePrediction(){
     let submission;
     try{submission=await tsSubmitPrediction(prediction);}catch(error){resetTurnstile("prediction");submission={submitted:false,message:apiErrorText(error.message)};}
     if(submission.requiresVerification){status.textContent=submission.message;return;}
-    const canvas=await tsDrawPrediction(tsSelectedGame,prediction),blob=await tsCanvasBlob(canvas);canvas.width=canvas.height=0;
+    const canvas=await tsDrawPrediction(tsSelectedGame,prediction,tsDownloadStamp()),blob=await tsCanvasBlob(canvas);canvas.width=canvas.height=0;
     if(tsPredictionURL)URL.revokeObjectURL(tsPredictionURL);tsPredictionURL=URL.createObjectURL(blob);
     document.getElementById("ts-pred-output").innerHTML=`<figure><img src="${tsPredictionURL}" alt="1.賽前預言與對答案預覽"><figcaption>1.賽前預言 · G1 測試資料對答案</figcaption><button class="output-download" id="ts-pred-download">下載 PNG</button></figure>`;
     document.getElementById("ts-pred-download").onclick=()=>{const a=document.createElement("a");a.href=tsPredictionURL;a.download=`cpbl-${tsSelectedGame.year}-taiwan-series-g${tsSelectedGame.g}-prediction.png`;a.click();};
@@ -3598,7 +3631,7 @@ async function tsGenerateSeries(){
   const status=document.getElementById("ts-series-status"),btn=document.getElementById("ts-series-generate");
   btn.disabled=true;status.textContent="正在整理系列賽預測…";
   try{
-    const series=tsPredictionState.series,canvas=await tsDrawSeriesPrediction(tsSelectedGame,series),blob=await tsCanvasBlob(canvas);canvas.width=canvas.height=0;
+    const series=tsPredictionState.series,canvas=await tsDrawSeriesPrediction(tsSelectedGame,series,tsDownloadStamp()),blob=await tsCanvasBlob(canvas);canvas.width=canvas.height=0;
     if(tsSeriesURL)URL.revokeObjectURL(tsSeriesURL);tsSeriesURL=URL.createObjectURL(blob);tsSavePredictions();
     document.getElementById("ts-series-output").innerHTML=`<figure><img src="${tsSeriesURL}" alt="系列賽預測圖預覽"><figcaption>系列賽預測</figcaption><button class="output-download" id="ts-series-download">下載 PNG</button></figure>`;
     document.getElementById("ts-series-download").onclick=()=>{const a=document.createElement("a");a.href=tsSeriesURL;a.download=`cpbl-${tsSelectedGame.year}-taiwan-series-series-prediction.png`;a.click();};
@@ -3608,17 +3641,27 @@ async function tsGenerateSeries(){
 }
 
 const tsPhotoInput = document.getElementById("ts-photo-input");
-document.querySelectorAll("[data-ts-upload]").forEach(btn => btn.onclick = () => tsPhotoInput.click());
+const tsFanNameInput = document.getElementById("ts-fan-name");
+try{ tsFanNameInput.value = localStorage.getItem(TS_NAME_KEY) || ""; }catch(e){}
+tsFanNameInput.addEventListener("input", () => {
+  try{ localStorage.setItem(TS_NAME_KEY, tsFanName()); }catch(e){}
+  tsResetPredictionOutput();tsResetSeriesOutput();tsResetOutputs();
+});
+document.querySelectorAll("[data-ts-upload]").forEach(btn => btn.onclick = () => {
+  tsUploadContext = btn.closest("#ts-review-view") ? "review" : "prediction";
+  tsPhotoInput.click();
+});
 tsPhotoInput.addEventListener("change", async () => {
   const file = tsPhotoInput.files && tsPhotoInput.files[0]; tsPhotoInput.value = "";
   if (!file) return;
+  const status = document.getElementById(tsUploadContext === "review" ? "ts-status" : "ts-pred-status");
   try{
-    document.getElementById(tsMode === "prediction" ? "ts-pred-status" : "ts-status").textContent = "正在處理照片…";
+    status.textContent = "正在處理照片…";
     const compressed = await compressImage(file), p = {...compressed, fx:.5, fy:.5, z:1};
     tsSetPhoto(p); await PhotoDB.run("readwrite", s => s.put(p, tsPhotoKey(tsSelectedGame)));
     tsPredictionBg="photo";tsCurrentPrediction().bg="photo";tsSavePredictions();document.querySelectorAll("[data-ts-bg]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.tsBg==="photo")));
-    document.getElementById(tsMode === "prediction" ? "ts-pred-status" : "ts-status").textContent = "照片已準備好，只儲存在這台裝置。";
-  }catch(e){ document.getElementById(tsMode === "prediction" ? "ts-pred-status" : "ts-status").textContent = "這張照片讀不進來，請換一張 JPG 或 PNG。"; }
+    tsResetPredictionOutput();tsResetSeriesOutput();tsResetOutputs();status.textContent = "照片已準備好，只儲存在這台裝置。";
+  }catch(e){ status.textContent = "這張照片讀不進來，請換一張 JPG 或 PNG。"; }
 });
 document.getElementById("ts-generate").onclick = tsGenerate;
 document.getElementById("ts-pred-generate").onclick = tsGeneratePrediction;
@@ -3629,18 +3672,16 @@ document.getElementById("ts-player-select").addEventListener("change", e => { ts
 document.getElementById("view-taiwan-series").addEventListener("click", e => {
   const jump = e.target.closest("[data-series-jump]");
   if (jump){ document.getElementById("series-picker").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); return; }
-  const modeBtn=e.target.closest("[data-ts-mode]");
-  if(modeBtn){tsMode=modeBtn.dataset.tsMode;document.querySelectorAll("[data-ts-mode]").forEach(b=>b.setAttribute("aria-pressed",String(b===modeBtn)));document.getElementById("ts-prediction-view").hidden=tsMode!=="prediction";document.getElementById("ts-review-view").hidden=tsMode!=="review";return;}
   const gameBtn = e.target.closest("[data-ts-pred-game],[data-ts-review-game]");
-  if (gameBtn){ const gameNo=Number(gameBtn.dataset.tsPredGame||gameBtn.dataset.tsReviewGame);tsSelectedGame = TAIWAN_SERIES_GAMES.find(g => g.g === gameNo); tsThemeTeam = tsSelectedGame.away; tsSelectedPlayer = tsDefaultPlayer(tsSelectedGame); tsRenderControls(); tsResetOutputs(); tsResetPredictionOutput(); tsLoadStoredPhoto(); tsLoadPoll(); return; }
+  if (gameBtn){ const gameNo=Number(gameBtn.dataset.tsPredGame||gameBtn.dataset.tsReviewGame);tsSelectedGame = TAIWAN_SERIES_GAMES.find(g => g.g === gameNo); tsThemeTeam = tsSelectedGame.away; tsSelectedPlayer = tsDefaultPlayer(tsSelectedGame); tsRenderControls(); tsResetOutputs(); tsResetPredictionOutput(); tsResetSeriesOutput(); tsLoadStoredPhoto(); tsLoadPoll(); return; }
   const theme = e.target.closest("[data-ts-team]");
   if (theme){ tsThemeTeam = theme.dataset.tsTeam; document.querySelectorAll("[data-ts-team]").forEach(b => b.setAttribute("aria-pressed", String(b === theme))); tsResetOutputs(); return; }
   const bg=e.target.closest("[data-ts-bg]");
-  if(bg){tsPredictionBg=bg.dataset.tsBg;tsCurrentPrediction().bg=tsPredictionBg;tsSavePredictions();document.querySelectorAll("[data-ts-bg]").forEach(b=>b.setAttribute("aria-pressed",String(b===bg)));tsResetPredictionOutput();return;}
+  if(bg){tsPredictionBg=bg.dataset.tsBg;tsCurrentPrediction().bg=tsPredictionBg;tsSavePredictions();document.querySelectorAll("[data-ts-bg]").forEach(b=>b.setAttribute("aria-pressed",String(b===bg)));tsResetPredictionOutput();tsResetSeriesOutput();return;}
   const finish=e.target.closest("[data-ts-finish]");
-  if(finish){tsPredictionState.series.finish=Number(finish.dataset.tsFinish);tsSavePredictions();tsRenderControls();return;}
+  if(finish){tsPredictionState.series.finish=Number(finish.dataset.tsFinish);tsSavePredictions();tsRenderControls();tsResetSeriesOutput();return;}
   const seriesPick=e.target.closest("[data-ts-series-winner]");
-  if(seriesPick){tsPredictionState.series.winners[Number(seriesPick.dataset.tsSeriesGame)]=seriesPick.dataset.tsSeriesWinner;tsSavePredictions();tsRenderControls();return;}
+  if(seriesPick){tsPredictionState.series.winners[Number(seriesPick.dataset.tsSeriesGame)]=seriesPick.dataset.tsSeriesWinner;tsSavePredictions();tsRenderControls();tsResetSeriesOutput();return;}
   const nav = e.target.closest("[data-go]"); if (nav) go(nav.dataset.go);
 });
 tsRenderControls();
