@@ -19,7 +19,7 @@
   ],
   "vars": {
     "ENVIRONMENT": "staging",
-    "POLL_MIN_SAMPLE": "5"
+    "POLL_MIN_SAMPLE": "1"
   },
   "env": {
     "production": {
@@ -34,7 +34,7 @@
       ],
       "vars": {
         "ENVIRONMENT": "production",
-        "POLL_MIN_SAMPLE": "5"
+        "POLL_MIN_SAMPLE": "1"
       }
     }
   }

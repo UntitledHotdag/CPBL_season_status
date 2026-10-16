@@ -263,7 +263,7 @@ async function predictionSummary(url, env) {
     if (Object.hasOwn(votes, row.winner_team)) votes[row.winner_team] = Number(row.votes) || 0;
   }
   const total = Object.values(votes).reduce((sum, count) => sum + count, 0);
-  const minimum = Math.max(1, Number(env.POLL_MIN_SAMPLE) || 5);
+  const minimum = Math.max(1, Number(env.POLL_MIN_SAMPLE) || 1);
   const visible = total >= minimum;
   return json({ ok: true, gameId: gameId(game), total, minimum, visible, votes: visible ? votes : null });
 }
@@ -330,7 +330,7 @@ async function seriesPredictionSummary(url, env) {
     votes: Number(row.votes) || 0,
   }));
   const total = scores.reduce((sum, score) => sum + score.votes, 0);
-  const minimum = Math.max(1, Number(env.POLL_MIN_SAMPLE) || 5);
+  const minimum = Math.max(1, Number(env.POLL_MIN_SAMPLE) || 1);
   const visible = total >= minimum;
   return json({ ok: true, year, total, minimum, visible, scores: visible ? scores : null });
 }
