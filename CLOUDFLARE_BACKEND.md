@@ -1,5 +1,7 @@
 # Cloudflare backend setup
 
+Current product flows and card design are documented in [SYSTEM_DESIGN.md](SYSTEM_DESIGN.md). This file covers configuration, not proof that either Cloudflare environment is healthy; confirm deployment, D1 binding and API responses in the target environment.
+
 The site remains static for normal page requests. Only `/api/*` and the protected `/admin*` paths run through the Worker. D1 stores anonymous Taiwan Series game and final-score predictions. Community storage remains disabled; user names and photos are never uploaded.
 
 ## Local development
@@ -23,7 +25,7 @@ The local Turnstile keys are Cloudflare's test keys. They must never be used for
    npx wrangler d1 create cpbl-season-status-staging
    ```
 
-3. Replace the staging placeholder `database_id` in `wrangler.jsonc` with the returned ID.
+3. Verify the staging `database_id` in `wrangler.jsonc` matches the D1 database in the Cloudflare account currently used by Wrangler. The repository has a staging ID, but an ID alone does not grant account access. A `7403` error means the signed-in account or API token is not authorized for that D1 resource; check `wrangler whoami`, account selection and token permissions before retrying the migration.
 4. In Cloudflare Turnstile, create a widget for `staging.mybaseballgame.com`.
 5. Configure the public site key and both server secrets. Wrangler prompts for values without putting them in shell history:
 
@@ -61,7 +63,7 @@ npx wrangler secret put ANON_HASH_SALT --env production
 npm run deploy:production
 ```
 
-Replace the production placeholder `database_id` in `wrangler.jsonc` before deploying. Every Taiwan Series game must include `startsAt`; its prediction window closes exactly at that time. The whole-series prediction closes at G1's `startsAt`.
+Replace the production placeholder `database_id` (`00000000-0000-0000-0000-000000000000`) in `wrangler.jsonc` before deploying. Production also needs its own D1, Turnstile keys and secrets; staging settings do not imply production is ready. Every Taiwan Series game must include `startsAt`; its prediction window closes exactly at that time. The whole-series prediction closes at G1's `startsAt`.
 
 ## Community moderation
 
@@ -96,5 +98,6 @@ Only approve public Threads posts that visibly use this site's fan-made card for
 - Stored series-prediction fields: final wins for both teams, anonymous browser ID hash, timestamps.
 - The community tables and moderation code remain present but all public, submission, and admin APIs return `503 community_coming_soon` while the feature is paused.
 - Never store the fan's display name, uploaded photo, raw anonymous browser ID, or IP address.
+- Per-game and whole-series card names, photos and crop values remain in the browser's localStorage / IndexedDB. The Worker accepts only the anonymous prediction fields; download timestamps appear on the local PNG, not in the public poll.
 - GA events may record only the team letter and game number; never send player names or Threads URLs to GA.
 

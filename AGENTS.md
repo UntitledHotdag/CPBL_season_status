@@ -10,7 +10,7 @@
 
 1. **不要直接改 `docs/index.html`**。它是建置產物，會被覆蓋。要改網站就改 `src/app.html`，再執行 `python3 tools/build.py`。
 2. **一般網站功能維持純前端**；目前唯一核准的後端範圍是台灣大賽匿名預測 API、D1 統計與受 Cloudflare Access 保護的管理架構。不得擴大保存範圍或新增會上傳個資的功能；若需求需要更多伺服器能力，先提出方案與費用評估，經維護者同意才做（見 §8）。
-3. **不得使用 CPBL 或各球團的官方 Logo、商標、官方照片**。球隊一律以「一個英文字母＋代表色」的自製標誌表示（見 §5.3）。
+3. **不得使用 CPBL 或各球團的官方 Logo、商標、官方照片**。一般介面的球隊徽章以「一個英文字母＋代表色」自製（見 §5.3）；台灣大賽下載預測圖改用球隊全名，不以 B／W 代替 Logo。
 4. **介面文字使用繁體中文（台灣用語）**；程式識別名稱、commit message 使用英文。
 5. **使用者的勾選紀錄、名字、照片只存在使用者自己的瀏覽器**；台灣大賽只會送出匿名比分／球員預測與雜湊後的裝置識別。GA 事件不得帶入名字、照片、球員選擇或搜尋字串內容。
 6. **只計「進場觀賽」**：轉播、直播不算，文案不得暗示可以登記電視觀賽。
@@ -57,6 +57,8 @@
 CPBL_season_status/
 ├── AGENTS.md              ← 本文件（AI／開發者說明）
 ├── CLAUDE.md              ← 指向本文件
+├── SYSTEM_DESIGN.md       ← 現行站點架構、使用者路徑、圖卡設計與功能狀態
+├── CLOUDFLARE_BACKEND.md  ← Worker／D1／Access 的設定與資料邊界
 ├── src/
 │   ├── app.html           ← 網站原始碼（唯一要手改的前端檔案；含 /*__GAMES_JSON__*/、/*__GA_ID__*/ 佔位符）
 │   ├── games.json         ← 360 場例行賽精簡資料（由 parse_cpbl_pdf.py 產生）
@@ -89,7 +91,7 @@ CPBL_season_status/
 ## 4. 技術架構
 
 - **單一 HTML 前端**：所有 CSS、JS、賽程資料都內嵌在 `docs/index.html`。無框架、無打包工具，純 vanilla JS；匿名預測才呼叫 Worker API。
-- **外部資源**：只有 Google Fonts（Manrope、Noto Sans TC）與 GA4 的 `gtag.js`。
+- **外部資源**：Google Fonts（Manrope、Noto Sans TC）、正式站 GA4 的 `gtag.js`，以及匿名預測所需的 Cloudflare Turnstile。
 - **路由**：hash router，包含 `#intro`、`#pick`、`#result`、`#taiwan-series`、`#community`。瀏覽器上一頁可用；`#result` 在沒有勾選時會導回 `#pick`。
 - **本機狀態儲存**：
 
@@ -101,9 +103,12 @@ CPBL_season_status/
 | localStorage | `cpbl2026-name` | 使用者在成果頁輸入的名字 |
 | localStorage | `cpbl2026-view` | 選賽頁檢視：`month` / `week` / `list` |
 | localStorage | `cpbl2026-taiwan-series-predictions-v2` | 台灣大賽逐場預測與系列賽比分；用於鎖定後重畫、完賽後對答案 |
+| localStorage | `cpbl2026-taiwan-series-name-v2` / `cpbl2026-taiwan-series-score-name-v2` | 逐場／系列賽圖卡姓名，只保存在裝置 |
 | IndexedDB | DB `cpbl2026`、store `kv`、key `photo` | 壓縮後 JPEG（最長邊 2000px，移除 EXIF/GPS）＋取景 `{fx, fy, z}` |
+| IndexedDB | 同 DB，`taiwan-series-v2-photo-<year>-<G>` / `taiwan-series-v2-series-photo-<year>` | 逐場與系列賽各自保存照片與取景，不會上傳 |
 
 - **照片取景模型**：焦點 `fx, fy`（0–1）＋縮放 `z`（≥1，以 cover 為基準）。同一組設定套用到成果頁 16:7 大圖與 9:16 回顧圖。
+- **台灣大賽照片編輯**：逐場與系列賽各有 9:16 取景編輯器，支援拖曳、雙指／滑桿縮放、換圖、移除及重開已存照片。預測圖的主要文字從圖面約 40% 以下開始，上方留給照片。
 - **回顧圖**：Canvas 2D 繪製 1080×1920 PNG（`drawShare(model, photo)`，資料由 `shareModel(games, team, name)` 產生）。下載方式依環境：Claude Artifact 用 `downloads` capability；手機支援時用 Web Share（可直接分享到 IG）；其他情況 `<a download>`；手機也可長按預覽圖儲存。
 - **SEO／分享**：`<link rel="canonical">` 與 Open Graph 標籤指向 `https://mybaseballgame.com/`（尚無 og:image）。
 
@@ -116,9 +121,12 @@ CPBL_season_status/
 | 頁面 | 重點功能 |
 |---|---|
 | 介紹頁 `#intro` | Hero 主標「你這個賽季，進場看了幾場球？」＋季後挑戰賽更新資訊與快速篩選入口＋2.5D 斜放、緩慢捲動的回顧圖牆（12 張預先算好的 JPG）；「放上這個賽季你最喜歡的照片」區塊（照片 → 回顧圖對照）；三步驟（勾選、選球隊、做成賽季回顧圖）；整季數字；資料來源與免責聲明 |
-| 選擇賽事 `#pick` | 三種檢視：**月曆**（預設，格子內為對戰字母小徽章，點日期在下方展開當日卡片）、**周曆**（7 天、左右換週）、**列表**（整季、依月份分段且月份標題 sticky）。篩選：球隊（7 顆按鈕）、月份（全季／上半季／下半季／3–10 月）、球場、只看已選、搜尋。右下角「看我的戰績 →」、「清除所有」（7 秒內可復原） |
+| 選擇賽事 `#pick` | 三種檢視：**月曆**（預設，格子內為對戰字母小徽章，點日期在下方展開當日卡片）、**周曆**（7 天、左右換週）、**列表**（整季、依月份分段且月份標題 sticky）。篩選：球隊（6 隊）、月份（全季／上半季／下半季／3–10 月）、球場、只看已選、搜尋。右下角「看我的戰績 →」、「清除所有」（7 秒內可復原） |
 | 我的戰績 `#result` | 主視覺（可上傳照片並拖曳/縮放取景）→ 名字 → **選擇版面（你支持的球隊）** 下拉 → 觀賽摘要、球隊觀賽勝率或季後挑戰賽專用版面 → **賽季回顧圖卡片**（即時縮圖＋下載）→ 球隊細項、主場觀賽、球場踩點、每月進場 → 最底部「每一場的比賽明細」（上半季、下半季、季後挑戰賽、台灣大賽 TBD）。右下角「← 回到選擇賽事」 |
 | 台灣大賽 `#taiwan-series` | G1–G7 逐場預測（每場開賽時間到即鎖定）→ 同裝置保存預測 → 賽果資料標記 `dataReady` 後進入對答案；另有系列賽最終勝場預測、匿名比例圖，以及僅在完賽資料齊全後開放的賽後回顧圖 |
+| 社群 `#community` | 目前只顯示「即將上線」；不讀取作品、也不接受 Threads 投稿。管理介面與資料表保留，但 API 同樣停用 |
+
+完整 sitemap、使用者路徑、台灣大賽三種圖卡與後續功能規劃見 [SYSTEM_DESIGN.md](SYSTEM_DESIGN.md)。實作狀態以程式碼及資料檔為準，不把「已規劃」當成「已上線」。
 
 ### 5.2 統計定義
 
@@ -194,6 +202,7 @@ git add src docs && git commit -m "Short imperative summary" && git push
 - [ ] 淺色、深色模式都可讀
 - [ ] console 無錯誤；網路面板無 4xx/5xx
 - [ ] 主要流程：介紹 → 選賽（月曆／周曆／列表都試）→ 勾選 → 戰績 → 切換版面 → 上傳照片 → 下載回顧圖
+- [ ] 台灣大賽：逐場／系列賽照片各自上傳、取景、重開編輯與下載；預測時間窗、鎖定、`dataReady` 後對答案；社群保持停用
 - [ ] 改統計邏輯時，用 Python 對 `src/games.json` 獨立重算一次並比對頁面數字
 - [ ] GA：正式網址加 `?ga_debug=1`，在 GA4 → DebugView 確認事件
 
@@ -229,7 +238,7 @@ git add src docs && git commit -m "Short imperative summary" && git push
 
 ## 8. 成本與限制
 
-- Cloudflare 靜態資源請求免費、不限量；**新增 Worker 程式、`functions/`、KV、R2、D1 才可能計費**——動工前必須先評估。
+- 靜態資源使用 Cloudflare Workers Static Assets；目前已加入 Worker 與 D1 供匿名預測，流量／儲存需監控免費額度。再新增 `functions/`、KV、R2 或擴大資料保存範圍前須先評估成本與隱私。
 - 免費方案若用量超標只會回 429，不會自動扣款；帳號不應有付費訂閱（Billing → Subscriptions 應只有 Free）。
 - 單檔上限 25 MiB、每站 20,000 檔；`docs/` 目前約 1.1 MB。
 
@@ -253,6 +262,7 @@ git add src docs && git commit -m "Short imperative summary" && git push
 | `photo_upload` / `photo_confirm` / `photo_remove` | 照片 | `zoom`（confirm） |
 | `share_open` | 開啟回顧圖預覽 | `view`, `has_photo`, `picks_total` |
 | `share_save` | 儲存／分享回顧圖 | `method`（download / native_share / claude_downloads） |
+| `ts_card_save` | 儲存／分享台灣大賽圖卡 | `card`（prediction / series / game-summary / fan-pick）、`method`（download / native_share） |
 | `theme_toggle` | 深淺色 | `theme` |
 
 已建立的事件範圍自訂維度：`filter_type`、`filter_value`、`view`、`method`、`cta_location`。
@@ -299,6 +309,9 @@ git add src docs && git commit -m "Short imperative summary" && git push
 
 ### 中期（季後賽～下季開打前）
 - [ ] 隨賽程補齊台灣大賽完賽資料並驗證逐場對答案
+- [ ] 社群投稿／審核流程完成資料寫入、嵌入與濫用防護測試後，再由維護者決定是否開放
+- [ ] ibon 適用的列印海報版型、尺寸與實際列印驗證；不得直接放大 9:16 手機圖卡
+- [ ] 應援捐款：先確認金流、費率、隱私及法律責任，再決定實作方式
 - [ ] 多賽季架構：資料改為 `src/games-2027.json` 等，localStorage key 依年份分開，網址或選單切換賽季
 - [ ] 解析流程自動化（若官方資料可程式化取得，改回爬蟲並排程更新）
 - [ ] 回顧圖多種版型（例如方形 1:1 貼文版）
