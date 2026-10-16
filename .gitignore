@@ -4,3 +4,6 @@ Claude outputs/
 .venv/
 __pycache__/
 data/pdf/
+node_modules/
+.wrangler/
+.dev.vars

@@ -1,0 +1,160 @@
+[
+  {
+    "year": 2026,
+    "series": "taiwan",
+    "g": 1,
+    "demo": true,
+    "dataReady": true,
+    "date": "2026-10-17",
+    "time": "17:05",
+    "startsAt": "2026-10-17T17:05:00+08:00",
+    "sourceDate": "2026-09-19",
+    "testSourceGame": 341,
+    "venue": "大巨蛋",
+    "away": "中信兄弟",
+    "home": "味全龍",
+    "awayScore": 4,
+    "homeScore": 3,
+    "seriesRecord": {
+      "中信兄弟": "0勝0敗",
+      "味全龍": "0勝0敗"
+    },
+    "innings": {
+      "away": [0, 0, 2, 0, 0, 0, 0, 0, 0, 2],
+      "home": [0, 0, 0, 1, 0, 0, 0, 1, 0, 1]
+    },
+    "rhe": {
+      "away": [4, 6, 0],
+      "home": [3, 9, 1]
+    },
+    "duration": "02:40",
+    "attendance": 33691,
+    "winningRbi": "岳東華",
+    "mvp": {
+      "name": "岳東華",
+      "line": "4 打數 · 1 安打 · 1 打點"
+    },
+    "decisions": {
+      "win": "呂彥青",
+      "loss": "林凱威",
+      "save": ""
+    },
+    "homeRuns": [],
+    "moments": [
+      "岳東華生涯第 3 支再見安打",
+      "中信兄弟拿下 6 連勝、大巨蛋 4 連勝",
+      "梅賽鍶生涯 200 投球局數達成，單場投 9 局寫下個人新高"
+    ],
+    "teams": {
+      "中信兄弟": {
+        "batters": [
+          {"order": "1", "name": "張士綸", "pos": "3B", "ab": 4, "r": 1, "h": 1, "rbi": 0, "hr": 0, "bb": 0, "so": 0, "extra": "2B"},
+          {"order": "2", "name": "張仁瑋", "pos": "RF", "ab": 4, "r": 0, "h": 2, "rbi": 2, "hr": 0, "bb": 0, "so": 0},
+          {"order": "3", "name": "曾頌恩", "pos": "DH", "ab": 4, "r": 0, "h": 0, "rbi": 0, "hr": 0, "bb": 0, "so": 0},
+          {"order": "4", "name": "王威晨", "pos": "1B", "ab": 4, "r": 0, "h": 1, "rbi": 0, "hr": 0, "bb": 0, "so": 0},
+          {"order": "4", "name": "劉貴元", "pos": "PR", "ab": 0, "r": 1, "h": 0, "rbi": 0, "hr": 0, "bb": 0, "so": 0},
+          {"order": "5", "name": "宋晟睿", "pos": "CF", "ab": 2, "r": 0, "h": 0, "rbi": 0, "hr": 0, "bb": 0, "so": 1, "extra": "SH"},
+          {"order": "5", "name": "岳政華", "pos": "PH", "ab": 1, "r": 1, "h": 1, "rbi": 0, "hr": 0, "bb": 0, "so": 0},
+          {"order": "6", "name": "江坤宇", "pos": "SS", "ab": 3, "r": 0, "h": 0, "rbi": 1, "hr": 0, "bb": 0, "so": 1, "extra": "SF"},
+          {"order": "7", "name": "岳東華", "pos": "2B", "ab": 4, "r": 0, "h": 1, "rbi": 1, "hr": 0, "bb": 0, "so": 0},
+          {"order": "8", "name": "高宇杰", "pos": "C", "ab": 3, "r": 0, "h": 0, "rbi": 0, "hr": 0, "bb": 0, "so": 0},
+          {"order": "9", "name": "許庭綸", "pos": "LF", "ab": 2, "r": 1, "h": 0, "rbi": 0, "hr": 0, "bb": 1, "so": 0}
+        ],
+        "pitchers": [
+          {"name": "鄭浩均", "decision": "", "ip": "7", "h": 6, "r": 1, "er": 0, "bb": 1, "so": 7, "pitches": "95-63"},
+          {"name": "江忠城", "decision": "", "ip": "⅔", "h": 0, "r": 1, "er": 1, "bb": 3, "so": 0, "pitches": "18-6"},
+          {"name": "余謙", "decision": "", "ip": "⅓", "h": 2, "r": 0, "er": 0, "bb": 0, "so": 0, "pitches": "8-4"},
+          {"name": "蔡齊哲", "decision": "", "ip": "1⅔", "h": 1, "r": 1, "er": 0, "bb": 0, "so": 1, "pitches": "17-11"},
+          {"name": "呂彥青", "decision": "W", "ip": "⅓", "h": 0, "r": 0, "er": 0, "bb": 0, "so": 0, "pitches": "3-2"}
+        ]
+      },
+      "味全龍": {
+        "batters": [
+          {"order": "1", "name": "郭天信", "pos": "CF", "ab": 4, "r": 1, "h": 1, "rbi": 0, "hr": 0, "bb": 1, "so": 0, "extra": "2B"},
+          {"order": "2", "name": "朱育賢", "pos": "1B", "ab": 3, "r": 0, "h": 0, "rbi": 0, "hr": 0, "bb": 0, "so": 2},
+          {"order": "2", "name": "劉俊緯", "pos": "3B", "ab": 2, "r": 0, "h": 1, "rbi": 0, "hr": 0, "bb": 0, "so": 0, "extra": "GDP"},
+          {"order": "3", "name": "張政禹", "pos": "SS", "ab": 2, "r": 2, "h": 1, "rbi": 1, "hr": 0, "bb": 2, "so": 1, "extra": "SF"},
+          {"order": "4", "name": "吉力吉撈．鞏冠", "pos": "DH", "ab": 3, "r": 0, "h": 2, "rbi": 1, "hr": 0, "bb": 1, "so": 0},
+          {"order": "4", "name": "張祐嘉", "pos": "PR / DH", "ab": 1, "r": 0, "h": 0, "rbi": 0, "hr": 0, "bb": 0, "so": 0},
+          {"order": "5", "name": "李凱威", "pos": "2B", "ab": 5, "r": 0, "h": 1, "rbi": 1, "hr": 0, "bb": 0, "so": 0},
+          {"order": "6", "name": "張祐銘", "pos": "LF", "ab": 2, "r": 0, "h": 0, "rbi": 0, "hr": 0, "bb": 0, "so": 1},
+          {"order": "6", "name": "陳子豪", "pos": "PH / LF", "ab": 2, "r": 0, "h": 1, "rbi": 0, "hr": 0, "bb": 0, "so": 1},
+          {"order": "7", "name": "曾聖安", "pos": "RF", "ab": 4, "r": 0, "h": 0, "rbi": 0, "hr": 0, "bb": 0, "so": 1},
+          {"order": "8", "name": "蔣少宏", "pos": "C", "ab": 4, "r": 0, "h": 1, "rbi": 0, "hr": 0, "bb": 0, "so": 0},
+          {"order": "9", "name": "拿莫．伊漾", "pos": "3B / 1B", "ab": 4, "r": 0, "h": 1, "rbi": 0, "hr": 0, "bb": 0, "so": 2}
+        ],
+        "pitchers": [
+          {"name": "梅賽鍶", "decision": "", "ip": "9", "h": 4, "r": 2, "er": 2, "bb": 1, "so": 2, "pitches": "104-75"},
+          {"name": "林凱威", "decision": "L", "ip": "⅓", "h": 2, "r": 2, "er": 0, "bb": 0, "so": 0, "pitches": "12-7"}
+        ]
+      }
+    },
+    "source": "https://www.cpbl.com.tw/box?year=2026&kindCode=A&gameSno=341"
+  },
+  {
+    "year": 2026,
+    "series": "taiwan",
+    "g": 2,
+    "dataReady": false,
+    "date": "2026-10-18",
+    "time": "17:05",
+    "startsAt": "2026-10-18T17:05:00+08:00",
+    "away": "中信兄弟",
+    "home": "味全龍"
+  },
+  {
+    "year": 2026,
+    "series": "taiwan",
+    "g": 3,
+    "dataReady": false,
+    "date": "2026-10-20",
+    "time": "18:35",
+    "startsAt": "2026-10-20T18:35:00+08:00",
+    "away": "味全龍",
+    "home": "中信兄弟"
+  },
+  {
+    "year": 2026,
+    "series": "taiwan",
+    "g": 4,
+    "dataReady": false,
+    "date": "2026-10-21",
+    "time": "18:35",
+    "startsAt": "2026-10-21T18:35:00+08:00",
+    "away": "味全龍",
+    "home": "中信兄弟"
+  },
+  {
+    "year": 2026,
+    "series": "taiwan",
+    "g": 5,
+    "dataReady": false,
+    "date": "2026-10-23",
+    "time": "18:35",
+    "startsAt": "2026-10-23T18:35:00+08:00",
+    "away": "中信兄弟",
+    "home": "味全龍"
+  },
+  {
+    "year": 2026,
+    "series": "taiwan",
+    "g": 6,
+    "dataReady": false,
+    "date": "2026-10-24",
+    "time": "17:05",
+    "startsAt": "2026-10-24T17:05:00+08:00",
+    "away": "中信兄弟",
+    "home": "味全龍"
+  },
+  {
+    "year": 2026,
+    "series": "taiwan",
+    "g": 7,
+    "dataReady": false,
+    "date": "2026-10-25",
+    "time": "17:05",
+    "startsAt": "2026-10-25T17:05:00+08:00",
+    "away": "中信兄弟",
+    "home": "味全龍"
+  }
+]

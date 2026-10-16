@@ -1,0 +1,44 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "cpbl-season-status-staging",
+  "compatibility_date": "2026-10-15",
+  "main": "worker/index.js",
+  "assets": {
+    "directory": "./docs",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/admin*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "cpbl-season-status-staging",
+      "database_id": "19f0b672-c4aa-4266-97bb-abfcd2414043",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    "ENVIRONMENT": "staging",
+    "ALLOW_DEMO_SUBMISSIONS": "true",
+    "POLL_MIN_SAMPLE": "5"
+  },
+  "env": {
+    "production": {
+      "name": "cpbl-season-status",
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "cpbl-season-status",
+          "database_id": "00000000-0000-0000-0000-000000000000",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "vars": {
+        "ENVIRONMENT": "production",
+        "ALLOW_DEMO_SUBMISSIONS": "false",
+        "POLL_MIN_SAMPLE": "5"
+      }
+    }
+  }
+}
+
