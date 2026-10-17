@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Pre-render the two Taiwan Series hero cards (賽前預言 → 賽時回顧) with the
+"""Pre-render the two Taiwan Series hero cards (1.賽事預言 before → after the game) with the
 site's own Canvas renderers, so #taiwan-series only loads two small JPGs.
 
 Reads : tools/ts_hero_sample.json — sample game (box score), sample prediction,
           and which owner photo / crop each card uses
         assets/wall-photos/*.jpg — the site owner's own stadium photos
-Writes: docs/img/taiwan-series/hero-prediction.jpg  600×1067  1.賽前預言（賽前）
-        docs/img/taiwan-series/hero-recap.jpg       600×1067  3.賽時回顧（賽後）
+Writes: docs/img/taiwan-series/hero-prediction.jpg  600×1067  1.賽事預言（賽前）
+        docs/img/taiwan-series/hero-answer.jpg      600×1067  1.賽事預言（賽後結算）
         <promo-dir>/ts-*.png                        1080×1920 full-size PNGs
-          (prediction, recap, the 對答案 version, and 4.最愛的球員) for social posts
+          (prediction, answer, 3.賽事回顧, 3.最愛球員) for social posts
 
 Usage:  python3 tools/build.py && python3 tools/prerender_ts_hero.py [--promo-dir "Claude outputs/promo"]
 Needs:  pip install playwright && playwright install chromium
@@ -40,11 +40,11 @@ JS = """async (c) => {
   usePhoto(await photo(c.before));
   let cv = await tsDrawPrediction(before, {...c.prediction}, c.before.stamp);
   out.prediction = {png: await enc(cv, 'image/png'), jpg: await enc(shrink(cv), 'image/jpeg', .84)};
-  cv = await tsDrawPrediction(c.game, {...c.prediction}, c.after.stamp);   // 對答案 version
-  out.answer = {png: await enc(cv, 'image/png')};
+  cv = await tsDrawPrediction(c.game, {...c.prediction}, c.after.stamp);   // same card, settled after the game
+  out.answer = {png: await enc(cv, 'image/png'), jpg: await enc(shrink(cv), 'image/jpeg', .84)};
   usePhoto(await photo(c.after));
   cv = await tsDrawCover(c.game, c.after.team, c.after.stamp);
-  out.recap = {png: await enc(cv, 'image/png'), jpg: await enc(shrink(cv), 'image/jpeg', .84)};
+  out.recap = {png: await enc(cv, 'image/png')};
   const players = tsPlayers(c.game), mvp = players.find(p => p.data.name === c.game.mvp.name) || players[0];
   cv = await tsDrawPlayer(c.game, mvp, c.after.stamp);
   out.player = {png: await enc(cv, 'image/png')};
@@ -72,12 +72,12 @@ def main():
         pg.goto(base + "#taiwan-series"); pg.wait_for_timeout(800)
         r = pg.evaluate(JS, sample)
         (out_dir / "hero-prediction.jpg").write_bytes(dec(r["prediction"]["jpg"]))
-        (out_dir / "hero-recap.jpg").write_bytes(dec(r["recap"]["jpg"]))
+        (out_dir / "hero-answer.jpg").write_bytes(dec(r["answer"]["jpg"]))
         for key in ("prediction", "answer", "recap", "player"):
             (promo / f"ts-{key}.png").write_bytes(dec(r[key]["png"]))
         b.close()
     srv.shutdown()
-    print(f"wrote {out_dir.relative_to(ROOT)}/hero-prediction.jpg, hero-recap.jpg and 4 PNGs in {promo}")
+    print(f"wrote {out_dir.relative_to(ROOT)}/hero-prediction.jpg, hero-answer.jpg and 4 PNGs in {promo}")
 
 
 def new_page(browser):

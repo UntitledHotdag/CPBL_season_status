@@ -560,9 +560,7 @@
   .playoff-update-status{font-family:"Manrope","Noto Sans TC",sans-serif;font-size:11px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
   .playoff-update h2{font-size:20px;line-height:1.35;margin-top:7px}
   .playoff-update p{max-width:38em;font-size:13px;line-height:1.7;color:var(--ink-dim);margin-top:5px}
-  .playoff-update-link{display:inline-flex;align-items:center;min-height:44px;margin-top:3px;color:var(--accent);font-size:13px;font-weight:700}
-  .playoff-update-link:hover{text-decoration:underline;text-underline-offset:4px}
-  .playoff-update + .hero-ctas{margin-top:17px}
+  .playoff-update .hero-ctas{margin-top:14px}
   .btn-ghost{
     border:1px solid var(--rule);color:var(--ink);min-height:44px;padding:12px 22px;border-radius:99px;
     font-family:"Manrope","Noto Sans TC",sans-serif;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;
@@ -751,8 +749,22 @@
   .prediction-window{display:flex;align-items:flex-start;gap:11px;padding:14px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
   .prediction-window i{width:9px;height:9px;margin-top:5px;border-radius:50%;background:var(--accent-fill);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent-fill) 16%,transparent);flex:0 0 auto}
   .prediction-window b{display:block;font-size:12px}.prediction-window span{display:block;margin-top:2px;color:var(--muted);font-size:10px;line-height:1.55}
-  .builder-layout.single>.output-set{grid-template-columns:minmax(0,300px);justify-content:center}
-  .builder-input{width:100%;min-height:50px;padding:0 14px;border:1px solid var(--rule);border-radius:9px;background:var(--panel);color:var(--ink);font:700 14px "Noto Sans TC",sans-serif}
+  /* 1.賽事預言 / 2.系列賽預言: lock banner, two-button row, live preview */
+  .ts-lock-banner{display:flex;align-items:baseline;gap:6px 14px;flex-wrap:wrap;margin:0 0 18px;padding:15px 20px;border-radius:14px;background:var(--ink);color:var(--ground)}
+  .ts-lock-banner b{font-size:17px;letter-spacing:.02em}
+  .ts-lock-banner span{font-size:12px;line-height:1.6;opacity:.8}
+  .ts-lock-banner.done{background:var(--accent-fill);color:var(--accent-ink)}
+  .ts-make.is-locked .prediction-panel>:not(.ts-actions):not(.builder-status){opacity:.5}
+  .ts-make.is-locked .series-poll-panel{opacity:1}
+  .ts-actions{margin-top:0}
+  .ts-actions .btn-ghost,.ts-actions .cta{min-height:48px}
+  .ts-actions button:disabled{opacity:.45;cursor:not-allowed}
+  .ts-live-frame{position:relative}
+  .ts-live-frame>.output-placeholder{aspect-ratio:9/16;border-radius:12px;padding:14px;overflow:hidden;box-shadow:0 20px 40px -25px rgba(0,0,0,.65)}
+  .ts-live-frame>[hidden]{display:none!important}
+  .ts-live-frame img{transition:opacity .2s ease}
+  .ts-live.is-rendering .ts-live-frame img{opacity:.55}
+  .ts-preview-bar{margin:14px 0 0;padding:10px 14px;border-radius:10px;border:1px dashed var(--accent);color:var(--accent);font-size:12px;font-weight:700;text-align:center}
   .series-score-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
   .series-score-option{min-height:70px;padding:10px 8px;border:1px solid var(--rule);border-radius:10px;background:var(--panel);color:var(--ink-dim);font-size:10px;font-weight:700;line-height:1.5}
   .series-score-option b{display:block;margin:3px 0;font:800 20px "Manrope",sans-serif;color:var(--ink)}
@@ -1016,16 +1028,16 @@
           <div class="intro-eyebrow">CPBL 2026 · My Baseball Season</div>
           <h1 class="hero-title">你這個賽季，<br><em>進場看了幾場球？</em></h1>
           <p class="hero-lede">勾選你在 2026 年親自進場看過的比賽，看看支持的球隊在你面前打出什麼成績，再放上照片做成一張賽季回顧圖。</p>
-          <div class="playoff-update" aria-label="台灣大賽專區預告">
+          <div class="hero-ctas" id="hero-ctas"></div>
+          <div class="playoff-update" aria-label="台灣大賽專區">
             <div class="playoff-update-head">
               <span class="playoff-update-kicker">Taiwan Series</span>
               <span class="playoff-update-status" id="playoff-update-status"></span>
             </div>
             <h2>台灣大賽專區，你是國師？還是咒言師？</h2>
-              <p>先發名單公布後，可以預測比分與關鍵球員；完賽後再用同一張圖對答案，並下載賽事摘要與你想記住的球員圖卡。</p>
-            <button class="playoff-update-link" data-go="taiwan-series">前往台灣大賽專區 →</button>
+            <p>每場開賽前預測比分與關鍵球員，完賽後同一張圖自動結算對答案，再做一張賽事回顧與最愛球員圖卡。</p>
+            <div class="hero-ctas"><button class="cta" data-go="taiwan-series">前往台灣大賽 →</button></div>
           </div>
-          <div class="hero-ctas" id="hero-ctas"></div>
           <button class="scroll-hint" id="scroll-hint">往下看怎麼玩 ↓</button>
         </div>
         <div class="wall" aria-label="賽季回顧圖範例">
@@ -1108,6 +1120,7 @@
 
   <!-- ==================== Taiwan Series ==================== -->
   <section id="view-taiwan-series" class="view" hidden>
+    <div class="ts-preview-bar" id="ts-preview-bar" role="note" hidden></div>
     <div class="ts-hero">
       <div class="ts-copy">
         <div class="intro-eyebrow">CPBL 2026 · Taiwan Series</div>
@@ -1118,15 +1131,15 @@
         </div>
         <button class="cta" data-series-jump>開始體驗 ↓</button>
       </div>
-      <div class="ts-flow" aria-label="圖卡範例：賽前留下 1.賽前預言，賽後做成 3.賽時回顧">
+      <div class="ts-flow" aria-label="圖卡範例：賽前留下 1.賽事預言，賽後同一張圖自動結算對答案">
         <figure class="ts-flow-card ts-flow-before">
-          <img src="img/taiwan-series/hero-prediction.jpg" width="600" height="1067" loading="lazy" alt="1.賽前預言範例：預測中信兄弟 4 比 2 味全龍，並選好勝利打點、勝投、敗投與 MVP">
-          <figcaption><b>賽前</b>1.賽前預言</figcaption>
+          <img src="img/taiwan-series/hero-prediction.jpg" width="600" height="1067" loading="lazy" alt="1.賽事預言範例：預測中信兄弟 4 比 2 味全龍，並選好勝利打點、勝投、敗投與 MVP">
+          <figcaption><b>賽前</b>1.賽事預言</figcaption>
         </figure>
-        <div class="ts-flow-arrow" aria-hidden="true"><span>開賽<br>鎖定</span><i>→</i><span>賽後<br>對答案</span></div>
+        <div class="ts-flow-arrow" aria-hidden="true"><span>開賽<br>鎖定</span><i>→</i><span>賽果<br>出爐</span></div>
         <figure class="ts-flow-card ts-flow-after">
-          <img src="img/taiwan-series/hero-recap.jpg" width="600" height="1067" loading="lazy" alt="3.賽時回顧範例：比分、MVP、勝敗投與關鍵時刻，放上當天拍的照片">
-          <figcaption><b>賽後</b>3.賽時回顧</figcaption>
+          <img src="img/taiwan-series/hero-answer.jpg" width="600" height="1067" loading="lazy" alt="1.賽事預言賽後結算範例：實際比分 4 比 3，五項預測命中三項">
+          <figcaption><b>賽後</b>結算對答案</figcaption>
         </figure>
         <span class="sample-tag">範例圖卡 · 非實際賽果</span>
       </div>
@@ -1154,14 +1167,15 @@
       <input id="ts-photo-input" type="file" accept="image/jpeg,image/png,image/webp" hidden>
 
       <div id="ts-prediction-view" class="ts-phase-block">
-        <section class="series-builder" aria-labelledby="prediction-builder-title">
+        <section class="series-builder ts-make" id="ts-pred-builder" aria-labelledby="prediction-builder-title">
           <div class="series-section-head">
             <div>
-              <div class="intro-eyebrow">1.賽前預言 · Make your pick</div>
+              <div class="intro-eyebrow">1.賽事預言 · Make your pick</div>
               <h2 id="prediction-builder-title">你的 G1 預測</h2>
             </div>
             <p id="ts-prediction-phase-copy">開賽前可以更新預測；開賽後鎖定，賽果更新後再回來對答案。</p>
           </div>
+          <div class="ts-lock-banner" id="ts-pred-lock" role="status" hidden><b id="ts-pred-lock-title">賽事已開始</b><span id="ts-pred-lock-copy"></span></div>
           <div class="prediction-layout">
             <div class="prediction-panel">
               <div class="prediction-window"><i></i><div><b id="ts-prediction-window-title">預測開放中</b><span id="ts-prediction-window-copy">本場開賽時鎖定。</span></div></div>
@@ -1185,52 +1199,51 @@
                 <label><span id="ts-pred-mvp-label">單場 MVP</span><select id="ts-pred-mvp"></select></label>
               </div>
               <span class="prediction-help">候選選手已更新為 2026 台灣大賽 32 人名單；勝利打點、勝投與 MVP 會依預測勝方切換。</span>
-              <div class="builder-row">
-                <span class="builder-k">照片</span>
-                <button class="upload-mock" id="ts-pred-upload" data-ts-upload="prediction"><span>＋</span><b>上傳當日照片</b><small>選填 · 沒放照片就用系統預設底圖</small></button>
-              </div>
               <div class="turnstile-slot" id="ts-pred-turnstile">正在確認匿名投票功能…</div>
-              <span class="prediction-consent">按下按鈕代表你同意將比分與球員預測匿名納入統計；照片與名字不會上傳。</span>
-              <button class="cta" id="ts-pred-generate">匿名送出並產生 1.賽前預言圖</button>
+              <span class="prediction-consent">按下「送出預測＋下載預測圖」代表你同意將比分與球員預測匿名納入統計；照片與名字不會上傳。</span>
+              <div class="recap-actions ts-actions">
+                <button class="btn-ghost" id="ts-pred-upload" data-ts-upload="prediction">換成我的照片</button>
+                <button class="cta" id="ts-pred-generate">送出預測＋下載預測圖</button>
+              </div>
               <div class="builder-status" id="ts-pred-status" aria-live="polite"></div>
             </div>
-            <div class="output-set" id="ts-pred-output" aria-label="預測圖卡預覽">
-              <figure><div class="output-placeholder output-cover"><span>1.賽前預言</span><b>我的預測</b></div><figcaption>完賽後用同一張圖對答案</figcaption></figure>
+            <div class="output-set ts-live" id="ts-pred-output" aria-label="預測圖即時預覽">
+              <figure><div class="ts-live-frame"><img id="ts-pred-preview" alt="1.賽事預言即時預覽" hidden><div class="output-placeholder output-cover" id="ts-pred-placeholder"><span>1.賽事預言</span><b>正在產生預覽…</b></div></div><figcaption id="ts-pred-caption">即時預覽 · 改比分、換照片都會同步更新</figcaption></figure>
             </div>
           </div>
-
         </section>
 
-        <section class="series-builder" id="ts-series-builder" aria-labelledby="series-prediction-title">
+        <section class="series-builder ts-make" id="ts-series-builder" aria-labelledby="series-prediction-title">
           <div class="series-section-head">
             <div>
-              <div class="intro-eyebrow">2.Series prediction</div>
+              <div class="intro-eyebrow">2.系列賽預言 · Series prediction</div>
               <h2 id="series-prediction-title">整個系列賽，你猜會打幾場？</h2>
             </div>
             <p>選擇兩隊最後各贏幾場，G1 開賽時鎖定。</p>
           </div>
-          <div class="builder-layout single">
-            <div class="builder-controls">
-              <div class="builder-row">
-                <span class="builder-k">照片</span>
-                <button class="upload-mock" id="ts-series-upload" data-ts-upload="series"><span>＋</span><b>上傳系列賽照片</b><small>選填 · 只用在系列賽預言圖</small></button>
-              </div>
-              <div class="builder-row">
-                <span class="builder-k">預測系列賽最終比分</span>
+          <div class="ts-lock-banner" id="ts-series-lock" role="status" hidden><b>賽事已開始</b><span id="ts-series-lock-copy"></span></div>
+          <div class="prediction-layout">
+            <div class="prediction-panel">
+              <div class="prediction-window"><i></i><div><b id="ts-series-window-title">預測開放中</b><span class="prediction-lock" id="ts-series-window-copy">系列賽預測會在 G1 開賽時一起鎖定</span></div></div>
+              <label class="prediction-name" for="ts-series-name">
+                <span class="prediction-label">圖卡姓名（選填）</span>
+                <input id="ts-series-name" type="text" maxlength="16" autocomplete="name" placeholder="輸入想顯示在圖卡上的名字">
+                <small>姓名只保存在這台裝置並押在下載圖上，不會送進公開統計。</small>
+              </label>
+              <div class="prediction-group">
+                <span class="prediction-label">預測系列賽最終比分</span>
                 <div class="series-score-options" id="ts-series-score-options"></div>
-                <span class="prediction-lock">系列賽預測會在 G1 開賽時一起鎖定</span>
-              </div>
-              <div class="builder-row">
-                <label class="builder-k" for="ts-series-name">圖卡姓名（選填）</label>
-                <input class="builder-input" id="ts-series-name" type="text" maxlength="16" autocomplete="name" placeholder="輸入想顯示在圖卡上的名字">
               </div>
               <div class="turnstile-slot" id="ts-series-turnstile">正在確認匿名投票功能…</div>
-              <span class="prediction-consent">按下按鈕代表你同意將系列賽比分匿名納入統計；照片與名字不會上傳。</span>
-              <button class="cta" id="ts-series-generate">匿名送出並產生 2.系列賽預言圖</button>
+              <span class="prediction-consent">按下「送出預測＋下載預測圖」代表你同意將系列賽比分匿名納入統計；照片與名字不會上傳。</span>
+              <div class="recap-actions ts-actions">
+                <button class="btn-ghost" id="ts-series-upload" data-ts-upload="series">換成我的照片</button>
+                <button class="cta" id="ts-series-generate">送出預測＋下載預測圖</button>
+              </div>
               <div class="builder-status" id="ts-series-status" aria-live="polite"></div>
             </div>
-            <div class="output-set" id="ts-series-output" aria-label="系列賽預測圖預覽">
-              <figure><div class="output-placeholder output-data away"><span>2.Series prediction</span><b>系列賽預言</b><i></i><i></i><i></i><i></i></div><figcaption>兩隊最終勝場預測</figcaption></figure>
+            <div class="output-set ts-live" id="ts-series-output" aria-label="系列賽預測圖即時預覽">
+              <figure><div class="ts-live-frame"><img id="ts-series-preview" alt="2.系列賽預言即時預覽" hidden><div class="output-placeholder output-data away" id="ts-series-placeholder"><span>2.系列賽預言</span><b>正在產生預覽…</b><i></i><i></i><i></i><i></i></div></div><figcaption id="ts-series-caption">即時預覽 · 改比分、換照片都會同步更新</figcaption></figure>
             </div>
           </div>
           <div class="series-poll-panel">
@@ -1245,7 +1258,7 @@
         <section class="series-picker" aria-labelledby="review-picker-title">
           <div class="series-section-head">
             <div>
-              <div class="intro-eyebrow">3.賽時回顧・4.最愛的球員</div>
+              <div class="intro-eyebrow">3.賽事回顧與最愛球員</div>
               <h2 id="review-picker-title">選擇一場已完賽的比賽</h2>
             </div>
             <p>賽事摘要整理全場重點；球員回顧只呈現客觀成績，不使用好壞評分或貶抑文字。</p>
@@ -1260,7 +1273,7 @@
               <div class="intro-eyebrow">Make your recap</div>
               <h2 id="series-builder-title">用最難忘的畫面留著這場比賽。</h2>
             </div>
-            <p>3.賽時回顧整理賽事摘要；4.最愛的球員讓你選一位想記住的球員，無論輸贏都只記錄這一場的表現。</p>
+            <p>賽事回顧整理全場重點；最愛球員讓你選一位想記住的球員，無論輸贏都只記錄這一場的表現。</p>
           </div>
           <div class="builder-layout">
             <div class="builder-controls">
@@ -1276,13 +1289,13 @@
                 <label class="builder-k" for="ts-player-select">本場想記住的球員</label>
                 <select class="builder-select" id="ts-player-select"></select>
               </div>
-              <button class="cta" id="ts-generate">產生 3、4 兩張回顧圖</button>
+              <button class="cta" id="ts-generate">產生賽事回顧＋最愛球員圖</button>
               <div class="builder-status" id="ts-status" aria-live="polite"></div>
               <div class="builder-note"><b>保留支持，不替球員打分數</b><span>球員圖只呈現官方賽事數據與中性文字；照片與選擇只存在這台裝置。</span></div>
             </div>
             <div class="output-set" id="ts-output-set" aria-label="賽後圖卡預覽">
-              <figure><div class="output-placeholder output-cover"><span>3.賽時回顧</span><b>賽事摘要</b></div><figcaption>比分與全場關鍵資訊</figcaption></figure>
-              <figure><div class="output-placeholder output-data home"><span>4.最愛的球員</span><b>本場想記住的球員</b><i></i><i></i><i></i><i></i></div><figcaption>只呈現客觀的單場成績</figcaption></figure>
+              <figure><div class="output-placeholder output-cover"><span>3.賽事回顧</span><b>賽事摘要</b></div><figcaption>比分與全場關鍵資訊</figcaption></figure>
+              <figure><div class="output-placeholder output-data home"><span>3.最愛球員</span><b>本場想記住的球員</b><i></i><i></i><i></i><i></i></div><figcaption>只呈現客觀的單場成績</figcaption></figure>
             </div>
           </div>
         </section>
@@ -1310,7 +1323,7 @@
       </div>
     </div>
 
-    <p class="page-foot">社群功能即將上線 · 你仍可照常製作與下載觀賽回顧、賽前預言與賽後回顧圖卡</p>
+    <p class="page-foot">社群功能即將上線 · 你仍可照常製作與下載觀賽回顧、賽事預言與賽後回顧圖卡</p>
   </section>
 
   <!-- ==================== Admin moderation ==================== -->
@@ -1501,6 +1514,24 @@ const GAMES = [{"n":1,"d":"2026-03-28","a":"中信兄弟","h":"樂天桃猿","as
 const POSTSEASON_GAMES = [{"series":"challenge","g":1,"d":"2026-10-09","a":"統一7-ELEVEn獅","h":"中信兄弟","as":1,"hs":4,"v":"洲際","wp":"勝騎士","lp":"布雷克","sv":"呂彥青","rbi":"王威晨","mvp":"勝騎士"},{"series":"challenge","g":2,"d":"2026-10-10","a":"中信兄弟","h":"統一7-ELEVEn獅","as":0,"hs":1,"v":"亞太主","wp":"喬登","lp":"菲力士","sv":"鍾允華","rbi":"邱智呈","mvp":"喬登"},{"series":"challenge","g":3,"d":"2026-10-11","a":"統一7-ELEVEn獅","h":"中信兄弟","as":4,"hs":2,"v":"洲際","wp":"獅帝芬","lp":"羅戈","sv":"鍾允華","rbi":"林佳緯","mvp":"獅帝芬"},{"series":"challenge","g":4,"d":"2026-10-12","a":"統一7-ELEVEn獅","h":"中信兄弟","as":2,"hs":8,"v":"洲際","dur":"3H27M","wp":"鄭浩均","lp":"布雷克","sv":"","rbi":"江坤宇","mvp":"鄭浩均"}].map(g => ({...g, ps:true}));
 const TAIWAN_SERIES_GAMES = [{"year":2026,"series":"taiwan","g":1,"dataReady":false,"date":"2026-10-17","time":"17:05","startsAt":"2026-10-17T17:05:00+08:00","away":"中信兄弟","home":"味全龍"},{"year":2026,"series":"taiwan","g":2,"dataReady":false,"date":"2026-10-18","time":"17:05","startsAt":"2026-10-18T17:05:00+08:00","away":"中信兄弟","home":"味全龍"},{"year":2026,"series":"taiwan","g":3,"dataReady":false,"date":"2026-10-20","time":"18:35","startsAt":"2026-10-20T18:35:00+08:00","away":"味全龍","home":"中信兄弟"},{"year":2026,"series":"taiwan","g":4,"dataReady":false,"date":"2026-10-21","time":"18:35","startsAt":"2026-10-21T18:35:00+08:00","away":"味全龍","home":"中信兄弟"},{"year":2026,"series":"taiwan","g":5,"dataReady":false,"date":"2026-10-23","time":"18:35","startsAt":"2026-10-23T18:35:00+08:00","away":"中信兄弟","home":"味全龍"},{"year":2026,"series":"taiwan","g":6,"dataReady":false,"date":"2026-10-24","time":"17:05","startsAt":"2026-10-24T17:05:00+08:00","away":"中信兄弟","home":"味全龍"},{"year":2026,"series":"taiwan","g":7,"dataReady":false,"date":"2026-10-25","time":"17:05","startsAt":"2026-10-25T17:05:00+08:00","away":"中信兄弟","home":"味全龍"}];
 const TAIWAN_SERIES_ROSTERS = {"year":2026,"series":"taiwan","teams":{"味全龍":{"pitchers":["李超","陳禹勳","林柏佑","黃暐傑","蔣銲","鋼龍","呂偉晟","趙璟榮","伍鐸","陳冠偉","曹祐齊","林子昱","林鋅杰","梅賽鍶","林凱威"],"catchers":["林辰勳","蔣少宏","姚冠瑋"],"infielders":["朱育賢","李凱威","劉俊緯","張政禹","李展毅","劉基鴻","拿莫．伊漾","石翔宇"],"outfielders":["陳子豪","郭天信","王順和","張祐銘","曾聖安","張祐嘉"]},"中信兄弟":{"pitchers":["魏碩成","鄭凱文","江忠城","李振昌","勝騎士","羅戈","鄭浩均","菲力士","余謙","蔡齊哲","曾品洋","呂彥青","陳琥","謝榮豪","伍立辰"],"catchers":["林吳晉瑋","陳統恩","高宇杰"],"infielders":["張士綸","王威晨","張仁瑋","陳俊秀","王政順","黃韋盛","江坤宇","岳東華"],"outfielders":["曾頌恩","許庭綸","詹子賢","林志綱","宋晟睿","岳政華"]}}};
+// Staging-only previews of later Taiwan Series states, for checking the UI
+// before it happens:  ?ts_preview=locked  (G1 has started)
+//                     ?ts_preview=final   (G1 finished, sample box score)
+// They use a simulated clock, separate local storage and never submit.
+const TS_PREVIEW_SAMPLE = {"game":{"year":2026,"series":"taiwan","g":1,"dataReady":true,"date":"2026-10-17","time":"17:05","startsAt":"2026-10-17T17:05:00+08:00","venue":"大巨蛋","away":"中信兄弟","home":"味全龍","awayScore":4,"homeScore":3,"seriesRecord":{"中信兄弟":"1勝0敗","味全龍":"0勝1敗"},"innings":{"away":[0,0,2,0,0,0,0,0,0,2],"home":[0,0,0,1,0,0,0,1,0,1]},"rhe":{"away":[4,6,0],"home":[3,9,1]},"duration":"02:40","attendance":33691,"winningRbi":"岳東華","mvp":{"name":"岳東華","line":"4 打數 · 1 安打 · 1 打點"},"decisions":{"win":"呂彥青","loss":"林凱威","save":""},"homeRuns":[],"moments":["延長 10 局，岳東華敲出超前安打","鄭浩均先發 7 局 7 次三振、無自責分","梅賽鍶獨撐 9 局，雙方鏖戰到第 10 局"],"teams":{"中信兄弟":{"batters":[{"order":"1","name":"張士綸","pos":"3B","ab":4,"r":1,"h":1,"rbi":0,"hr":0,"bb":0,"so":0,"extra":"2B"},{"order":"2","name":"張仁瑋","pos":"RF","ab":4,"r":0,"h":2,"rbi":2,"hr":0,"bb":0,"so":0},{"order":"3","name":"曾頌恩","pos":"DH","ab":4,"r":0,"h":0,"rbi":0,"hr":0,"bb":0,"so":0},{"order":"4","name":"王威晨","pos":"1B","ab":4,"r":0,"h":1,"rbi":0,"hr":0,"bb":0,"so":0},{"order":"4","name":"劉貴元","pos":"PR","ab":0,"r":1,"h":0,"rbi":0,"hr":0,"bb":0,"so":0},{"order":"5","name":"宋晟睿","pos":"CF","ab":2,"r":0,"h":0,"rbi":0,"hr":0,"bb":0,"so":1,"extra":"SH"},{"order":"5","name":"岳政華","pos":"PH","ab":1,"r":1,"h":1,"rbi":0,"hr":0,"bb":0,"so":0},{"order":"6","name":"江坤宇","pos":"SS","ab":3,"r":0,"h":0,"rbi":1,"hr":0,"bb":0,"so":1,"extra":"SF"},{"order":"7","name":"岳東華","pos":"2B","ab":4,"r":0,"h":1,"rbi":1,"hr":0,"bb":0,"so":0},{"order":"8","name":"高宇杰","pos":"C","ab":3,"r":0,"h":0,"rbi":0,"hr":0,"bb":0,"so":0},{"order":"9","name":"許庭綸","pos":"LF","ab":2,"r":1,"h":0,"rbi":0,"hr":0,"bb":1,"so":0}],"pitchers":[{"name":"鄭浩均","decision":"","ip":"7","h":6,"r":1,"er":0,"bb":1,"so":7,"pitches":"95-63"},{"name":"江忠城","decision":"","ip":"⅔","h":0,"r":1,"er":1,"bb":3,"so":0,"pitches":"18-6"},{"name":"余謙","decision":"","ip":"⅓","h":2,"r":0,"er":0,"bb":0,"so":0,"pitches":"8-4"},{"name":"蔡齊哲","decision":"","ip":"1⅔","h":1,"r":1,"er":0,"bb":0,"so":1,"pitches":"17-11"},{"name":"呂彥青","decision":"W","ip":"⅓","h":0,"r":0,"er":0,"bb":0,"so":0,"pitches":"3-2"}]},"味全龍":{"batters":[{"order":"1","name":"郭天信","pos":"CF","ab":4,"r":1,"h":1,"rbi":0,"hr":0,"bb":1,"so":0,"extra":"2B"},{"order":"2","name":"朱育賢","pos":"1B","ab":3,"r":0,"h":0,"rbi":0,"hr":0,"bb":0,"so":2},{"order":"2","name":"劉俊緯","pos":"3B","ab":2,"r":0,"h":1,"rbi":0,"hr":0,"bb":0,"so":0,"extra":"GDP"},{"order":"3","name":"張政禹","pos":"SS","ab":2,"r":2,"h":1,"rbi":1,"hr":0,"bb":2,"so":1,"extra":"SF"},{"order":"4","name":"吉力吉撈．鞏冠","pos":"DH","ab":3,"r":0,"h":2,"rbi":1,"hr":0,"bb":1,"so":0},{"order":"4","name":"張祐嘉","pos":"PR / DH","ab":1,"r":0,"h":0,"rbi":0,"hr":0,"bb":0,"so":0},{"order":"5","name":"李凱威","pos":"2B","ab":5,"r":0,"h":1,"rbi":1,"hr":0,"bb":0,"so":0},{"order":"6","name":"張祐銘","pos":"LF","ab":2,"r":0,"h":0,"rbi":0,"hr":0,"bb":0,"so":1},{"order":"6","name":"陳子豪","pos":"PH / LF","ab":2,"r":0,"h":1,"rbi":0,"hr":0,"bb":0,"so":1},{"order":"7","name":"曾聖安","pos":"RF","ab":4,"r":0,"h":0,"rbi":0,"hr":0,"bb":0,"so":1},{"order":"8","name":"蔣少宏","pos":"C","ab":4,"r":0,"h":1,"rbi":0,"hr":0,"bb":0,"so":0},{"order":"9","name":"拿莫．伊漾","pos":"3B / 1B","ab":4,"r":0,"h":1,"rbi":0,"hr":0,"bb":0,"so":2}],"pitchers":[{"name":"梅賽鍶","decision":"","ip":"9","h":4,"r":2,"er":2,"bb":1,"so":2,"pitches":"104-75"},{"name":"林凱威","decision":"L","ip":"⅓","h":2,"r":2,"er":0,"bb":0,"so":0,"pitches":"12-7"}]}}},"prediction":{"awayScore":4,"homeScore":2,"rbi":"岳東華","win":"鄭浩均","loss":"林凱威","mvp":"岳東華","bg":"photo"}};
+const TS_PREVIEW = (() => {
+  const host = location.hostname;
+  if (!["staging.mybaseballgame.com", "localhost", "127.0.0.1", ""].includes(host)) return "";
+  const v = new URLSearchParams(location.search).get("ts_preview");
+  return v === "locked" || v === "final" ? v : "";
+})();
+let TS_CLOCK_OFFSET = 0;
+if (TS_PREVIEW && TAIWAN_SERIES_GAMES[0]){
+  const g1 = TAIWAN_SERIES_GAMES[0], keep = {year:g1.year, series:g1.series, g:1, date:g1.date, time:g1.time, startsAt:g1.startsAt, away:g1.away, home:g1.home};
+  if (TS_PREVIEW === "final") Object.assign(g1, TS_PREVIEW_SAMPLE.game, keep, {dataReady:true});
+  TS_CLOCK_OFFSET = Date.parse(g1.startsAt) + (TS_PREVIEW === "final" ? 4 : .5) * 3600e3 - Date.now();
+}
+const tsNow = () => Date.now() + TS_CLOCK_OFFSET;
 const ALL_GAMES = [...GAMES, ...POSTSEASON_GAMES];
 const BY_N = new Map(GAMES.map(g => [g.n, g]));
 const gameKey = g => g.ps ? `E${g.g}` : String(g.n);
@@ -2341,10 +2372,11 @@ nameEl.addEventListener("input", () => store.set(K_NAME, nameEl.value));
 function renderIntro(){
   const n = picks.size;
   const season = `<button class="cta" data-go="pick">${n ? "繼續勾選我的球季" : "開始回顧我的 2026 球季"} →</button>`;
-  const result = n ? `<button class="btn-ghost" data-go="result">看我的戰績（${n} 場）</button>` : "";
-  document.getElementById("hero-ctas").innerHTML = season + result;
-  document.getElementById("end-ctas").innerHTML = `<button class="cta" data-go="pick">${n ? "繼續勾選進場賽事" : "開始勾選進場賽事"} →</button>` + result;
-  document.getElementById("playoff-update-status").textContent = "功能預覽 · 先發公布後開放";
+  document.getElementById("hero-ctas").innerHTML = season;
+  document.getElementById("end-ctas").innerHTML = `<button class="cta" data-go="pick">${n ? "繼續勾選進場賽事" : "開始勾選進場賽事"} →</button>`;
+  const nextOpen = TAIWAN_SERIES_GAMES.find(g => tsGamePhase(g) === "open");
+  document.getElementById("playoff-update-status").textContent = nextOpen
+    ? `G${nextOpen.g} ${tsGameTime(nextOpen)} 開賽前可預測` : "賽後對答案 · 賽事回顧開放中";
 
   buildWall();
   fillFeatureDemo();
@@ -2374,7 +2406,7 @@ document.getElementById("view-intro").addEventListener("click", e => {
   }
   const b = e.target.closest("[data-go]");
   if (!b) return;
-  track("cta_click", {cta_location: b.closest("#end-ctas") ? "intro_end" : "intro_hero", cta_target: b.dataset.go, picks_total: picks.size});
+  track("cta_click", {cta_location: b.closest("#end-ctas") ? "intro_end" : b.closest(".playoff-update") ? "intro_taiwan_series" : "intro_hero", cta_target: b.dataset.go, picks_total: picks.size});
   go(b.dataset.go);
 });
 document.getElementById("scroll-hint").onclick = () =>
@@ -3042,7 +3074,7 @@ let tsThemeTeam = tsSelectedGame ? tsSelectedGame.away : null;
 let tsSelectedPlayer = "";
 let tsUploadContext = "prediction";
 let tsPhoto = null, tsPhotoURL = "", tsSeriesPhoto = null, tsSeriesPhotoURL = "", tsOutputURLs = [], tsPredictionURL = "", tsSeriesURL = "";
-const TS_PREDICTION_KEY = "cpbl2026-taiwan-series-predictions-v2";
+const TS_PREDICTION_KEY = "cpbl2026-taiwan-series-predictions-v2" + (TS_PREVIEW ? `-preview-${TS_PREVIEW}` : "");
 const TS_NAME_KEY = "cpbl2026-taiwan-series-name-v2";
 const TS_SERIES_NAME_KEY = "cpbl2026-taiwan-series-score-name-v2";
 const ANONYMOUS_ID_KEY = "cpbl-anonymous-voter-id";
@@ -3056,13 +3088,19 @@ const isLocalPreview = ["localhost","127.0.0.1",""].includes(location.hostname);
 let tsPredictionState = (() => {
   try{ return JSON.parse(localStorage.getItem(TS_PREDICTION_KEY)) || {}; }catch(e){ return {}; }
 })();
-const tsPhotoKey = game => game ? `taiwan-series-v2-photo-${game.year}-${game.g}` : "taiwan-series-v2-photo";
-const tsSeriesPhotoKey = () => `taiwan-series-v2-series-photo-${TAIWAN_SERIES_GAMES[0]?.year || 2026}`;
+if (TS_PREVIEW && TAIWAN_SERIES_GAMES[0]){          // previews start with a sample saved prediction
+  const g1 = TAIWAN_SERIES_GAMES[0], key = `${g1.year}-g1`;
+  if (!tsPredictionState[key]?.savedAt) tsPredictionState[key] = {...TS_PREVIEW_SAMPLE.prediction, savedAt:"preview"};
+  if (!tsPredictionState.series?.savedAt) tsPredictionState.series = {brothersWins:4, dragonsWins:2, savedAt:"preview"};
+}
+const TS_PHOTO_PREFIX = TS_PREVIEW ? `preview-${TS_PREVIEW}-` : "";
+const tsPhotoKey = game => TS_PHOTO_PREFIX + (game ? `taiwan-series-v2-photo-${game.year}-${game.g}` : "taiwan-series-v2-photo");
+const tsSeriesPhotoKey = () => TS_PHOTO_PREFIX + `taiwan-series-v2-series-photo-${TAIWAN_SERIES_GAMES[0]?.year || 2026}`;
 const tsPredictionKey = game => game ? `${game.year}-g${game.g}` : "demo";
 const tsFanName = () => (document.getElementById("ts-fan-name")?.value || "").trim().slice(0,16);
 const tsSeriesName = () => (document.getElementById("ts-series-name")?.value || "").trim().slice(0,16);
 const TS_SERIES_SCORES = [[4,0],[4,1],[4,2],[4,3],[0,4],[1,4],[2,4],[3,4]];
-function tsGamePhase(game, now=Date.now()){
+function tsGamePhase(game, now=tsNow()){
   if(game?.dataReady)return "answer";
   const start=Date.parse(game?.startsAt||"");
   return Number.isFinite(start)&&now>=start?"locked":"open";
@@ -3087,12 +3125,14 @@ const apiErrorText = code => ({
 })[code] || "目前無法完成，請稍後再試。";
 
 async function getApiConfig(){
-  if (isLocalPreview) return {ok:true,writesEnabled:false,turnstileSiteKey:""};
+  if (isLocalPreview || TS_PREVIEW) return {ok:true,writesEnabled:false,turnstileSiteKey:""};
   if (!apiConfigPromise) apiConfigPromise = fetch("/api/config",{headers:{accept:"application/json"}})
     .then(async response => { if(!response.ok) throw new Error("api_unavailable"); return response.json(); })
     .catch(() => ({ok:false,writesEnabled:false,turnstileSiteKey:""}));
   return apiConfigPromise;
 }
+let tsApiConfigCache = null;
+getApiConfig().then(config => { tsApiConfigCache = config; });
 function getAnonymousId(){
   try{
     let value=localStorage.getItem(ANONYMOUS_ID_KEY);
@@ -3111,6 +3151,7 @@ function loadTurnstileScript(){
 async function initTurnstile(kind){
   const state=turnstileState[kind],container=document.getElementById(state.container);if(!container||state.widget!==null)return;
   const config=await getApiConfig();
+  if(TS_PREVIEW){container.textContent="預覽模式不會送出預測，只會下載圖卡。";return;}
   if(!config.writesEnabled||!config.turnstileSiteKey){container.textContent="測試站完成安全設定後，匿名送出功能才會開放；圖卡仍可在裝置上產生。";return;}
   try{
     await loadTurnstileScript();container.textContent="";
@@ -3154,47 +3195,121 @@ function tsCurrentSeries(){
 function tsSetPhoto(p){
   if (tsPhotoURL) URL.revokeObjectURL(tsPhotoURL);
   tsPhoto = p; tsPhotoURL = p ? URL.createObjectURL(p.blob) : "";
-  // Prediction and recap share one photo per game, so both upload rows mirror it.
-  [["ts-pred-upload","選填 · 沒放照片就用系統預設底圖"],["ts-upload","可沿用預測圖底圖 · 只在這台裝置處理"]].forEach(([id, hint]) => {
-    const btn = document.getElementById(id);
-    if (!btn) return;
-    btn.classList.toggle("has-photo", !!p);
-    btn.innerHTML = p
-      ? `<span><img src="${tsPhotoURL}" alt=""></span><b>調整／更換當日照片</b><small>已儲存在這台裝置 · 點擊可重新取景</small>`
-      : `<span>＋</span><b>上傳當日照片</b><small>${hint}</small>`;
-  });
+  // Prediction and recap share one photo per game: the prediction card reads it
+  // through the live preview, the recap row shows a thumbnail.
+  document.getElementById("ts-pred-upload").textContent = p ? "調整照片" : "換成我的照片";
+  const btn = document.getElementById("ts-upload");
+  btn.classList.toggle("has-photo", !!p);
+  btn.innerHTML = p
+    ? `<span><img src="${tsPhotoURL}" alt=""></span><b>調整／更換當日照片</b><small>已儲存在這台裝置 · 點擊可重新取景</small>`
+    : `<span>＋</span><b>上傳當日照片</b><small>可沿用預測圖底圖 · 只在這台裝置處理</small>`;
+  tsQueueLive("prediction");
 }
 
 function tsSetSeriesPhoto(p){
   if (tsSeriesPhotoURL) URL.revokeObjectURL(tsSeriesPhotoURL);
   tsSeriesPhoto = p; tsSeriesPhotoURL = p ? URL.createObjectURL(p.blob) : "";
-  const btn = document.getElementById("ts-series-upload");
-  if (!btn) return;
-  btn.classList.toggle("has-photo", !!p);
-  btn.innerHTML = p
-    ? `<span><img src="${tsSeriesPhotoURL}" alt=""></span><b>調整／更換系列賽照片</b><small>已儲存在這台裝置 · 點擊可重新取景</small>`
-    : `<span>＋</span><b>上傳系列賽照片</b><small>選填 · 只用在系列賽預言圖</small>`;
+  document.getElementById("ts-series-upload").textContent = p ? "調整照片" : "換成我的照片";
+  tsQueueLive("series");
 }
 
 function tsResetOutputs(){
   tsOutputURLs.forEach(URL.revokeObjectURL); tsOutputURLs = [];
   document.getElementById("ts-output-set").innerHTML = `
-    <figure><div class="output-placeholder output-cover"><span>3.賽時回顧</span><b>賽事摘要</b></div><figcaption>比分與全場關鍵資訊</figcaption></figure>
-    <figure><div class="output-placeholder output-data home"><span>4.最愛的球員</span><b>本場想記住的球員</b><i></i><i></i><i></i><i></i></div><figcaption>只呈現客觀的單場成績</figcaption></figure>`;
+    <figure><div class="output-placeholder output-cover"><span>3.賽事回顧</span><b>賽事摘要</b></div><figcaption>比分與全場關鍵資訊</figcaption></figure>
+    <figure><div class="output-placeholder output-data home"><span>3.最愛球員</span><b>本場想記住的球員</b><i></i><i></i><i></i><i></i></div><figcaption>只呈現客觀的單場成績</figcaption></figure>`;
   document.getElementById("ts-status").textContent = "";
 }
 function tsResetPredictionOutput(){
-  if (tsPredictionURL) URL.revokeObjectURL(tsPredictionURL);
-  tsPredictionURL = "";
-  document.getElementById("ts-pred-output").innerHTML = `<figure><div class="output-placeholder output-cover"><span>1.賽前預言</span><b>我的預測</b></div><figcaption>完賽後用同一張圖對答案</figcaption></figure>`;
   document.getElementById("ts-pred-status").textContent = "";
+  tsQueueLive("prediction");
 }
 function tsResetSeriesOutput(){
-  if (tsSeriesURL) URL.revokeObjectURL(tsSeriesURL);
-  tsSeriesURL = "";
-  document.getElementById("ts-series-output").innerHTML = `<figure><div class="output-placeholder output-data away"><span>2.Series prediction</span><b>系列賽預言</b><i></i><i></i><i></i><i></i></div><figcaption>兩隊最終勝場預測</figcaption></figure>`;
   document.getElementById("ts-series-status").textContent = "";
+  tsQueueLive("series");
 }
+
+// ---- Live card previews (1.賽事預言, 2.系列賽預言) ---------------------
+// Every change (score, players, name, photo, game) re-draws the 1080×1920 card
+// after a short pause. The finished PNG is kept so "送出預測＋下載預測圖" can hand
+// it to the share sheet straight from the tap, which iPhone Safari requires.
+const tsLive = {
+  prediction:{timer:0, seq:0, blob:null, url:"", ready:false},
+  series:{timer:0, seq:0, blob:null, url:"", ready:false},
+};
+const TS_LIVE_IDS = {
+  prediction:{img:"ts-pred-preview", ph:"ts-pred-placeholder", out:"ts-pred-output"},
+  series:{img:"ts-series-preview", ph:"ts-series-placeholder", out:"ts-series-output"},
+};
+function tsLiveVisible(){ return !document.getElementById("view-taiwan-series").hidden; }
+function tsQueueLive(kind, delay = 260){
+  const st = tsLive[kind]; st.ready = false; clearTimeout(st.timer);
+  if (!tsLiveVisible()) return;              // drawn when the page is opened
+  document.getElementById(TS_LIVE_IDS[kind].out).classList.add("is-rendering");
+  st.timer = setTimeout(() => tsRenderLive(kind), delay);
+}
+function tsLivePlaceholder(kind, text){
+  const ids = TS_LIVE_IDS[kind], st = tsLive[kind];
+  if (st.url) URL.revokeObjectURL(st.url);
+  st.url = ""; st.blob = null; st.ready = false;
+  document.getElementById(ids.img).hidden = true;
+  const ph = document.getElementById(ids.ph); ph.hidden = false; ph.querySelector("b").textContent = text;
+}
+async function tsRenderLive(kind){
+  const st = tsLive[kind], seq = ++st.seq, ids = TS_LIVE_IDS[kind];
+  let canvas = null;
+  try{
+    if (kind === "prediction"){
+      const game = tsSelectedGame; if (!game) return;
+      const phase = tsGamePhase(game), pred = tsCurrentPrediction();
+      if (phase !== "open" && !pred.savedAt){ tsLivePlaceholder(kind, phase === "answer" ? "這台裝置沒有本場預測" : "本場預測已鎖定"); return; }
+      if (phase === "open"){
+        if (!tsPredictedTeams()){ tsLivePlaceholder(kind, "台灣大賽不會有和局"); return; }
+        tsReadPrediction();
+      }
+      canvas = await tsDrawPrediction(game, {...pred}, tsDownloadStamp());
+    } else {
+      const game = TAIWAN_SERIES_GAMES[0]; if (!game) return;
+      const series = tsCurrentSeries();
+      if (tsGamePhase(game) !== "open" && !series.savedAt){ tsLivePlaceholder(kind, "系列賽預測已鎖定"); return; }
+      canvas = await tsDrawSeriesPrediction(game, series, tsDownloadStamp());
+    }
+    const blob = await tsCanvasBlob(canvas);
+    if (seq !== st.seq) return;               // a newer edit is already drawing
+    if (st.url) URL.revokeObjectURL(st.url);
+    st.blob = blob; st.url = URL.createObjectURL(blob); st.ready = true;
+    const img = document.getElementById(ids.img); img.src = st.url; img.hidden = false;
+    document.getElementById(ids.ph).hidden = true;
+  }catch(e){ console.error(e); if (seq === st.seq) tsLivePlaceholder(kind, "預覽產生失敗，請重新整理"); }
+  finally{
+    if (canvas){ canvas.width = canvas.height = 0; }
+    if (seq === st.seq) document.getElementById(ids.out).classList.remove("is-rendering");
+  }
+}
+async function tsEnsureLive(kind){
+  const st = tsLive[kind];
+  if (st.ready) return true;
+  clearTimeout(st.timer); await tsRenderLive(kind);
+  return st.ready;
+}
+// Hands the current preview to the share sheet (touch) or a normal download.
+function tsDeliver(kind, name){
+  const st = tsLive[kind], file = st.blob ? tsShareableFile(st.blob, name) : null;
+  if (file){
+    return navigator.share({files:[file]}).then(() => "native_share", e => {
+      if (e && e.name === "AbortError") return "cancelled";
+      tsAnchorDownload(st.url, name); return "download";
+    });
+  }
+  tsAnchorDownload(st.url, name);
+  return Promise.resolve("download");
+}
+function tsDeliverNote(how){
+  if (how === "cancelled") return "已取消儲存；也可以長按右邊的預覽圖存到相簿。";
+  if (how === "download" && TS_TOUCH) return "如果沒有開始下載，請長按右邊的預覽圖存到相簿。";
+  return TS_IN_APP ? TS_SAVE_HINT : "";
+}
+
 async function tsLoadStoredPhoto(){
   tsSetPhoto(null);
   const p = await PhotoDB.run("readonly", s => s.get(tsPhotoKey(tsSelectedGame))).catch(() => null);
@@ -3302,28 +3417,47 @@ function tsRenderControls(){
   document.getElementById("ts-pred-away-score").value = prediction.awayScore;
   document.getElementById("ts-pred-home-score").value = prediction.homeScore;
   tsRenderPredictionChoices();
-  const phaseTitle=document.getElementById("ts-prediction-window-title"),phaseCopy=document.getElementById("ts-prediction-window-copy"),phaseIntro=document.getElementById("ts-prediction-phase-copy"),predButton=document.getElementById("ts-pred-generate");
+  const predSection=document.getElementById("ts-pred-builder"),predButton=document.getElementById("ts-pred-generate");
+  const predLock=document.getElementById("ts-pred-lock"),phaseIntro=document.getElementById("ts-prediction-phase-copy");
+  predSection.classList.toggle("is-locked",phase!=="open");
+  predLock.hidden=phase==="open";predLock.classList.toggle("done",phase==="answer");
+  document.querySelector("#ts-pred-builder .prediction-window").hidden=phase!=="open";
   if(phase==="open"){
-    phaseTitle.textContent="預測開放中";phaseCopy.textContent=`G${tsSelectedGame.g} 將於 ${tsGameTime(tsSelectedGame)} 開賽時鎖定。`;phaseIntro.textContent="開賽前可以更新預測；開賽後鎖定，賽果更新後再回來對答案。";predButton.textContent="匿名送出並產生 1.賽前預言圖";predButton.disabled=false;
+    document.getElementById("ts-prediction-window-title").textContent="預測開放中";
+    document.getElementById("ts-prediction-window-copy").textContent=`G${tsSelectedGame.g} 將於 ${tsGameTime(tsSelectedGame)} 開賽時鎖定。`;
+    phaseIntro.textContent="開賽前可以一直修改；送出後同一台裝置再送一次會更新這一票。";
+    predButton.textContent="送出預測＋下載預測圖";predButton.disabled=false;
   }else if(phase==="locked"){
-    phaseTitle.textContent="本場預測已鎖定";phaseCopy.textContent=hasPrediction?"你的賽前預測已保存在這台裝置，等待賽果更新後即可對答案。":"這台裝置沒有留下本場賽前預測。";phaseIntro.textContent="比賽已開打，現在不能新增或修改預測；賽果更新後會進入對答案模式。";predButton.textContent=hasPrediction?"重新產生已鎖定的預言圖":"本場預測已鎖定";predButton.disabled=!hasPrediction;
+    document.getElementById("ts-pred-lock-title").textContent="賽事已開始";
+    document.getElementById("ts-pred-lock-copy").textContent=`G${tsSelectedGame.g} 已於 ${tsGameTime(tsSelectedGame)} 開賽，本場預測已鎖定。`+(hasPrediction?"你的預測保存在這台裝置，賽果出爐後回來對答案。":"這台裝置沒有留下本場預測。");
+    phaseIntro.textContent="比賽已開打，不能新增或修改預測。";
+    predButton.textContent=hasPrediction?"下載我的預測圖":"賽事已開始 · 預測已鎖定";predButton.disabled=!hasPrediction;
   }else{
-    phaseTitle.textContent="對答案模式";phaseCopy.textContent=hasPrediction?"已找到這台裝置保存的賽前預測，可以產生對答案圖。":"這台裝置沒有找到本場的賽前預測。";phaseIntro.textContent="賽果已更新；使用同一台裝置且瀏覽器資料仍保留，就能查看預測與實際結果。";predButton.textContent=hasPrediction?"產生 1.賽前預言對答案圖":"沒有可對照的賽前預測";predButton.disabled=!hasPrediction;
+    document.getElementById("ts-pred-lock-title").textContent="賽事已結束";
+    document.getElementById("ts-pred-lock-copy").textContent=`實際比分 ${teamDisplayName(tsSelectedGame.away)} ${tsSelectedGame.awayScore} : ${tsSelectedGame.homeScore} ${teamDisplayName(tsSelectedGame.home)}。`+(hasPrediction?"預覽圖已自動結算成你的對答案圖。":"這台裝置沒有本場的預測紀錄。");
+    phaseIntro.textContent="賽果已更新，用同一台裝置就能對答案。";
+    predButton.textContent=hasPrediction?"下載對答案圖":"沒有可對照的預測";predButton.disabled=!hasPrediction;
   }
   const predictionLocked=phase!=="open";
-  ["ts-fan-name","ts-pred-away-score","ts-pred-home-score","ts-pred-rbi","ts-pred-win","ts-pred-loss","ts-pred-mvp"].forEach(id=>document.getElementById(id).disabled=predictionLocked);
-  document.querySelectorAll("#ts-prediction-view [data-ts-upload=\"prediction\"]").forEach(button=>button.disabled=predictionLocked);
+  document.getElementById("ts-pred-caption").textContent=phase==="open"?"即時預覽 · 改比分、換照片都會同步更新":phase==="locked"?"你在開賽前保存的預測":"賽後結算 · 同一張圖對答案";
+  ["ts-fan-name","ts-pred-away-score","ts-pred-home-score","ts-pred-rbi","ts-pred-win","ts-pred-loss","ts-pred-mvp","ts-pred-upload"].forEach(id=>document.getElementById(id).disabled=predictionLocked);
   document.getElementById("ts-pred-turnstile").hidden=predictionLocked;
+  document.querySelector("#ts-pred-builder .prediction-consent").hidden=predictionLocked;
 
-  const series=tsCurrentSeries(),seriesPhase=tsGamePhase(TAIWAN_SERIES_GAMES[0]);
-  document.getElementById("ts-series-score-options").innerHTML=TS_SERIES_SCORES.map(([b,w])=>`<button class="series-score-option" data-ts-series-score="${b}-${w}" aria-pressed="${series.brothersWins===b&&series.dragonsWins===w}"${seriesPhase!=="open"?" disabled":""}><span>中信兄弟</span><b>${b} : ${w}</b><span>味全龍</span></button>`).join("");
-  const seriesButton=document.getElementById("ts-series-generate"),seriesStored=!!series.savedAt;
-  document.getElementById("ts-series-name").disabled=seriesPhase!=="open";
-  document.getElementById("ts-series-upload").disabled=seriesPhase!=="open";
-  document.getElementById("ts-series-turnstile").hidden=seriesPhase!=="open";
-  document.querySelector("#ts-series-builder .prediction-lock").textContent=seriesPhase==="open"?`系列賽預測會在 ${tsGameTime(TAIWAN_SERIES_GAMES[0])} 鎖定`:seriesStored?"系列賽預測已鎖定，這台裝置仍保留你的選擇":"系列賽預測已鎖定";
-  seriesButton.textContent=seriesPhase==="open"?"匿名送出並產生 2.系列賽預言圖":seriesStored?"重新產生已鎖定的系列賽預言圖":"系列賽預測已鎖定";
-  seriesButton.disabled=seriesPhase!=="open"&&!seriesStored;
+  const series=tsCurrentSeries(),seriesGame=TAIWAN_SERIES_GAMES[0],seriesPhase=tsGamePhase(seriesGame),seriesOpen=seriesPhase==="open",seriesStored=!!series.savedAt;
+  document.getElementById("ts-series-score-options").innerHTML=TS_SERIES_SCORES.map(([b,w])=>`<button class="series-score-option" data-ts-series-score="${b}-${w}" aria-pressed="${series.brothersWins===b&&series.dragonsWins===w}"${seriesOpen?"":" disabled"}><span>中信兄弟</span><b>${b} : ${w}</b><span>味全龍</span></button>`).join("");
+  const seriesSection=document.getElementById("ts-series-builder"),seriesButton=document.getElementById("ts-series-generate"),seriesLock=document.getElementById("ts-series-lock");
+  seriesSection.classList.toggle("is-locked",!seriesOpen);seriesLock.hidden=seriesOpen;
+  document.querySelector("#ts-series-builder .prediction-window").hidden=!seriesOpen;
+  document.getElementById("ts-series-window-copy").textContent=`系列賽預測會在 G1 開賽（${tsGameTime(seriesGame)}）時鎖定。`;
+  document.getElementById("ts-series-lock-copy").textContent=`系列賽預測已於 G1 開賽（${tsGameTime(seriesGame)}）時鎖定。`+(seriesStored?"你的預測保存在這台裝置。":"這台裝置沒有留下系列賽預測。");
+  ["ts-series-name","ts-series-upload"].forEach(id=>document.getElementById(id).disabled=!seriesOpen);
+  document.getElementById("ts-series-caption").textContent=seriesOpen?"即時預覽 · 改比分、換照片都會同步更新":"你在 G1 開賽前保存的系列賽預測";
+  document.getElementById("ts-series-turnstile").hidden=!seriesOpen;
+  document.querySelector("#ts-series-builder .prediction-consent").hidden=!seriesOpen;
+  seriesButton.textContent=seriesOpen?"送出預測＋下載預測圖":seriesStored?"下載我的預測圖":"賽事已開始 · 預測已鎖定";
+  seriesButton.disabled=!seriesOpen&&!seriesStored;
+  tsQueueLive("prediction");tsQueueLive("series");
 
   const reviewReady=!!tsSelectedGame.dataReady,reviewBuilder=document.getElementById("ts-review-builder");
   document.getElementById("ts-review-empty").hidden=reviewReady;reviewBuilder.hidden=!reviewReady;
@@ -3488,7 +3622,7 @@ async function tsDrawPrediction(game, prediction, stamp = tsDownloadStamp()){
   const winner = prediction.awayScore > prediction.homeScore ? game.away : game.home;
   const {c,ctx,accent}=tsBase(game,winner),L=70,R=SW-66;
   await tsDrawFullBleed(ctx,prediction.bg === "photo" ? tsPhoto : null,prediction.bg === "photo" ? tsPhotoURL : "",game.away,game.home,accent);
-  tsHeader(ctx,game,`1.賽前預言 · G${game.g}`,accent);
+  tsHeader(ctx,game,`1.賽事預言 · G${game.g}`,accent);
   ctx.save();ctx.shadowColor="rgba(0,0,0,.78)";ctx.shadowBlur=18;
   ctx.fillStyle=accent.f;ctx.font=`800 23px ${F_NUM}`;spacing(ctx,4);ctx.fillText(`${tsDate(game.date)} · ${game.time} 開賽`,L,823);spacing(ctx,0);
   ctx.fillStyle="#F7F3E8";ctx.font=`700 35px ${F_TC}`;ctx.fillText(teamDisplayName(game.away),L,898);ctx.textAlign="right";ctx.fillText(teamDisplayName(game.home),R,898);
@@ -3497,10 +3631,16 @@ async function tsDrawPrediction(game, prediction, stamp = tsDownloadStamp()){
   ctx.fillStyle="rgba(247,243,232,.72)";ctx.font=`600 22px ${F_TC}`;ctx.fillText("我的賽前比分預測",SW/2,1104);ctx.restore();ctx.textAlign="left";
 
   ctx.fillStyle=accent.f;ctx.font=`800 20px ${F_NUM}`;spacing(ctx,3);ctx.fillText("MY PICKS",L,1170);spacing(ctx,0);
-  const picks=[["勝利打點",prediction.rbi],["勝投",prediction.win],["敗投",prediction.loss],["單場 MVP",prediction.mvp]],colW=(R-L-34)/2;
-  picks.forEach((row,i)=>{const col=i%2,line=Math.floor(i/2),x=L+col*(colW+34),y=1228+line*108;ctx.fillStyle="rgba(255,255,255,.20)";ctx.fillRect(x,y+52,colW,1);ctx.fillStyle="rgba(247,243,232,.56)";ctx.font=`600 19px ${F_TC}`;ctx.fillText(row[0],x,y);ctx.fillStyle="#F7F3E8";ctx.font=`700 31px ${F_TC}`;ctx.fillText(row[1],x,y+43,colW);});
+  // After the game each pick gets settled: 命中 badge, or the actual name.
+  const actual=game.dataReady?{rbi:game.winningRbi,win:game.decisions.win,loss:game.decisions.loss,mvp:game.mvp.name}:null;
+  const picks=[["勝利打點",prediction.rbi,"rbi"],["勝投",prediction.win,"win"],["敗投",prediction.loss,"loss"],["單場 MVP",prediction.mvp,"mvp"]],colW=(R-L-34)/2;
+  picks.forEach((row,i)=>{const col=i%2,line=Math.floor(i/2),x=L+col*(colW+34),y=1228+line*108;ctx.fillStyle="rgba(255,255,255,.20)";ctx.fillRect(x,y+52,colW,1);ctx.fillStyle="rgba(247,243,232,.56)";ctx.font=`600 19px ${F_TC}`;ctx.fillText(row[0],x,y);ctx.fillStyle="#F7F3E8";ctx.font=`700 31px ${F_TC}`;ctx.fillText(row[1],x,y+43,colW-150);
+    if(actual){const hit=row[1]===actual[row[2]];ctx.textAlign="right";
+      if(hit){ctx.font=`800 19px ${F_TC}`;const w=ctx.measureText("命中").width+30;rr(ctx,x+colW-w,y+14,w,38,19);ctx.fillStyle=accent.f;ctx.fill();ctx.fillStyle=accent.i;ctx.fillText("命中",x+colW-15,y+40);}
+      else{ctx.fillStyle="rgba(247,243,232,.62)";ctx.font=`600 19px ${F_TC}`;ctx.fillText(`實際 ${actual[row[2]]}`,x+colW,y+40,150);}
+      ctx.textAlign="left";}});
   ctx.fillStyle="rgba(255,255,255,.18)";ctx.fillRect(L,1430,R-L,1);
-  ctx.fillStyle=accent.f;ctx.font=`800 19px ${F_NUM}`;spacing(ctx,3);ctx.fillText("AFTER THE GAME",L,1482);spacing(ctx,0);
+  ctx.fillStyle=accent.f;ctx.font=`800 19px ${F_NUM}`;spacing(ctx,3);ctx.fillText(game.dataReady?"FINAL · 賽後結算":"AFTER THE GAME",L,1482);spacing(ctx,0);
   if(game.dataReady){
     const answers=[prediction.awayScore===game.awayScore&&prediction.homeScore===game.homeScore,prediction.rbi===game.winningRbi,prediction.win===game.decisions.win,prediction.loss===game.decisions.loss,prediction.mvp===game.mvp.name],hits=answers.filter(Boolean).length;
     ctx.fillStyle="#F7F3E8";ctx.font=`700 36px ${F_TC}`;ctx.fillText(`實際賽果 ${game.awayScore} : ${game.homeScore}`,L,1540);
@@ -3519,7 +3659,7 @@ async function tsDrawSeriesPrediction(game, series, stamp = tsDownloadStamp()){
   await loadFontsFor(`${brothers}${dragons}${tsSeriesName()}`);
   const {c,ctx,accent}=tsBase(game,winner),L=70,R=SW-66;
   await tsDrawFullBleed(ctx,tsSeriesPhoto,tsSeriesPhotoURL,brothers,dragons,accent);
-  tsHeader(ctx,game,"2.SERIES PREDICTION",accent);
+  tsHeader(ctx,game,"2.系列賽預言",accent);
   ctx.save();ctx.shadowColor="rgba(0,0,0,.8)";ctx.shadowBlur=18;
   ctx.fillStyle=accent.f;ctx.font=`800 22px ${F_NUM}`;spacing(ctx,4);ctx.fillText("2026 台灣大賽 · 我的系列賽預言",L,823);spacing(ctx,0);
   ctx.fillStyle="#F7F3E8";ctx.font=`700 38px ${F_TC}`;ctx.textAlign="left";ctx.fillText(teamDisplayName(brothers),L,915);ctx.textAlign="right";ctx.fillText(teamDisplayName(dragons),R,915);
@@ -3538,7 +3678,7 @@ async function tsDrawCover(game, team, stamp = tsDownloadStamp()){
   await loadFontsFor(Object.keys(game.teams).join("") + game.moments.join("") + game.mvp.name + tsFanName());
   const {c, ctx, accent} = tsBase(game, team), L = 70, R = SW - 66;
   await tsDrawPhotoStage(ctx, team, 1040);
-  tsHeader(ctx, game, `3.賽時回顧 · G${game.g}`, accent);
+  tsHeader(ctx, game, `3.賽事回顧 · G${game.g}`, accent);
   ctx.fillStyle = accent.f; ctx.font = `800 24px ${F_NUM}`; spacing(ctx, 4); ctx.fillText(`${tsDate(game.date)} · ${game.venue}`, L, 780); spacing(ctx, 0);
   ctx.fillStyle = "#F7F3E8"; ctx.font = `700 34px ${F_TC}`; ctx.fillText(teamDisplayName(game.away), L, 886);
   ctx.textAlign = "right"; ctx.fillText(teamDisplayName(game.home), R, 886); ctx.textAlign = "center";
@@ -3630,7 +3770,7 @@ async function tsDrawPlayer(game, player, stamp = tsDownloadStamp()){
   const {team, role, data} = player, {c, ctx, accent} = tsBase(game, team), L = 70, R = SW - 66;
   await loadFontsFor(`${team}${data.name}${game.moments.join("")}${tsFanName()}`);
   await tsDrawPhotoStage(ctx, team, 1040);
-  tsHeader(ctx, game, `4.最愛的球員 · G${game.g}`, accent);
+  tsHeader(ctx, game, `3.最愛球員 · G${game.g}`, accent);
   ctx.fillStyle = "rgba(247,243,232,.74)"; ctx.font = `600 24px ${F_TC}`; ctx.fillText(teamDisplayName(team), L, 780);
   ctx.fillStyle = accent.f; ctx.font = `800 20px ${F_NUM}`; spacing(ctx,4); ctx.fillText(role === "pitcher" ? "PITCHER" : `BATTER · ${data.pos}`, L, 850); spacing(ctx,0);
   const nameSize = tsFit(ctx, data.name, R-L, 92, 60); ctx.font = `700 ${nameSize}px ${F_TC}`; ctx.fillStyle = "#F7F3E8"; ctx.fillText(data.name, L, 945);
@@ -3722,62 +3862,74 @@ async function tsGenerate(){
     const canvases = [await tsDrawCover(game, tsThemeTeam, stamp), await tsDrawPlayer(game, player, stamp)];
     const blobs = await Promise.all(canvases.map(tsCanvasBlob)); canvases.forEach(c => { c.width = c.height = 0; });
     tsOutputURLs.forEach(URL.revokeObjectURL); tsOutputURLs = blobs.map(URL.createObjectURL);
-    const names = ["3.賽時回顧", `4.最愛的球員・${player.data.name}`];
+    const names = ["3.賽事回顧", `3.最愛球員・${player.data.name}`];
     const slugs = ["game-summary", "fan-pick"];
     document.getElementById("ts-output-set").innerHTML = tsOutputURLs.map((url, i) => `<figure><img src="${url}" alt="${names[i]}預覽"><figcaption>${names[i]}</figcaption><button class="output-download" data-ts-download="${i}">下載 PNG</button></figure>`).join("");
     document.querySelectorAll("[data-ts-download]").forEach(downloadBtn => {
       const i = Number(downloadBtn.dataset.tsDownload);
       tsBindSave(downloadBtn, blobs[i], tsOutputURLs[i], `cpbl-${game.year}-taiwan-series-g${game.g}-${slugs[i]}.png`, "ts-status", slugs[i]);
     });
-    status.textContent = `3.賽時回顧、4.最愛的球員兩張 1080 × 1920 圖卡已完成。${TS_SAVE_HINT}`;
+    status.textContent = `賽事回顧、最愛球員兩張 1080 × 1920 圖卡已完成。${TS_SAVE_HINT}`;
   }catch(e){ console.error(e); status.textContent = "圖卡產生失敗，請重新整理後再試一次。"; }
   finally{ btn.disabled = false; }
 }
-async function tsGeneratePrediction(){
-  if (!tsSelectedGame) return;
-  const status=document.getElementById("ts-pred-status"),btn=document.getElementById("ts-pred-generate");
-  const phase=tsGamePhase(tsSelectedGame),existing=tsCurrentPrediction();
-  if(phase!=="open"&&!existing.savedAt){status.textContent="這台裝置沒有可重新產生的賽前預測。";return;}
-  if(!tsPredictedTeams()){status.textContent="台灣大賽不會出現和局，請調整預測比分。";return;}
-  btn.disabled=true;status.textContent="正在整理你的預測…";
+async function tsPredictionAction(){
+  const game = tsSelectedGame; if (!game) return;
+  const status = document.getElementById("ts-pred-status"), btn = document.getElementById("ts-pred-generate");
+  const phase = tsGamePhase(game), pred = tsCurrentPrediction();
+  const name = `cpbl-${game.year}-taiwan-series-g${game.g}-${phase === "answer" ? "answer" : "prediction"}.png`;
+  if (phase !== "open"){
+    if (!pred.savedAt){ status.textContent = "賽事已開始，這台裝置沒有本場預測可以下載。"; return; }
+    if (!tsLive.prediction.ready){ status.textContent = "正在產生預測圖…"; if (!await tsEnsureLive("prediction")) return; }
+    const how = await tsDeliver("prediction", name);
+    track("ts_card_save", {card: phase === "answer" ? "answer" : "prediction", method: how});
+    status.textContent = (phase === "answer" ? "對答案圖已準備好。" : "這是你開賽前保存的預測。") + tsDeliverNote(how);
+    return;
+  }
+  if (!tsPredictedTeams()){ status.textContent = "台灣大賽不會出現和局，請調整預測比分。"; return; }
+  if (tsApiConfigCache?.writesEnabled && !turnstileState.prediction.token){ status.textContent = "請先完成上方的匿名驗證，再送出預測。"; return; }
+  if (!tsLive.prediction.ready){ status.textContent = "正在產生預測圖…"; if (!await tsEnsureLive("prediction")) return; }
+  const prediction = tsReadPrediction();
+  // Start the anonymous submit and hand over the image in the same tap.
+  const submitting = tsSubmitPrediction(prediction).catch(error => ({error}));
+  const delivering = tsDeliver("prediction", name);
+  btn.disabled = true; status.textContent = "正在送出預測…";
   try{
-    const prediction=tsReadPrediction();
-    let submission={submitted:false,message:""};
-    if(phase==="open"){
-      try{submission=await tsSubmitPrediction(prediction);}catch(error){resetTurnstile("prediction");if(error.message==="prediction_closed"){status.textContent=apiErrorText(error.message);tsRenderControls();return;}submission={submitted:false,message:apiErrorText(error.message)};}
-      if(submission.requiresVerification){status.textContent=submission.message;return;}
-      prediction.savedAt=new Date().toISOString();tsSavePredictions();
-    }
-    const canvas=await tsDrawPrediction(tsSelectedGame,prediction,tsDownloadStamp()),blob=await tsCanvasBlob(canvas);canvas.width=canvas.height=0;
-    if(tsPredictionURL)URL.revokeObjectURL(tsPredictionURL);tsPredictionURL=URL.createObjectURL(blob);
-    const caption=phase==="answer"?`1.賽前預言 · G${tsSelectedGame.g} 對答案`:`1.賽前預言 · G${tsSelectedGame.g}`;
-    document.getElementById("ts-pred-output").innerHTML=`<figure><img src="${tsPredictionURL}" alt="${caption}預覽"><figcaption>${caption}</figcaption><button class="output-download" id="ts-pred-download">下載 PNG</button></figure>`;
-    tsBindSave(document.getElementById("ts-pred-download"),blob,tsPredictionURL,`cpbl-${tsSelectedGame.year}-taiwan-series-g${tsSelectedGame.g}-prediction.png`,"ts-pred-status","prediction");
-    status.textContent=(phase==="answer"?"對答案圖已完成。":phase==="locked"?"已用這台裝置保存的內容重新產生預言圖。":`1.賽前預言圖已完成。${submission.message}`)+TS_SAVE_HINT;
-    tsRenderControls();
-  }catch(e){console.error(e);status.textContent="預測圖產生失敗，請重新整理後再試一次。";}
-  finally{tsRenderControls();}
+    const result = await submitting;
+    if (result.error?.message === "prediction_closed"){ status.textContent = apiErrorText("prediction_closed"); return; }
+    if (result.requiresVerification){ status.textContent = result.message; return; }
+    prediction.savedAt = new Date().toISOString(); tsSavePredictions();
+    const how = await delivering;
+    track("ts_card_save", {card:"prediction", method:how});
+    status.textContent = (result.error ? `預測圖已下載，但這次沒有納入統計：${apiErrorText(result.error.message)}` : result.submitted ? "已匿名送出預測，預測圖也下載好了。開賽前再按一次會更新這一票。" : `預測圖已下載。${result.message}`) + tsDeliverNote(how);
+  } finally { tsRenderControls(); }
 }
-async function tsGenerateSeries(){
-  const game=TAIWAN_SERIES_GAMES[0];if(!game)return;
-  const status=document.getElementById("ts-series-status"),btn=document.getElementById("ts-series-generate");
-  const phase=tsGamePhase(game),series=tsCurrentSeries();
-  if(phase!=="open"&&!series.savedAt){status.textContent="這台裝置沒有可重新產生的系列賽預測。";return;}
-  btn.disabled=true;status.textContent="正在整理系列賽預測…";
+async function tsSeriesAction(){
+  const game = TAIWAN_SERIES_GAMES[0]; if (!game) return;
+  const status = document.getElementById("ts-series-status"), btn = document.getElementById("ts-series-generate");
+  const phase = tsGamePhase(game), series = tsCurrentSeries(), name = `cpbl-${game.year}-taiwan-series-series-prediction.png`;
+  if (phase !== "open"){
+    if (!series.savedAt){ status.textContent = "系列賽預測已鎖定，這台裝置沒有可以下載的預測。"; return; }
+    if (!tsLive.series.ready){ status.textContent = "正在產生預測圖…"; if (!await tsEnsureLive("series")) return; }
+    const how = await tsDeliver("series", name);
+    track("ts_card_save", {card:"series", method:how});
+    status.textContent = "這是你在 G1 開賽前保存的系列賽預測。" + tsDeliverNote(how);
+    return;
+  }
+  if (tsApiConfigCache?.writesEnabled && !turnstileState.series.token){ status.textContent = "請先完成上方的匿名驗證，再送出預測。"; return; }
+  if (!tsLive.series.ready){ status.textContent = "正在產生預測圖…"; if (!await tsEnsureLive("series")) return; }
+  const submitting = tsSubmitSeriesPrediction(series).catch(error => ({error}));
+  const delivering = tsDeliver("series", name);
+  btn.disabled = true; status.textContent = "正在送出預測…";
   try{
-    let submission={submitted:false,message:""};
-    if(phase==="open"){
-      try{submission=await tsSubmitSeriesPrediction(series);}catch(error){resetTurnstile("series");if(error.message==="series_prediction_closed"){status.textContent=apiErrorText(error.message);tsRenderControls();return;}submission={submitted:false,message:apiErrorText(error.message)};}
-      if(submission.requiresVerification){status.textContent=submission.message;return;}
-      series.savedAt=new Date().toISOString();tsSavePredictions();
-    }
-    const canvas=await tsDrawSeriesPrediction(game,series,tsDownloadStamp()),blob=await tsCanvasBlob(canvas);canvas.width=canvas.height=0;
-    if(tsSeriesURL)URL.revokeObjectURL(tsSeriesURL);tsSeriesURL=URL.createObjectURL(blob);tsSavePredictions();
-    document.getElementById("ts-series-output").innerHTML=`<figure><img src="${tsSeriesURL}" alt="系列賽預測圖預覽"><figcaption>系列賽預測</figcaption><button class="output-download" id="ts-series-download">下載 PNG</button></figure>`;
-    tsBindSave(document.getElementById("ts-series-download"),blob,tsSeriesURL,`cpbl-${game.year}-taiwan-series-series-prediction.png`,"ts-series-status","series");
-    status.textContent=(phase==="open"?`2.系列賽預言圖已完成。${submission.message}`:"已用這台裝置保存的內容重新產生系列賽預言圖。")+TS_SAVE_HINT;tsRenderControls();
-  }catch(e){console.error(e);status.textContent="系列賽預測圖產生失敗。";}
-  finally{tsRenderControls();}
+    const result = await submitting;
+    if (result.error?.message === "series_prediction_closed"){ status.textContent = apiErrorText("series_prediction_closed"); return; }
+    if (result.requiresVerification){ status.textContent = result.message; return; }
+    series.savedAt = new Date().toISOString(); tsSavePredictions();
+    const how = await delivering;
+    track("ts_card_save", {card:"series", method:how});
+    status.textContent = (result.error ? `預測圖已下載，但這次沒有納入統計：${apiErrorText(result.error.message)}` : result.submitted ? "已匿名送出預測，預測圖也下載好了。開賽前再按一次會更新這一票。" : `預測圖已下載。${result.message}`) + tsDeliverNote(how);
+  } finally { tsRenderControls(); }
 }
 
 const tsPhotoInput = document.getElementById("ts-photo-input");
@@ -3883,8 +4035,8 @@ tsPhotoInput.addEventListener("change", async () => {
   }catch(e){ tsEditorStatus("這張照片讀不進來，請換一張 JPG 或 PNG。"); }
 });
 document.getElementById("ts-generate").onclick = tsGenerate;
-document.getElementById("ts-pred-generate").onclick = tsGeneratePrediction;
-document.getElementById("ts-series-generate").onclick = tsGenerateSeries;
+document.getElementById("ts-pred-generate").onclick = tsPredictionAction;
+document.getElementById("ts-series-generate").onclick = tsSeriesAction;
 document.getElementById("ts-player-select").addEventListener("change", e => { tsSelectedPlayer = e.target.value; tsResetOutputs(); });
 ["ts-pred-away-score","ts-pred-home-score"].forEach(id=>document.getElementById(id).addEventListener("input",()=>{tsResetPredictionOutput();tsRenderPredictionChoices();}));
 ["ts-pred-rbi","ts-pred-win","ts-pred-loss","ts-pred-mvp"].forEach(id=>document.getElementById(id).addEventListener("change",tsResetPredictionOutput));
@@ -3903,6 +4055,18 @@ tsRenderControls();
 tsLoadStoredPhoto();
 tsLoadStoredSeriesPhoto();
 tsLoadSeriesPoll();
+let tsPhaseSig = TAIWAN_SERIES_GAMES.map(g => tsGamePhase(g)).join();
+setInterval(() => {
+  const sig = TAIWAN_SERIES_GAMES.map(g => tsGamePhase(g)).join();
+  if (sig !== tsPhaseSig){ tsPhaseSig = sig; tsRenderControls(); }
+}, 20000);
+if (TS_PREVIEW){
+  const bar = document.getElementById("ts-preview-bar");
+  bar.hidden = false;
+  bar.textContent = TS_PREVIEW === "locked"
+    ? "預覽模式 · G1 開賽後的鎖定畫面（模擬時間，不會送出任何資料）"
+    : "預覽模式 · G1 完賽後的畫面（範例賽果，非實際比賽；不會送出任何資料）";
+}
 
 const COMMUNITY_FEATURE_ENABLED=false;
 function loadThreadsEmbedScript(){
@@ -3997,7 +4161,7 @@ function render(v){
   if (v === "intro") renderIntro();
   else if (v === "pick"){ buildFilters(); renderList(); }
   else if (v === "result") renderResult();
-  else if (v === "taiwan-series"){ tsLoadPoll();tsLoadSeriesPoll();initTurnstile("prediction");initTurnstile("series"); }
+  else if (v === "taiwan-series"){ tsLoadPoll();tsLoadSeriesPoll();initTurnstile("prediction");initTurnstile("series");tsQueueLive("prediction",0);tsQueueLive("series",0); }
   else if (v === "community") initCommunity();
   else if (v === "admin"){document.title="社群管理｜CPBL 進場戰績";loadAdmin();}
   window.scrollTo({top:0});

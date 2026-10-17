@@ -6,6 +6,7 @@
   + src/postseason.json (completed postseason games, compact JSON)
   + src/taiwan-series.json (Taiwan Series card data)
   + src/taiwan-series-rosters.json (Taiwan Series roster data)
+  + tools/ts_hero_sample.json (sample G1 for staging previews)
   -> docs/index.html  (what Cloudflare serves)
 
 Usage:
@@ -32,6 +33,10 @@ def main():
     postseason = json.loads((ROOT / "src/postseason.json").read_text(encoding="utf-8"))
     taiwan_series = json.loads((ROOT / "src/taiwan-series.json").read_text(encoding="utf-8"))
     taiwan_series_rosters = json.loads((ROOT / "src/taiwan-series-rosters.json").read_text(encoding="utf-8"))
+    # Sample G1 box score + prediction, used only by the staging previews
+    # (?ts_preview=locked|final) and by tools/prerender_ts_hero.py.
+    ts_sample = json.loads((ROOT / "tools/ts_hero_sample.json").read_text(encoding="utf-8"))
+    ts_preview_js = json.dumps({"game": ts_sample["game"], "prediction": ts_sample["prediction"]}, ensure_ascii=False, separators=(",", ":"))
     assert len(games) == 360 and all(g["d"] for g in games), "games.json must hold 360 dated games"
     required = {"series", "g", "d", "a", "h", "as", "hs", "v", "wp", "lp", "sv", "mvp"}
     assert postseason and all(required <= game.keys() for game in postseason), "postseason.json has incomplete games"
@@ -57,6 +62,7 @@ def main():
     page = page.replace("/*__POSTSEASON_JSON__*/", postseason_js)
     page = page.replace("/*__TAIWAN_SERIES_JSON__*/", taiwan_series_js)
     page = page.replace("/*__TAIWAN_SERIES_ROSTERS_JSON__*/", taiwan_series_rosters_js)
+    page = page.replace("/*__TS_PREVIEW_JSON__*/", ts_preview_js)
     page = page.replace('"/*__GA_ID__*/"', '""' if args.no_ga else f'"{GA_ID}"')
     assert "/*__" not in page, "unreplaced placeholder left in template"
 
