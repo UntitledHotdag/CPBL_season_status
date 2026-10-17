@@ -263,6 +263,7 @@ git add src docs && git commit -m "Short imperative summary" && git push
 | `share_open` | 開啟回顧圖預覽 | `view`, `has_photo`, `picks_total` |
 | `share_save` | 儲存／分享回顧圖 | `method`（download / native_share / claude_downloads） |
 | `ts_card_save` | 儲存／分享台灣大賽圖卡 | `card`（prediction / answer / series / game-summary / fan-pick）、`method`（download / native_share / cancelled） |
+| `ts_answer_reveal` | 賽後結算面板揭曉 | `game_no`、`hits`（0–5） |
 | `theme_toggle` | 深淺色 | `theme` |
 
 已建立的事件範圍自訂維度：`filter_type`、`filter_value`、`view`、`method`、`cta_location`。

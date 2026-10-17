@@ -74,3 +74,9 @@
 
 - 鎖定畫面：`https://staging.mybaseballgame.com/?ts_preview=locked#taiwan-series`（模擬 G1 開賽 30 分鐘後）
 - 完賽畫面：`https://staging.mybaseballgame.com/?ts_preview=final#taiwan-series`（G1 套用 `tools/ts_hero_sample.json` 範例賽果，模擬開賽 4 小時後）
+
+## 賽果資料與結算
+
+- `src/taiwan-series.json` 的 `dataReady: true` 代表**最終賽果已確定**（比分、勝敗救援、MVP、勝利打點、系列賽戰績），足以讓 1.賽事預言自動結算；`tools/build.py` 會檢查這些名字都在台灣大賽名單上。
+- 完整 box score（`teams`、`innings`、`rhe`、`moments`、`homeRuns`、`duration`、`attendance`）可以之後補；補齊前，3.賽事回顧與最愛球員會顯示「賽果已出 · 回顧整理中」。
+- 結算稱號（`TS_VERDICTS`）：5 項「你是國師 · 未卜先知」、4 項「你是國師 · 料事如神」、3 項「你是準國師 · 心中有數」、2 項「你是見習國師 · 略知一二」、1 項「你是半個咒言師 · 聊勝於無」、0 項「你是咒言師 · 職棒反指標」；網頁上的結算面板會逐項揭曉，預言圖卡也同步印上稱號。

@@ -19,13 +19,22 @@ test("2026 Taiwan Series schedule contains G1-G7 in order", () => {
       { g: 7, date: "2026-10-25", time: "17:05", away: "中信兄弟", home: "味全龍" },
     ],
   );
-  assert.equal(taiwanSeriesGames.every((item) => item.dataReady === false), true);
-  assert.equal(taiwanSeriesGames.every((item) => !item.demo && !item.testSourceGame && !item.teams), true);
+  assert.equal(taiwanSeriesGames.every((item) => typeof item.dataReady === "boolean"), true);
+  assert.equal(taiwanSeriesGames.every((item) => !item.demo && !item.testSourceGame), true);
+});
+
+test("settled games carry a final result and stop accepting predictions", () => {
+  for (const item of taiwanSeriesGames.filter((g) => g.dataReady)) {
+    assert.notEqual(item.awayScore, item.homeScore);
+    assert.ok(item.decisions?.win && item.decisions?.loss && item.mvp?.name && item.winningRbi);
+    assert.equal(predictionWindowOpen(item, {}, new Date(Date.parse(item.startsAt) - 3600e3)), false);
+  }
 });
 
 test("each game accepts predictions until its own first pitch", () => {
-  assert.equal(predictionWindowOpen(game, {}, new Date("2026-10-17T17:04:59+08:00")), true);
-  assert.equal(predictionWindowOpen(game, {}, new Date("2026-10-17T17:05:00+08:00")), false);
+  const scheduled = { ...game, dataReady: false };
+  assert.equal(predictionWindowOpen(scheduled, {}, new Date("2026-10-17T17:04:59+08:00")), true);
+  assert.equal(predictionWindowOpen(scheduled, {}, new Date("2026-10-17T17:05:00+08:00")), false);
   assert.equal(predictionWindowOpen({ ...game, dataReady: true }, {}, new Date("2026-10-17T16:00:00+08:00")), false);
 });
 

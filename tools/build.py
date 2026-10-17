@@ -41,11 +41,15 @@ def main():
     required = {"series", "g", "d", "a", "h", "as", "hs", "v", "wp", "lp", "sv", "mvp"}
     assert postseason and all(required <= game.keys() for game in postseason), "postseason.json has incomplete games"
     ts_schedule_required = {"year", "g", "date", "time", "startsAt", "away", "home", "dataReady"}
-    ts_result_required = {"venue", "awayScore", "homeScore", "teams", "seriesRecord", "innings", "rhe"}
+    # dataReady = the final result is known (enough to settle predictions).
+    # The full box score (for 3.賽事回顧與最愛球員) can follow later.
+    ts_result_required = {"venue", "awayScore", "homeScore", "decisions", "mvp", "winningRbi", "seriesRecord"}
+    ts_box_required = {"teams", "innings", "rhe", "moments", "homeRuns", "duration", "attendance"}
     assert taiwan_series and all(ts_schedule_required <= game.keys() for game in taiwan_series), "taiwan-series.json has incomplete schedule entries"
     assert all(game["g"] == index for index, game in enumerate(taiwan_series, 1)), "taiwan-series.json must contain G1-G7 in order"
     assert all(game["away"] != game["home"] for game in taiwan_series), "Taiwan Series opponents must be different"
     assert all(game.get("dataReady") is False or ts_result_required <= game.keys() for game in taiwan_series), "taiwan-series.json has incomplete result data"
+    assert all("teams" not in game or ts_box_required <= game.keys() for game in taiwan_series), "taiwan-series.json has an incomplete box score"
     roster_groups = {"pitchers": 15, "catchers": 3, "infielders": 8, "outfielders": 6}
     assert taiwan_series_rosters.get("year") == 2026 and taiwan_series_rosters.get("series") == "taiwan", "Taiwan Series roster metadata is invalid"
     assert set(taiwan_series_rosters.get("teams", {})) == {"中信兄弟", "味全龍"}, "Taiwan Series rosters must contain both teams"
@@ -53,6 +57,20 @@ def main():
         assert all(len(roster.get(group, [])) == count for group, count in roster_groups.items()), f"{team} roster counts are invalid"
         names = [name for group in roster_groups for name in roster[group]]
         assert len(names) == len(set(names)) == 32, f"{team} roster must contain 32 unique players"
+
+    roster_names = {team: {n for grp in roster_groups for n in taiwan_series_rosters["teams"][team][grp]} for team in taiwan_series_rosters["teams"]}
+    for game in taiwan_series:
+        if not game.get("dataReady"):
+            continue
+        assert game["awayScore"] != game["homeScore"], f"G{game['g']} cannot be a tie"
+        winner = game["away"] if game["awayScore"] > game["homeScore"] else game["home"]
+        loser = game["home"] if winner == game["away"] else game["away"]
+        checks = {"winningRbi": (game["winningRbi"], winner), "decisions.win": (game["decisions"]["win"], winner),
+                  "decisions.loss": (game["decisions"]["loss"], loser), "mvp": (game["mvp"]["name"], winner)}
+        if game["decisions"].get("save"):
+            checks["decisions.save"] = (game["decisions"]["save"], winner)
+        for field, (name, team) in checks.items():
+            assert name in roster_names[team], f"G{game['g']} {field} '{name}' is not on the {team} Taiwan Series roster"
 
     games_js = json.dumps(games, ensure_ascii=False, separators=(",", ":"))
     postseason_js = json.dumps(postseason, ensure_ascii=False, separators=(",", ":"))

@@ -760,6 +760,26 @@
   .ts-live-frame>[hidden]{display:none!important}
   .ts-live-frame img{transition:opacity .2s ease}
   .ts-live.is-rendering .ts-live-frame img{opacity:.55}
+  .ts-result{margin:0 0 18px;padding:20px 22px 22px;border-radius:16px;border:1px solid var(--rule);background:var(--panel);box-shadow:0 24px 60px -48px rgba(0,0,0,.7)}
+  .ts-result-head{display:flex;justify-content:space-between;align-items:center;gap:12px;font:800 11px "Manrope","Noto Sans TC",sans-serif;letter-spacing:.16em;color:var(--accent)}
+  .ts-result-replay{min-height:32px;padding:0 4px;font-size:11px;font-weight:700;letter-spacing:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+  .ts-result-rows{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+  .ts-result-rows li{display:grid;grid-template-columns:4.8em minmax(0,1fr) minmax(0,1fr) 30px;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:var(--ground);opacity:0;transform:translateY(8px);transition:opacity .35s ease,transform .35s ease}
+  .ts-result-rows li.is-in{opacity:1;transform:none}
+  .ts-result-rows .k{font-size:11px;font-weight:700;color:var(--muted)}
+  .ts-result-rows .mine{font-size:14px;font-weight:700;overflow-wrap:anywhere}
+  .ts-result-rows .real{font-size:12px;color:var(--ink-dim);overflow-wrap:anywhere}
+  .ts-result-rows .mark{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:14px;font-weight:800}
+  .ts-result-rows li.hit .mark{background:var(--accent-fill);color:var(--accent-ink)}
+  .ts-result-rows li.miss .mark{border:1px solid var(--rule);color:var(--muted)}
+  .ts-result-verdict{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;margin-top:20px;opacity:0;transform:scale(.9);transform-origin:left center;transition:opacity .4s ease,transform .45s cubic-bezier(.2,1.4,.4,1)}
+  .ts-result-verdict.is-in{opacity:1;transform:none}
+  .ts-result-verdict small{flex-basis:100%;font:800 12px "Manrope","Noto Sans TC",sans-serif;letter-spacing:.14em;color:var(--muted)}
+  .ts-result-verdict b{font-size:clamp(30px,5vw,46px);line-height:1.15;color:var(--accent)}
+  .ts-result-verdict span{font-size:clamp(20px,3vw,28px);font-weight:700}
+  .ts-result.jinx .ts-result-verdict b{color:var(--ink)}
+  .ts-result.jinx .ts-result-verdict span{color:var(--muted)}
+  @media (prefers-reduced-motion: reduce){.ts-result-rows li,.ts-result-verdict{transition:none}}
   .ts-claim{display:flex;flex-direction:column;gap:4px;font-size:clamp(22px,2.6vw,28px);font-weight:700;line-height:1.35;color:var(--ink)}
   .ts-claim-row{display:flex;align-items:baseline;gap:12px}
   .ts-claim input{flex:1 1 0;width:0;min-width:0;height:50px;padding:0 4px;border:0;border-bottom:2px solid var(--accent-fill);border-radius:0;background:transparent;color:var(--accent);font:800 1em "Noto Sans TC",sans-serif}
@@ -1175,6 +1195,11 @@
             <p id="ts-prediction-phase-copy">開賽前可以更新預測；開賽後鎖定，賽果更新後再回來對答案。</p>
           </div>
           <div class="ts-lock-banner" id="ts-pred-lock" role="status" hidden><b id="ts-pred-lock-title">賽事已開始</b><span id="ts-pred-lock-copy"></span></div>
+          <div class="ts-result" id="ts-pred-result" hidden>
+            <div class="ts-result-head"><span id="ts-result-kicker">G1 結算</span><button class="ts-result-replay" id="ts-result-replay" type="button">再揭曉一次</button></div>
+            <ol class="ts-result-rows" id="ts-result-rows"></ol>
+            <div class="ts-result-verdict" aria-live="polite"><small id="ts-result-hits"></small><b id="ts-result-title"></b><span id="ts-result-sub"></span></div>
+          </div>
           <div class="prediction-layout">
             <div class="prediction-panel">
               <div class="prediction-window"><i></i><div><b id="ts-prediction-window-title">預測開放中</b><span id="ts-prediction-window-copy">本場開賽時鎖定。</span></div></div>
@@ -1528,6 +1553,7 @@ let TS_CLOCK_OFFSET = 0;
 if (TS_PREVIEW && TAIWAN_SERIES_GAMES[0]){
   const g1 = TAIWAN_SERIES_GAMES[0], keep = {year:g1.year, series:g1.series, g:1, date:g1.date, time:g1.time, startsAt:g1.startsAt, away:g1.away, home:g1.home};
   if (TS_PREVIEW === "final") Object.assign(g1, TS_PREVIEW_SAMPLE.game, keep, {dataReady:true});
+  if (TS_PREVIEW === "locked") g1.dataReady = false;
   TS_CLOCK_OFFSET = Date.parse(g1.startsAt) + (TS_PREVIEW === "final" ? 4 : .5) * 3600e3 - Date.now();
 }
 const tsNow = () => Date.now() + TS_CLOCK_OFFSET;
@@ -3104,6 +3130,34 @@ function tsGamePhase(game, now=tsNow()){
   const start=Date.parse(game?.startsAt||"");
   return Number.isFinite(start)&&now>=start?"locked":"open";
 }
+// dataReady = final result known (predictions can be settled); the full box
+// score for 3.賽事回顧與最愛球員 may arrive later.
+function tsHasBox(game){ return !!(game?.dataReady && game.teams && game.innings && game.rhe); }
+function tsAnswerRows(game, p){
+  const same = (a, b) => String(a || "") === String(b || "");
+  return [
+    {k:"比分", mine:`${p.awayScore} : ${p.homeScore}`, real:`${game.awayScore} : ${game.homeScore}`, hit:Number(p.awayScore) === game.awayScore && Number(p.homeScore) === game.homeScore},
+    {k:"勝利打點", mine:p.rbi, real:game.winningRbi, hit:same(p.rbi, game.winningRbi)},
+    {k:"勝投", mine:p.win, real:game.decisions.win, hit:same(p.win, game.decisions.win)},
+    {k:"敗投", mine:p.loss, real:game.decisions.loss, hit:same(p.loss, game.decisions.loss)},
+    {k:"單場 MVP", mine:p.mvp, real:game.mvp.name, hit:same(p.mvp, game.mvp.name)},
+  ];
+}
+// Settled-card verdict by hits (out of 5).
+const TS_VERDICTS = [
+  {tier:"jinx",   title:"你是咒言師",     sub:"職棒反指標"},  // 0
+  {tier:"mid",    title:"你是半個咒言師", sub:"聊勝於無"},    // 1
+  {tier:"mid",    title:"你是見習國師",   sub:"略知一二"},    // 2
+  {tier:"oracle", title:"你是準國師",     sub:"心中有數"},    // 3
+  {tier:"oracle", title:"你是國師",       sub:"料事如神"},    // 4
+  {tier:"oracle", title:"你是國師",       sub:"未卜先知"},    // 5
+];
+function tsVerdict(hits){ return TS_VERDICTS[Math.max(0, Math.min(5, hits))]; }
+// Open on the latest game this device can settle; otherwise the next open game.
+function tsInitialGame(){
+  const settled = [...TAIWAN_SERIES_GAMES].reverse().find(g => tsGamePhase(g) === "answer" && tsPredictionState[tsPredictionKey(g)]?.savedAt);
+  return settled || TAIWAN_SERIES_GAMES.find(g => tsGamePhase(g) === "open") || TAIWAN_SERIES_GAMES[0] || null;
+}
 function tsGameTime(game){return `${game.date.slice(5).replace("-","/")} ${game.time}`;}
 function tsDownloadStamp(now = new Date()){
   const pad = value => String(value).padStart(2,"0");
@@ -3227,6 +3281,49 @@ function tsResetSeriesOutput(){
   document.getElementById("ts-series-status").textContent = "";
   tsQueueLive("series");
 }
+
+// ---- Settling a prediction: rows tick in one by one, then the verdict ----
+let tsRevealKey = "", tsRevealTimers = [], tsRevealObserver = null;
+function tsRenderResult(replay = false){
+  const panel = document.getElementById("ts-pred-result"), game = tsSelectedGame;
+  const pred = game && tsPredictionState[tsPredictionKey(game)];
+  const show = !!(game && tsGamePhase(game) === "answer" && pred?.savedAt);
+  panel.hidden = !show;
+  if (!show){ tsRevealKey = ""; return; }
+  const key = tsPredictionKey(game);
+  if (key === tsRevealKey && !replay) return;          // already shown for this game
+  tsRevealKey = key;
+  const rows = tsAnswerRows(game, pred), hits = rows.filter(r => r.hit).length, v = tsVerdict(hits);
+  panel.classList.toggle("jinx", v.tier !== "oracle");
+  document.getElementById("ts-result-kicker").textContent = `G${game.g} 結算 · 你的預言 vs 實際`;
+  document.getElementById("ts-result-rows").innerHTML = rows.map(r =>
+    `<li class="${r.hit ? "hit" : "miss"}"><span class="k">${r.k}</span><span class="mine">${esc(r.mine || "—")}</span><span class="real">實際 ${esc(r.real || "—")}</span><i class="mark" aria-label="${r.hit ? "命中" : "未中"}">${r.hit ? "✓" : "✗"}</i></li>`).join("");
+  document.getElementById("ts-result-hits").textContent = `五項命中 ${hits} 項`;
+  document.getElementById("ts-result-title").textContent = v.title;
+  document.getElementById("ts-result-sub").textContent = v.sub;
+  tsPlayReveal(panel, game.g, hits, replay);
+}
+function tsPlayReveal(panel, gameNo, hits, now){
+  tsRevealTimers.forEach(clearTimeout); tsRevealTimers = [];
+  if (tsRevealObserver){ tsRevealObserver.disconnect(); tsRevealObserver = null; }
+  const items = [...panel.querySelectorAll(".ts-result-rows li")], verdict = panel.querySelector(".ts-result-verdict");
+  verdict.classList.remove("is-in");
+  const run = () => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches){ items.forEach(li => li.classList.add("is-in")); verdict.classList.add("is-in"); }
+    else {
+      items.forEach((li, i) => tsRevealTimers.push(setTimeout(() => li.classList.add("is-in"), 250 + i * 420)));
+      tsRevealTimers.push(setTimeout(() => verdict.classList.add("is-in"), 250 + items.length * 420 + 250));
+    }
+    track("ts_answer_reveal", {game_no: gameNo, hits});
+  };
+  if (now || !("IntersectionObserver" in window)) return run();
+  tsRevealObserver = new IntersectionObserver(entries => {      // start when it scrolls into view
+    if (!entries.some(e => e.isIntersecting)) return;
+    tsRevealObserver.disconnect(); tsRevealObserver = null; run();
+  }, {threshold:.3});
+  tsRevealObserver.observe(panel);
+}
+document.getElementById("ts-result-replay").onclick = () => tsRenderResult(true);
 
 // ---- Live card previews (1.賽事預言, 2.系列賽預言) ---------------------
 // Every change (score, players, name, photo, game) re-draws the 1080×1920 card
@@ -3362,6 +3459,7 @@ function tsGameButtons(kind){
       const status=phase==="locked"?"等待賽果":optional?"若有比賽":"尚未開賽";
       return `<button class="series-game" disabled><b>G${n}</b><span>${dateTime}</span><small>${status}</small></button>`;
     }
+    if(!tsHasBox(g))return `<button class="series-game" disabled><b>G${n}</b><span>${g.awayScore} : ${g.homeScore} · ${g.venue}</span><small>賽果已出 · 回顧整理中</small></button>`;
     return `<button class="series-game${selected?" preview":""}" data-ts-review-game="${n}" aria-pressed="${selected}"><b>G${n}</b><span>${g.awayScore} : ${g.homeScore} · ${g.venue}</span><small>${g.year} 已完賽</small></button>`;
   }).join("");
 }
@@ -3378,6 +3476,8 @@ function tsPredictedTeams(){
     : {winner:tsSelectedGame.home,loser:tsSelectedGame.away};
 }
 function tsSetPredictionSelect(id, values, saved){
+  // Once a game has started the saved pick is shown as-is, never re-chosen.
+  if (tsSelectedGame && tsGamePhase(tsSelectedGame) !== "open" && saved) values = [saved, ...values];
   const select = document.getElementById(id), unique = [...new Set(values.filter(Boolean))];
   const value = unique.includes(saved) ? saved : (unique[0] || "");
   select.innerHTML = tsOptionList(unique,value);
@@ -3456,10 +3556,12 @@ function tsRenderControls(){
   document.querySelector("#ts-series-builder .prediction-consent").hidden=!seriesOpen;
   seriesButton.textContent=seriesOpen?"送出預測＋下載預測圖":seriesStored?"下載我的預測圖":"賽事已開始 · 預測已鎖定";
   seriesButton.disabled=!seriesOpen&&!seriesStored;
+  tsRenderResult();
   tsQueueLive("prediction");tsQueueLive("series");
 
-  const reviewReady=!!tsSelectedGame.dataReady,reviewBuilder=document.getElementById("ts-review-builder");
-  document.getElementById("ts-review-empty").hidden=reviewReady;reviewBuilder.hidden=!reviewReady;
+  const reviewReady=tsHasBox(tsSelectedGame),reviewBuilder=document.getElementById("ts-review-builder"),reviewEmpty=document.getElementById("ts-review-empty");
+  reviewEmpty.hidden=reviewReady;reviewBuilder.hidden=!reviewReady;
+  reviewEmpty.textContent=TAIWAN_SERIES_GAMES.some(g=>g.dataReady)?"賽果已更新，先到上方「1.賽事預言」看你的結算；賽事回顧與最愛球員圖卡會在完整數據整理好後開放。":"台灣大賽尚未開打；賽果更新後，這裡會開放賽事摘要與球員回顧。";
   if(reviewReady){
     document.getElementById("ts-theme-options").innerHTML=[tsSelectedGame.away,tsSelectedGame.home].map(team=>`<button data-ts-team="${team}" aria-pressed="${team===tsThemeTeam}">${teamDisplayName(team)}版</button>`).join("");
     const players=tsPlayers(tsSelectedGame);if(!players.some(p=>p.id===tsSelectedPlayer))tsSelectedPlayer=tsDefaultPlayer(tsSelectedGame);
@@ -3630,7 +3732,7 @@ async function tsSubmitSeriesPrediction(series){
   return {submitted:true,message:"已匿名納入系列賽比分預測；同一裝置再次送出會更新這一票。",data};
 }
 async function tsDrawPrediction(game, prediction, stamp = tsDownloadStamp()){
-  await loadFontsFor(`${game.away}${game.home}${prediction.rbi}${prediction.win}${prediction.loss}${prediction.mvp}${tsFanName()}我大膽預言這場比賽`);
+  await loadFontsFor(`${game.away}${game.home}${prediction.rbi}${prediction.win}${prediction.loss}${prediction.mvp}${tsFanName()}我大膽預言這場比賽你是國師未卜先知料事如神咒言師職棒反指標半個見習準聊勝於無略知一二心中有數實際賽果五項命中`);
   const winner = prediction.awayScore > prediction.homeScore ? game.away : game.home;
   const {c,ctx,accent}=tsBase(game,winner),L=70,R=SW-66;
   await tsDrawFullBleed(ctx,prediction.bg === "photo" ? tsPhoto : null,prediction.bg === "photo" ? tsPhotoURL : "",game.away,game.home,accent);
@@ -3655,10 +3757,11 @@ async function tsDrawPrediction(game, prediction, stamp = tsDownloadStamp()){
   ctx.fillStyle="rgba(255,255,255,.18)";ctx.fillRect(L,1430,R-L,1);
   ctx.fillStyle=accent.f;ctx.font=`800 19px ${F_NUM}`;spacing(ctx,3);ctx.fillText(game.dataReady?"FINAL · 賽後結算":"AFTER THE GAME",L,1482);spacing(ctx,0);
   if(game.dataReady){
-    const answers=[prediction.awayScore===game.awayScore&&prediction.homeScore===game.homeScore,prediction.rbi===game.winningRbi,prediction.win===game.decisions.win,prediction.loss===game.decisions.loss,prediction.mvp===game.mvp.name],hits=answers.filter(Boolean).length;
-    ctx.fillStyle="#F7F3E8";ctx.font=`700 36px ${F_TC}`;ctx.fillText(`實際賽果 ${game.awayScore} : ${game.homeScore}`,L,1540);
-    ctx.textAlign="right";ctx.fillStyle=accent.f;ctx.font=`800 52px ${F_NUM}`;ctx.fillText(`${hits} / 5`,R,1542);ctx.textAlign="left";
-    ctx.fillStyle="rgba(247,243,232,.68)";ctx.font=`500 20px ${F_TC}`;ctx.fillText("比分與四項球員預測，共五項對答案。",L,1588);
+    const hits=tsAnswerRows(game,prediction).filter(r=>r.hit).length,v=tsVerdict(hits);
+    ctx.fillStyle=v.tier==="oracle"?accent.f:"#F7F3E8";ctx.font=`800 48px ${F_TC}`;ctx.fillText(v.title,L,1548);
+    const vw=ctx.measureText(v.title).width;ctx.fillStyle=v.tier==="oracle"?"#F7F3E8":"rgba(247,243,232,.72)";ctx.font=`700 34px ${F_TC}`;ctx.fillText(v.sub,L+vw+18,1548);
+    ctx.textAlign="right";ctx.fillStyle=accent.f;ctx.font=`800 52px ${F_NUM}`;ctx.fillText(`${hits} / 5`,R,1548);ctx.textAlign="left";
+    ctx.fillStyle="rgba(247,243,232,.68)";ctx.font=`500 20px ${F_TC}`;ctx.fillText(`實際賽果 ${teamDisplayName(game.away)} ${game.awayScore} : ${game.homeScore} ${teamDisplayName(game.home)} · 五項命中 ${hits} 項`,L,1594);
   }else{
     ctx.fillStyle="#F7F3E8";ctx.font=`700 36px ${F_TC}`;ctx.fillText(`G${game.g} 開賽時鎖定`,L,1540);
     ctx.fillStyle="rgba(247,243,232,.68)";ctx.font=`500 20px ${F_TC}`;ctx.fillText("賽果更新後，用同一台裝置回來對答案。",L,1588);
@@ -4063,6 +4166,9 @@ document.getElementById("view-taiwan-series").addEventListener("click", e => {
   if(seriesScore){const [brothersWins,dragonsWins]=seriesScore.dataset.tsSeriesScore.split("-").map(Number),series=tsCurrentSeries();series.brothersWins=brothersWins;series.dragonsWins=dragonsWins;tsSavePredictions();tsRenderControls();tsResetSeriesOutput();return;}
   const nav = e.target.closest("[data-go]"); if (nav) go(nav.dataset.go);
 });
+tsSelectedGame = tsInitialGame();
+tsThemeTeam = tsSelectedGame ? tsSelectedGame.away : null;
+tsSelectedPlayer = tsHasBox(tsSelectedGame) ? tsDefaultPlayer(tsSelectedGame) : "";
 tsRenderControls();
 tsLoadStoredPhoto();
 tsLoadStoredSeriesPhoto();
