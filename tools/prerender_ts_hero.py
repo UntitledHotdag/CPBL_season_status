@@ -31,7 +31,7 @@ JS = """async (c) => {
     return {blob, w:bm.width, h:bm.height, fx:p.fx, fy:p.fy, z:p.z};
   };
   const usePhoto = p => { tsPhoto = p; tsPhotoURL = URL.createObjectURL(p.blob); };
-  document.getElementById('ts-fan-name').value = '';
+  document.getElementById('ts-fan-name').value = c.fanName || '';
   const enc = (cv, t, q) => new Promise(r => cv.toBlob(b => { const f = new FileReader(); f.onload = () => r(f.result); f.readAsDataURL(b); }, t, q));
   const shrink = big => { const s = document.createElement('canvas'); s.width = 600; s.height = 1067;
     const x = s.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(big, 0, 0, 600, 1067); return s; };

@@ -732,7 +732,7 @@
   .builder-status{min-height:20px;font-size:11px;line-height:1.6;color:var(--accent)}
   .builder-controls>.cta{align-self:flex-start}
   .prediction-layout{display:grid;grid-template-columns:.86fr 1.14fr;gap:42px;align-items:start;width:100%;padding:clamp(18px,3vw,34px);border:1px solid color-mix(in srgb,var(--rule) 82%,transparent);border-radius:22px;background:linear-gradient(135deg,color-mix(in srgb,var(--panel) 64%,transparent),color-mix(in srgb,var(--panel) 34%,transparent));box-shadow:0 28px 80px -58px rgba(0,0,0,.7);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);overflow:hidden}
-  .prediction-panel{display:flex;flex-direction:column;gap:24px;padding:0}
+  .prediction-panel{display:flex;flex-direction:column;gap:24px;padding:0;min-width:0}
   .prediction-group{display:flex;flex-direction:column;gap:10px}
   .prediction-label{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--muted)}
   .prediction-help{font-size:11px;line-height:1.65;color:var(--muted)}
@@ -764,6 +764,12 @@
   .ts-live-frame>[hidden]{display:none!important}
   .ts-live-frame img{transition:opacity .2s ease}
   .ts-live.is-rendering .ts-live-frame img{opacity:.55}
+  .ts-claim{display:flex;flex-direction:column;gap:4px;font-size:clamp(22px,2.6vw,28px);font-weight:700;line-height:1.35;color:var(--ink)}
+  .ts-claim-row{display:flex;align-items:baseline;gap:12px}
+  .ts-claim input{flex:1 1 0;width:0;min-width:0;height:50px;padding:0 4px;border:0;border-bottom:2px solid var(--accent-fill);border-radius:0;background:transparent;color:var(--accent);font:800 1em "Noto Sans TC",sans-serif}
+  .ts-claim input::placeholder{color:var(--muted);font-weight:700;opacity:.65}
+  .ts-claim input:focus{outline:none;border-bottom-color:var(--ink)}
+  .ts-claim small{margin-top:6px;color:var(--muted);font-size:10px;font-weight:400;line-height:1.6}
   .ts-preview-bar{margin:14px 0 0;padding:10px 14px;border-radius:10px;border:1px dashed var(--accent);color:var(--accent);font-size:12px;font-weight:700;text-align:center}
   .series-score-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
   .series-score-option{min-height:70px;padding:10px 8px;border:1px solid var(--rule);border-radius:10px;background:var(--panel);color:var(--ink-dim);font-size:10px;font-weight:700;line-height:1.5}
@@ -1131,14 +1137,14 @@
         </div>
         <button class="cta" data-series-jump>開始體驗 ↓</button>
       </div>
-      <div class="ts-flow" aria-label="圖卡範例：賽前留下 1.賽事預言，賽後同一張圖自動結算對答案">
+      <div class="ts-flow" aria-label="圖卡範例：賽前留下賽事預言，賽後同一張圖自動結算對答案">
         <figure class="ts-flow-card ts-flow-before">
-          <img src="img/taiwan-series/hero-prediction.jpg" width="600" height="1067" loading="lazy" alt="1.賽事預言範例：預測中信兄弟 4 比 2 味全龍，並選好勝利打點、勝投、敗投與 MVP">
-          <figcaption><b>賽前</b>1.賽事預言</figcaption>
+          <img src="img/taiwan-series/hero-prediction.jpg" width="600" height="1067" loading="lazy" alt="賽事預言範例：球迷大膽預言中信兄弟 4 比 2 味全龍，並選好勝利打點、勝投、敗投與 MVP">
+          <figcaption><b>賽前</b>賽事預言</figcaption>
         </figure>
         <div class="ts-flow-arrow" aria-hidden="true"><span>開賽<br>鎖定</span><i>→</i><span>賽果<br>出爐</span></div>
         <figure class="ts-flow-card ts-flow-after">
-          <img src="img/taiwan-series/hero-answer.jpg" width="600" height="1067" loading="lazy" alt="1.賽事預言賽後結算範例：實際比分 4 比 3，五項預測命中三項">
+          <img src="img/taiwan-series/hero-answer.jpg" width="600" height="1067" loading="lazy" alt="賽事預言賽後結算範例：實際比分 4 比 3，五項預測命中三項">
           <figcaption><b>賽後</b>結算對答案</figcaption>
         </figure>
         <span class="sample-tag">範例圖卡 · 非實際賽果</span>
@@ -1179,10 +1185,10 @@
           <div class="prediction-layout">
             <div class="prediction-panel">
               <div class="prediction-window"><i></i><div><b id="ts-prediction-window-title">預測開放中</b><span id="ts-prediction-window-copy">本場開賽時鎖定。</span></div></div>
-              <label class="prediction-name" for="ts-fan-name">
-                <span class="prediction-label">圖卡姓名（選填）</span>
-                <input id="ts-fan-name" type="text" maxlength="16" autocomplete="name" placeholder="輸入想顯示在圖卡上的名字">
-                <small>姓名只保存在這台裝置並押在下載圖上，不會送進公開投票。</small>
+              <label class="ts-claim" for="ts-fan-name">
+                <span class="ts-claim-row"><span>我</span><input id="ts-fan-name" type="text" maxlength="16" autocomplete="nickname" placeholder="你的名字"></span>
+                <span>大膽預言這場比賽</span>
+                <small>名字選填，只保存在這台裝置並寫在預測圖上，不會送進公開投票。</small>
               </label>
               <div class="prediction-group">
                 <span class="prediction-label">預測比分</span>
@@ -1225,10 +1231,10 @@
           <div class="prediction-layout">
             <div class="prediction-panel">
               <div class="prediction-window"><i></i><div><b id="ts-series-window-title">預測開放中</b><span class="prediction-lock" id="ts-series-window-copy">系列賽預測會在 G1 開賽時一起鎖定</span></div></div>
-              <label class="prediction-name" for="ts-series-name">
-                <span class="prediction-label">圖卡姓名（選填）</span>
-                <input id="ts-series-name" type="text" maxlength="16" autocomplete="name" placeholder="輸入想顯示在圖卡上的名字">
-                <small>姓名只保存在這台裝置並押在下載圖上，不會送進公開統計。</small>
+              <label class="ts-claim" for="ts-series-name">
+                <span class="ts-claim-row"><span>我</span><input id="ts-series-name" type="text" maxlength="16" autocomplete="nickname" placeholder="你的名字"></span>
+                <span>大膽預言這個系列賽</span>
+                <small>名字選填，只保存在這台裝置並寫在預測圖上，不會送進公開統計。</small>
               </label>
               <div class="prediction-group">
                 <span class="prediction-label">預測系列賽最終比分</span>
@@ -3468,6 +3474,19 @@ function tsRenderControls(){
   }
 }
 
+// "我 <名字> / 大膽預言這場比賽" — the fan's claim, drawn above the score.
+function tsDrawClaim(ctx, name, tail, accent){
+  const L = 70, R = SW - 66;
+  ctx.textAlign = "left"; ctx.fillStyle = "#F7F3E8";
+  if (name){
+    ctx.font = `700 42px ${F_TC}`; ctx.fillText("我", L, 690);
+    const x = L + ctx.measureText("我").width + 16;
+    ctx.fillStyle = accent.f; ctx.font = `800 58px ${F_TC}`; ctx.fillText(name, x, 692, R - x);
+    ctx.fillStyle = "#F7F3E8"; ctx.font = `700 42px ${F_TC}`; ctx.fillText(tail, L, 752);
+  } else {
+    ctx.font = `700 46px ${F_TC}`; ctx.fillText(`我${tail}`, L, 752);
+  }
+}
 function tsDate(iso){
   const [y,m,d] = iso.split("-"); return `${y}.${m}.${d}`;
 }
@@ -3547,9 +3566,9 @@ async function tsDrawFullBleed(ctx, record, url, away, home, accent){
   let shade = ctx.createLinearGradient(0, 0, 0, 440);
   shade.addColorStop(0, "rgba(0,0,0,.72)"); shade.addColorStop(1, "rgba(0,0,0,0)");
   ctx.fillStyle = shade; ctx.fillRect(0, 0, SW, 440);
-  shade = ctx.createLinearGradient(0, 670, 0, SH);
-  shade.addColorStop(0, "rgba(0,0,0,0)"); shade.addColorStop(.32, "rgba(7,8,11,.62)"); shade.addColorStop(1, "rgba(7,8,11,.94)");
-  ctx.fillStyle = shade; ctx.fillRect(0, 670, SW, SH - 670);
+  shade = ctx.createLinearGradient(0, 540, 0, SH);   // starts higher so the fan's claim stays readable
+  shade.addColorStop(0, "rgba(0,0,0,0)"); shade.addColorStop(.2, "rgba(7,8,11,.5)"); shade.addColorStop(.42, "rgba(7,8,11,.66)"); shade.addColorStop(1, "rgba(7,8,11,.94)");
+  ctx.fillStyle = shade; ctx.fillRect(0, 540, SW, SH - 540);
   const side = ctx.createLinearGradient(0, 0, SW, 0);
   side.addColorStop(0, "rgba(0,0,0,.30)"); side.addColorStop(.5, "rgba(0,0,0,0)"); side.addColorStop(1, "rgba(0,0,0,.30)");
   ctx.fillStyle = side; ctx.fillRect(0, 0, SW, SH);
@@ -3618,12 +3637,13 @@ async function tsSubmitSeriesPrediction(series){
   return {submitted:true,message:"已匿名納入系列賽比分預測；同一裝置再次送出會更新這一票。",data};
 }
 async function tsDrawPrediction(game, prediction, stamp = tsDownloadStamp()){
-  await loadFontsFor(`${game.away}${game.home}${prediction.rbi}${prediction.win}${prediction.loss}${prediction.mvp}${tsFanName()}`);
+  await loadFontsFor(`${game.away}${game.home}${prediction.rbi}${prediction.win}${prediction.loss}${prediction.mvp}${tsFanName()}我大膽預言這場比賽`);
   const winner = prediction.awayScore > prediction.homeScore ? game.away : game.home;
   const {c,ctx,accent}=tsBase(game,winner),L=70,R=SW-66;
   await tsDrawFullBleed(ctx,prediction.bg === "photo" ? tsPhoto : null,prediction.bg === "photo" ? tsPhotoURL : "",game.away,game.home,accent);
   tsHeader(ctx,game,`1.賽事預言 · G${game.g}`,accent);
   ctx.save();ctx.shadowColor="rgba(0,0,0,.78)";ctx.shadowBlur=18;
+  tsDrawClaim(ctx,tsFanName(),"大膽預言這場比賽",accent);
   ctx.fillStyle=accent.f;ctx.font=`800 23px ${F_NUM}`;spacing(ctx,4);ctx.fillText(`${tsDate(game.date)} · ${game.time} 開賽`,L,823);spacing(ctx,0);
   ctx.fillStyle="#F7F3E8";ctx.font=`700 35px ${F_TC}`;ctx.fillText(teamDisplayName(game.away),L,898);ctx.textAlign="right";ctx.fillText(teamDisplayName(game.home),R,898);
   ctx.fillStyle=ACCENT[game.away].f;ctx.fillRect(L,920,170,5);ctx.fillStyle=ACCENT[game.home].f;ctx.fillRect(R-170,920,170,5);
@@ -3651,17 +3671,17 @@ async function tsDrawPrediction(game, prediction, stamp = tsDownloadStamp()){
     ctx.fillStyle="rgba(247,243,232,.68)";ctx.font=`500 20px ${F_TC}`;ctx.fillText("賽果更新後，用同一台裝置回來對答案。",L,1588);
   }
   ctx.fillStyle="rgba(255,255,255,.14)";ctx.fillRect(L,1742,R-L,1);ctx.fillStyle="rgba(247,243,232,.58)";ctx.font=`500 18px ${F_TC}`;ctx.fillText(`下載時間 ${stamp}`,L,1782);
-  const fan=tsFanName();if(fan){ctx.textAlign="right";ctx.font=`700 20px ${F_TC}`;ctx.fillText(`球迷 ${fan}`,R,1782);ctx.textAlign="left";}
   ctx.textAlign="center";ctx.fillStyle="rgba(247,243,232,.75)";ctx.font=`700 24px ${F_NUM}`;ctx.fillText("mybaseballgame.com",SW/2,1850);ctx.fillStyle="rgba(247,243,232,.42)";ctx.font=`500 16px ${F_TC}`;ctx.fillText("2026 台灣大賽預測 · 非官方球迷網站",SW/2,1884);return c;
 }
 async function tsDrawSeriesPrediction(game, series, stamp = tsDownloadStamp()){
   const brothers="中信兄弟",dragons="味全龍",winner=series.brothersWins>series.dragonsWins?brothers:dragons;
-  await loadFontsFor(`${brothers}${dragons}${tsSeriesName()}`);
+  await loadFontsFor(`${brothers}${dragons}${tsSeriesName()}我大膽預言這個系列賽七戰四勝`);
   const {c,ctx,accent}=tsBase(game,winner),L=70,R=SW-66;
   await tsDrawFullBleed(ctx,tsSeriesPhoto,tsSeriesPhotoURL,brothers,dragons,accent);
   tsHeader(ctx,game,"2.系列賽預言",accent);
   ctx.save();ctx.shadowColor="rgba(0,0,0,.8)";ctx.shadowBlur=18;
-  ctx.fillStyle=accent.f;ctx.font=`800 22px ${F_NUM}`;spacing(ctx,4);ctx.fillText("2026 台灣大賽 · 我的系列賽預言",L,823);spacing(ctx,0);
+  tsDrawClaim(ctx,tsSeriesName(),"大膽預言這個系列賽",accent);
+  ctx.fillStyle=accent.f;ctx.font=`800 22px ${F_NUM}`;spacing(ctx,4);ctx.fillText("2026 台灣大賽 · 七戰四勝",L,823);spacing(ctx,0);
   ctx.fillStyle="#F7F3E8";ctx.font=`700 38px ${F_TC}`;ctx.textAlign="left";ctx.fillText(teamDisplayName(brothers),L,915);ctx.textAlign="right";ctx.fillText(teamDisplayName(dragons),R,915);
   ctx.fillStyle=ACCENT[brothers].f;ctx.fillRect(L,939,190,5);ctx.fillStyle=ACCENT[dragons].f;ctx.fillRect(R-190,939,190,5);
   ctx.textAlign="center";ctx.fillStyle="#F7F3E8";ctx.font=`800 126px ${F_NUM}`;ctx.fillText(`${series.brothersWins} : ${series.dragonsWins}`,SW/2,1095);
@@ -3670,8 +3690,7 @@ async function tsDrawSeriesPrediction(game, series, stamp = tsDownloadStamp()){
   const colW=(R-L-40)/2;[[brothers,series.brothersWins],[dragons,series.dragonsWins]].forEach(([team,wins],i)=>{const x=L+i*(colW+40);ctx.fillStyle="rgba(255,255,255,.18)";ctx.fillRect(x,1402,colW,1);ctx.fillStyle="rgba(247,243,232,.68)";ctx.font=`600 25px ${F_TC}`;ctx.fillText(teamDisplayName(team),x,1282);ctx.fillStyle=team===winner?accent.f:"#F7F3E8";ctx.font=`800 96px ${F_NUM}`;ctx.fillText(String(wins),x,1374);const w=ctx.measureText(String(wins)).width;ctx.fillStyle="rgba(247,243,232,.78)";ctx.font=`700 28px ${F_TC}`;ctx.fillText("勝",x+w+10,1374);});
   ctx.fillStyle="rgba(255,255,255,.18)";ctx.fillRect(L,1450,R-L,1);ctx.fillStyle="#F7F3E8";ctx.font=`700 38px ${F_TC}`;ctx.fillText(`系列賽打滿 ${series.brothersWins+series.dragonsWins} 場`,L,1515);ctx.fillStyle="rgba(247,243,232,.68)";ctx.font=`500 22px ${F_TC}`;ctx.fillText("G1 開賽後鎖定這張預測",L,1565);
   ctx.fillStyle="rgba(255,255,255,.14)";ctx.fillRect(L,1680,R-L,1);ctx.fillStyle="rgba(247,243,232,.56)";ctx.font=`500 19px ${F_TC}`;ctx.fillText("系列賽預測將在 G1 開賽時鎖定",L,1726);
-  const fan=tsSeriesName();ctx.fillStyle="rgba(247,243,232,.58)";ctx.font=`500 18px ${F_TC}`;ctx.fillText(`下載時間 ${stamp}`,L,1780);
-  if(fan){ctx.textAlign="right";ctx.font=`700 20px ${F_TC}`;ctx.fillText(`球迷 ${fan}`,R,1780);ctx.textAlign="left";}
+  ctx.fillStyle="rgba(247,243,232,.58)";ctx.font=`500 18px ${F_TC}`;ctx.fillText(`下載時間 ${stamp}`,L,1780);
   ctx.textAlign="center";ctx.fillStyle="rgba(247,243,232,.75)";ctx.font=`700 24px ${F_NUM}`;ctx.fillText("mybaseballgame.com",SW/2,1850);ctx.fillStyle="rgba(247,243,232,.42)";ctx.font=`500 16px ${F_TC}`;ctx.fillText("2026 台灣大賽預測 · 非官方球迷網站",SW/2,1884);return c;
 }
 async function tsDrawCover(game, team, stamp = tsDownloadStamp()){
