@@ -28,7 +28,7 @@
         {
           "binding": "DB",
           "database_name": "cpbl-season-status",
-          "database_id": "00000000-0000-0000-0000-000000000000",
+          "database_id": "7346c706-2e82-42e8-8a1b-c2c173955181",
           "migrations_dir": "migrations"
         }
       ],
