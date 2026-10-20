@@ -59,12 +59,29 @@
     "year": 2026,
     "series": "taiwan",
     "g": 3,
-    "dataReady": false,
+    "dataReady": true,
     "date": "2026-10-20",
     "time": "18:35",
     "startsAt": "2026-10-20T18:35:00+08:00",
     "away": "味全龍",
-    "home": "中信兄弟"
+    "home": "中信兄弟",
+    "venue": "大巨蛋",
+    "awayScore": 6,
+    "homeScore": 0,
+    "duration": "02:47",
+    "decisions": {
+      "win": "鋼龍",
+      "loss": "江忠城",
+      "save": ""
+    },
+    "mvp": {
+      "name": "鋼龍"
+    },
+    "winningRbi": "李凱威",
+    "seriesRecord": {
+      "中信兄弟": "0勝3敗",
+      "味全龍": "3勝0敗"
+    }
   },
   {
     "year": 2026,
