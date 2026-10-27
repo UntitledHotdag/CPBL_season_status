@@ -2117,10 +2117,14 @@ function currentView(){
   const saved = store.get(K_TEAM);
   if (saved && saved.startsWith("PS:")){
     const team = saved.slice(3);
-    if (CHALLENGE_TEAMS.includes(team)) return {value:saved, team, postseason:true};
+    if (CHALLENGE_TEAMS.includes(team)) return {value:saved, team, postseason:true, series:"challenge"};
   }
-  if (saved && TEAMS[saved]) return {value:saved, team:saved, postseason:false};
-  return {value:"NONE", team:null, postseason:false};
+  if (saved && saved.startsWith("TS:")){
+    const team = saved.slice(3);
+    if (TS_PLAYED_GAMES.length && TS_TEAMS.includes(team)) return {value:saved, team, postseason:true, series:"taiwan"};
+  }
+  if (saved && TEAMS[saved]) return {value:saved, team:saved, postseason:false, series:""};
+  return {value:"NONE", team:null, postseason:false, series:""};
 }
 const currentTeam = () => currentView().team;
 function statsFor(team, list = picked()){
@@ -2192,12 +2196,31 @@ function postseasonDetails(g, team){
     ["", "陳鏞基 球員生涯最後一個打席：一壘安打"],
     ["", "陳鏞基 季後挑戰賽最年長安打記錄（43年91天）"]
   ];
+  // Taiwan Series with 中信兄弟 / 味全龍 picked: only the games that team won
+  // carry details, and only the winning side's (no losing pitcher).
+  if (g.ts && team && TS_TEAMS.includes(team)){
+    if (resultOf(g, team) !== "W") return [];
+    return postseasonAwards(g).filter(([label]) => label !== "敗投");
+  }
   return postseasonAwards(g);
 }
+// Series-only layouts (季後挑戰賽版面 / 台灣大賽版面): web page and recap image.
+const SERIES_META = {
+  challenge:{name:"季後挑戰賽", short:"挑戰賽", en:"Playoff Series", kicker:"2026 PLAYOFF SERIES", tag:"PLAYOFFS", pick:isChallenge, abbr:"postseason"},
+  taiwan:{name:"台灣大賽", short:"台灣大賽", en:"Taiwan Series", kicker:"2026 TAIWAN SERIES", tag:"TAIWAN SERIES", pick:g => !!g.ts, abbr:"taiwan"},
+};
+// Taiwan Series layouts use full team names (中信兄弟, not 兄弟).
+const seriesTeamName = (team, series) => series === "taiwan" ? teamDisplayName(team) : TEAMS[team].short;
+const viewTrackName = v => v.postseason ? `${SERIES_META[v.series].abbr}_${TEAMS[v.team].abbr}` : v.team ? TEAMS[v.team].abbr : "summary";
 function hasYongjiTribute(games, team){
   return games.some(g => isYongjiTribute(g, team));
 }
-function postseasonIntro(games, team){
+function postseasonIntro(games, team, series = "challenge"){
+  if (series === "taiwan"){
+    const sawClinch = TS_CHAMPION && TS_CHAMPION.team === team && games.some(g => gameKey(g) === TS_CHAMPION.key);
+    return sawClinch ? `你在 ${TS_CHAMPION.date} ${TS_CHAMPION.venue}，親眼見證${teamDisplayName(team)}拋下台灣大賽冠軍彩帶`
+      : `拼戰到最後一刻的台灣大賽，你在現場參與了 ${games.length} 場`;
+  }
   return hasYongjiTribute(games, team)
     ? "Go Go Let's Go 陳鏞基！"
     : `拼戰到最後一刻的季後挑戰賽，你在現場參與了 ${games.length} 場`;
@@ -2206,8 +2229,9 @@ function postseasonIntro(games, team){
 function playoffGameCell(g, team){
   const won = team && resultOf(g, team) === "W";
   const tribute = isYongjiTribute(g, team);
-  const awards = `<div class="playoff-awards ${tribute ? "tribute" : ""}">${postseasonDetails(g, team).map(([label, value]) =>
-    `<span>${label ? `<b>${label}</b>` : ""}${esc(value)}</span>`).join("")}</div>`;
+  const details = postseasonDetails(g, team);
+  const awards = details.length ? `<div class="playoff-awards ${tribute ? "tribute" : ""}">${details.map(([label, value]) =>
+    `<span>${label ? `<b>${label}</b>` : ""}${esc(value)}</span>`).join("")}</div>` : "";
   return `<article class="playoff-game ${won ? "won" : ""}">
     <div class="playoff-kicker"><b>G${g.g}</b><span>${md(g.d)} · ${esc(g.v)}${g.dur ? ` · ${esc(g.dur)}` : ""}</span></div>
     ${gameCell(g)}${awards}
@@ -2219,8 +2243,11 @@ function renderResult(){
   if (!allPicks.length){ go("pick"); return; }
   const regular = allPicks.filter(g => !g.ps), postseason = allPicks.filter(isChallenge), taiwan = allPicks.filter(g => g.ts);
   const view = currentView(), team = view.team, postseasonMode = view.postseason;
-  const all = postseasonMode ? postseason : allPicks;
-  const champion = postseasonMode ? null : championshipMoment(allPicks, team);
+  const SM = postseasonMode ? SERIES_META[view.series] : null;
+  const seriesGames = postseasonMode ? allPicks.filter(SM.pick) : [];
+  const all = postseasonMode ? seriesGames : allPicks;
+  // the series layout only celebrates a clinch inside that series (Taiwan Series)
+  const champion = championshipMoment(postseasonMode ? (view.series === "taiwan" ? seriesGames : []) : allPicks, team);
   document.getElementById("r-total").textContent = all.length;
   const venues = new Set(all.map(g => g.v)).size;
 
@@ -2252,13 +2279,13 @@ function renderResult(){
     </button>
     <div class="b-abbr ${team ? "" : "word"}">${team ? TEAMS[team].abbr : "CPBL"}</div>
     <div class="b-text"><div class="b-eyebrow">CPBL 2026 · 進場紀錄</div>
-    <div class="b-title">${postseasonMode ? `${esc(TEAMS[team].short)}的季後挑戰賽，我看了幾場？` : team ? `我進場的時候，${esc(TEAMS[team].short)}贏了幾場？` : `今年我進場看了 ${all.length} 場球`}</div></div>`;
+    <div class="b-title">${postseasonMode ? `${esc(seriesTeamName(team, view.series))}的${SM.name}，我看了幾場？` : team ? `我進場的時候，${esc(TEAMS[team].short)}贏了幾場？` : `今年我進場看了 ${all.length} 場球`}</div></div>`;
   if (photo) placePhoto(bannerEl.querySelector(".b-photo"), bannerEl, photo);
   document.getElementById("recap-photo").textContent = photo ? "調整照片" : "換成我的照片";
   queueRecapThumb();
 
   // Summary
-  document.getElementById("summary").innerHTML = `${postseasonMode ? "挑戰賽進場" : "共進場"} <b>${all.length}</b> 場<br>去過 <b>${venues}</b> 座球場`;
+  document.getElementById("summary").innerHTML = `${postseasonMode ? `${SM.short}進場` : "共進場"} <b>${all.length}</b> 場<br>去過 <b>${venues}</b> 座球場`;
 
   // Team chips
   const sel = document.getElementById("view-select");
@@ -2266,12 +2293,14 @@ function renderResult(){
     <optgroup label="支持球隊版面 · 看觀賽勝率">${TEAM_ORDER.map(t =>
       `<option value="${esc(t)}">${esc(teamDisplayName(t))}</option>`).join("")}</optgroup>
     <optgroup label="季後挑戰賽版面">${CHALLENGE_TEAMS.map(t =>
-      `<option value="PS:${esc(t)}">${esc(TEAMS[t].short)}（季後挑戰賽）</option>`).join("")}</optgroup>`;
+      `<option value="PS:${esc(t)}">${esc(TEAMS[t].short)}（季後挑戰賽）</option>`).join("")}</optgroup>
+    ${TS_PLAYED_GAMES.length ? `<optgroup label="台灣大賽版面">${TS_TEAMS.map(t =>
+      `<option value="TS:${esc(t)}">${esc(teamDisplayName(t))}（台灣大賽）</option>`).join("")}</optgroup>` : ""}`;
   sel.value = view.value;
   document.getElementById("vp-badge").innerHTML = team ? badge(team, false)
     : `<span class="vp-all"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg></span>`;
   document.getElementById("view-hint").textContent = postseasonMode
-    ? `${TEAMS[team].short}季後挑戰賽版面：網頁與回顧圖只顯示你勾選的挑戰賽；每場都會顯示比分與單場關鍵資訊`
+    ? `${seriesTeamName(team, view.series)}${SM.name}版面：網頁與回顧圖只顯示你勾選的${SM.short}；每場都會顯示比分與單場關鍵資訊`
     : team
     ? `${TEAMS[team].short}版面：看你進場時${TEAMS[team].short}的勝率，回顧圖也會套用這個版面`
     : "選你支持的球隊，版面會換成它的觀賽勝率和幸運指數，回顧圖同步套用";
@@ -2287,18 +2316,20 @@ function renderResult(){
   const rate = document.getElementById("rate");
   let s = null;
   if (postseasonMode){
-    s = statsFor(team, postseason);
-    if (!postseason.length){
-      rate.innerHTML = `<div class="r-label">${badge(team, false, "xs")}${esc(TEAMS[team].short)} · 季後挑戰賽</div>
+    s = statsFor(team, seriesGames);
+    if (!seriesGames.length){
+      rate.innerHTML = `<div class="r-label">${badge(team, false, "xs")}${esc(seriesTeamName(team, view.series))} · ${SM.name}</div>
         <div class="r-big">0<small>場</small></div><div class="r-side"></div>
-        <div class="r-cmp">你還沒有勾選季後挑戰賽，回到賽事列表選擇已完賽場次。</div>`;
+        <div class="r-cmp">你還沒有勾選${SM.name}，回到賽事列表選擇已完賽場次。</div>`;
     } else {
-      rate.innerHTML = `<div class="r-label">${badge(team, false, "xs")}${esc(TEAMS[team].short)} · 季後挑戰賽進場戰績</div>
+      const intro = postseasonIntro(seriesGames, team, view.series);
+      rate.innerHTML = `<div class="r-label">${badge(team, false, "xs")}${esc(seriesTeamName(team, view.series))} · ${SM.name}進場戰績</div>
         <div class="r-big">${s.w}<small>勝</small></div>
-        <div class="r-side"><span class="r-rec">${s.l}敗${s.t ? ` ${s.t}和` : ""}</span><span class="luck ${s.w ? "up" : ""}">PLAYOFFS</span></div>
-        <div class="r-cmp">${hasYongjiTribute(postseason, team)
+        <div class="r-side"><span class="r-rec">${s.l}敗${s.t ? ` ${s.t}和` : ""}</span><span class="luck ${s.w ? "up" : ""}">${SM.tag}</span></div>
+        <div class="r-cmp">${hasYongjiTribute(seriesGames, team) && view.series === "challenge"
           ? "Go Go Let's Go 陳鏞基！"
-          : `拼戰到最後一刻的季後挑戰賽，你在現場參與了 <b>${postseason.length}</b> 場；每場都會顯示單場關鍵資訊。`}</div>`;
+          : intro.includes("冠軍彩帶") ? `${esc(intro)}！每場都會顯示單場關鍵資訊。`
+          : `拼戰到最後一刻的${SM.name}，你在現場參與了 <b>${seriesGames.length}</b> 場；每場都會顯示單場關鍵資訊。`}</div>`;
     }
   } else if (team){
     s = statsFor(team, regular);
@@ -2341,7 +2372,7 @@ function renderResult(){
       <div class="section-head"><div class="section-title">${title}<span class="en">${en}</span></div></div>
       <div class="empty-slot"><span class="reserved">${note}</span></div></section>`;
   const tsNote = taiwan.length && team && TS_TEAMS.includes(team)
-    ? (() => { const x = statsFor(team, taiwan); return `<div class="ts-log-note">你進場的台灣大賽，${esc(TEAMS[team].short)} <b>${x.w}勝${x.l}敗</b></div>`; })() : "";
+    ? (() => { const x = statsFor(team, taiwan); return `<div class="ts-log-note">你進場的台灣大賽，${esc(teamDisplayName(team))} <b>${x.w}勝${x.l}敗</b></div>`; })() : "";
   const taiwanSection = TS_PLAYED_GAMES.length ? `<section class="section playoff-section">
       <div class="section-head"><div class="section-title">台灣大賽<span class="en">Taiwan Series</span><span class="count">· ${taiwan.length} games</span></div></div>
       ${tsNote}${taiwan.length ? `<div class="playoff-grid">${taiwan.map(g => playoffGameCell(g, team)).join("")}</div>`
@@ -2354,7 +2385,7 @@ function renderResult(){
     </section>`;
 
   const gamesHtml = `<div class="games-head"><div class="eyebrow">Game log</div><h3>每一場的比賽明細</h3></div>`
-           + (postseasonMode ? playoff
+           + (postseasonMode ? (view.series === "taiwan" ? taiwanSection : playoff)
              : half("上半季", "1st half season", regular.filter(g => g.n <= HALF_END))
              + half("下半季", "2nd half season", regular.filter(g => g.n > HALF_END))
              + playoff + taiwanSection);
@@ -2414,7 +2445,7 @@ function renderResult(){
 document.getElementById("view-select").addEventListener("change", e => {
   store.set(K_TEAM, e.target.value);
   const v = currentView();
-  track("team_view_change", {view: v.postseason ? `postseason_${TEAMS[v.team].abbr}` : v.team ? TEAMS[v.team].abbr : "summary"});
+  track("team_view_change", {view: viewTrackName(v)});
   renderResult();
 });
 const nameEl = document.getElementById("fan-name");
@@ -2666,16 +2697,17 @@ function shareModel(all, team, name, postseasonMode){
   if (all === undefined) all = picked();
   if (team === undefined) team = currentTeam();
   if (name === undefined) name = (store.get(K_NAME) || "").trim();
-  if (postseasonMode === undefined) postseasonMode = liveCall && currentView().postseason;
+  if (postseasonMode === undefined) postseasonMode = liveCall && currentView().postseason ? currentView().series : "";
+  if (postseasonMode === true) postseasonMode = "challenge";
   const postGames = all.filter(isChallenge), tsGames = all.filter(g => g.ts);
   const regular = all.filter(g => !g.ps);
   if (postseasonMode){
-    const games = postGames, s = statsFor(team, games), venues = new Set(games.map(g => g.v)).size;
+    const SM = SERIES_META[postseasonMode], games = all.filter(SM.pick), s = statsFor(team, games), venues = new Set(games.map(g => g.v)).size;
     return {
-      mode:"postseason", all:games, postGames:games, team, name, venues, s,
-      tc:TEAMS[team].c, acc:ACCENT[team], label:`${TEAMS[team].short} · 季後挑戰賽`,
-      title:`2026 季後挑戰賽`, big:String(s.w), unit:"勝", rec:`${s.l}敗${s.t ? ` ${s.t}和` : ""}`,
-      luck:"PLAYOFFS", cmp:[], cells:[], strip:[], extraLines:[], championText:""
+      mode:"postseason", series:postseasonMode, sm:SM, all:games, postGames:games, team, name, venues, s,
+      tc:TEAMS[team].c, acc:ACCENT[team], label:`${seriesTeamName(team, postseasonMode)} · ${SM.name}`,
+      title:`2026 ${SM.name}`, big:String(s.w), unit:"勝", rec:`${s.l}敗${s.t ? ` ${s.t}和` : ""}`,
+      luck:SM.tag, cmp:[], cells:[], strip:[], extraLines:[], championText:""
     };
   }
   const venues = new Set(all.map(g => g.v)).size;
@@ -2692,7 +2724,7 @@ function shareModel(all, team, name, postseasonMode){
     m.extraLines.push(psLines.map(([t, list]) => { const x = statsFor(team, list); return `${t} ${x.w}勝${x.l}敗`; }).join("　·　"));
   } else psLines.forEach(([t, list]) => {
     const x = statsFor(team, list);
-    m.extraLines.push(t === "台灣大賽" ? `台灣大賽　進場 ${list.length} 場 · ${TEAMS[team].short} ${x.w}勝${x.l}敗` : `季後挑戰賽　${postseasonScoreLine(list)}`);
+    m.extraLines.push(t === "台灣大賽" ? `台灣大賽　進場 ${list.length} 場 · ${teamDisplayName(team)} ${x.w}勝${x.l}敗` : `季後挑戰賽　${postseasonScoreLine(list)}`);
   });
   if (team){
     const s = statsFor(team, regular), short = TEAMS[team].short;
@@ -2830,11 +2862,11 @@ async function drawShare(m, ph){
   // ---- Dedicated postseason card: only the selected challenge-series games.
   if (m.mode === "postseason"){
     ctx.fillStyle = m.acc.f; ctx.font = `700 26px ${F_NUM}`; spacing(ctx, 6);
-    ctx.fillText("2026 PLAYOFF SERIES", L, 872);
+    ctx.fillText(m.sm.kicker, L, 872);
     ctx.fillStyle = white; ctx.font = `700 58px ${F_TC}`; spacing(ctx, 0);
-    ctx.fillText("季後挑戰賽", L, 950);
+    ctx.fillText(m.sm.name, L, 950);
     ctx.fillStyle = dim; ctx.font = `500 32px ${F_TC}`;
-    ctx.fillText(`${TEAMS[m.team].short} · 我的進場戰績`, L, 1034);
+    ctx.fillText(`${seriesTeamName(m.team, m.series)} · 我的進場戰績`, L, 1034);
 
     ctx.fillStyle = white; ctx.font = `800 190px ${F_NUM}`; spacing(ctx, -4);
     ctx.fillText(m.big, L - 3, 1254);
@@ -2842,25 +2874,73 @@ async function drawShare(m, ph){
     ctx.font = `700 54px ${F_TC}`; spacing(ctx, 0); ctx.fillText("勝", L + bigW + 12, 1254);
     ctx.textAlign = "right"; ctx.font = `800 54px ${F_TC}`; ctx.fillText(m.rec, R, 1195);
     ctx.fillStyle = m.acc.f; ctx.font = `700 24px ${F_NUM}`; spacing(ctx, 4);
-    ctx.fillText("PLAYOFFS", R, 1257);
+    ctx.fillText(m.sm.tag, R, 1257);
     spacing(ctx, 0);
     ctx.textAlign = "left";
 
     ctx.fillStyle = "rgba(255,255,255,.22)"; ctx.fillRect(L, 1302, W, 2);
     ctx.fillStyle = dim; ctx.font = `500 25px ${F_TC}`;
-    ctx.fillText(postseasonIntro(m.postGames, m.team), L, 1345);
+    ctx.fillText(postseasonIntro(m.postGames, m.team, m.series), L, 1345, W);
 
     const games = m.postGames;
     const denseGames = games.length >= 4;
     const rowH = games.length ? Math.min(142, 390 / games.length) : 142;
     if (!games.length){
-      ctx.fillStyle = dim; ctx.font = `500 32px ${F_TC}`; ctx.fillText("還沒有勾選季後挑戰賽", L, 1460);
+      ctx.fillStyle = dim; ctx.font = `500 32px ${F_TC}`; ctx.fillText(`還沒有勾選${m.sm.name}`, L, 1460);
+    }
+    // Taiwan Series rows: "G1  兄弟 0 : 3 味全龍" on the left, centred in the row
+    // (scores line up in one column); the winning side's awards on the right.
+    const tsRows = m.series === "taiwan" && games.length;
+    let tsCol = null;
+    if (tsRows){
+      const big = rowH >= 120, mid = !big && rowH >= 90;
+      tsCol = {big, mid, gFs:big ? 26 : mid ? 24 : 22, nameFs:big ? 34 : mid ? 30 : 27, scoreFs:big ? 42 : mid ? 36 : 32,
+        awardFs:big ? 17 : mid ? 16 : 15, awardGap:big ? 25 : mid ? 22 : 20};
+      ctx.font = `800 ${tsCol.gFs}px ${F_NUM}`; spacing(ctx, 1);
+      tsCol.gW = Math.max(...games.map(g => ctx.measureText(`G${g.g}`).width)); spacing(ctx, 0);
+      ctx.font = `700 ${tsCol.nameFs}px ${F_TC}`;
+      tsCol.nameW = Math.max(...games.flatMap(g => [g.a, g.h]).map(t => ctx.measureText(teamDisplayName(t)).width));
+      ctx.font = `800 ${tsCol.scoreFs}px ${F_NUM}`;
+      tsCol.scoreW = Math.max(...games.map(g => ctx.measureText(`${g.as} : ${g.hs}`).width));
     }
     games.forEach((game, i) => {
       const y0 = 1372 + i * rowH;
+      if (tsRows){
+        const c = tsCol, won = resultOf(game, m.team) === "W";
+        const cy = y0 + (rowH - 8) / 2;
+        ctx.fillStyle = won ? m.acc.f : dim; ctx.font = `800 ${c.gFs}px ${F_NUM}`; spacing(ctx, 1);
+        ctx.fillText(`G${game.g}`, L, cy + c.gFs * .36);
+        spacing(ctx, 0);
+        const awayEnd = L + c.gW + 30 + c.nameW, scoreX = awayEnd + 26 + c.scoreW / 2, homeX = awayEnd + 52 + c.scoreW;
+        ctx.fillStyle = white; ctx.font = `700 ${c.nameFs}px ${F_TC}`;
+        // 中信兄弟 and 味全龍 take the same width: shorter names get wider letter spacing
+        const spread = (t, x0) => {
+          const chars = [...teamDisplayName(t)], ws = chars.map(ch => ctx.measureText(ch).width);
+          const gap = chars.length > 1 ? (c.nameW - ws.reduce((a, b) => a + b, 0)) / (chars.length - 1) : 0;
+          let x = chars.length > 1 ? x0 : x0 + (c.nameW - ws[0]) / 2;
+          ctx.textAlign = "left";
+          chars.forEach((ch, k) => { ctx.fillText(ch, x, cy + c.nameFs * .36); x += ws[k] + gap; });
+        };
+        spread(game.a, awayEnd - c.nameW); spread(game.h, homeX);
+        ctx.font = `800 ${c.scoreFs}px ${F_NUM}`; ctx.textAlign = "center";
+        ctx.fillText(`${game.as} : ${game.hs}`, scoreX, cy + c.scoreFs * .36);
+        // right side: MVP only (and only for games the chosen team won)
+        const items = postseasonDetails(game, m.team).filter(([label]) => label === "MVP").map(([label, value]) => `${label} ${value}`);
+        const lines = [];
+        for (let k = 0; k < items.length; k += 2) lines.push(items.slice(k, k + 2).join("　·　"));
+        ctx.fillStyle = dim; ctx.font = `500 ${c.awardFs}px ${F_TC}`; ctx.textAlign = "right";
+        const top = cy - (lines.length - 1) * c.awardGap / 2 + c.awardFs * .36;
+        lines.forEach((line, k) => ctx.fillText(line, R, top + k * c.awardGap, R - homeX - c.nameW - 30));
+        ctx.textAlign = "left";
+        if (i < games.length - 1){
+          ctx.fillStyle = "rgba(255,255,255,.18)"; ctx.fillRect(L, y0 + rowH - 4, W, 1);
+        }
+        return;
+      }
       const won = resultOf(game, m.team) === "W";
       const awardItems = postseasonDetails(game, m.team).map(([label, value]) => label ? `${label} ${value}` : value);
-      const awardLines = [awardItems.slice(0, 3).join("　·　"), awardItems.slice(3).join("　·　")].filter(Boolean);
+      const awardLines = rowH < 90 ? [awardItems.join("　·　")]
+        : [awardItems.slice(0, 3).join("　·　"), awardItems.slice(3).join("　·　")].filter(Boolean);
 
       if (denseGames){
         ctx.fillStyle = won ? m.acc.f : dim; ctx.font = `800 21px ${F_NUM}`; spacing(ctx, 1);
@@ -3020,7 +3100,7 @@ const SHARE_NAME = "my-2026-season-recap.png";
 function setShareMsg(t){ shMsg.textContent = t; }
 async function openShare(){
   const v = currentView();
-  track("share_open", {view: v.postseason ? `postseason_${TEAMS[v.team].abbr}` : v.team ? TEAMS[v.team].abbr : "summary", has_photo: !!photo, picks_total: picks.size});
+  track("share_open", {view: viewTrackName(v), has_photo: !!photo, picks_total: picks.size});
   if (!shareDlg.open) shareDlg.showModal();
   const prev = document.getElementById("sh-preview");
   prev.innerHTML = `<span class="ed-busy">產生中…</span>`;
