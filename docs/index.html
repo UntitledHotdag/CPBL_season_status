@@ -2222,11 +2222,18 @@ const viewTrackName = v => v.postseason ? `${SERIES_META[v.series].abbr}_${TEAMS
 function hasYongjiTribute(games, team){
   return games.some(g => isYongjiTribute(g, team));
 }
+// Taiwan Series layout tagline: [saw the final game (G6), did not].
+const TS_TAGLINES = {
+  "中信兄弟":["你跟兄弟齊心，一起奮戰到最後一刻", "兄弟精神，永不放棄"],
+  "味全龍":["RUN for HONOR 一起拋下榮耀的彩帶", "RUN for HONOR 一起高唱紅潮凱旋"],
+};
 function postseasonIntro(games, team, series = "challenge"){
   if (series === "taiwan"){
-    const sawClinch = TS_CHAMPION && TS_CHAMPION.team === team && games.some(g => gameKey(g) === TS_CHAMPION.key);
-    return sawClinch ? `你在 ${TS_CHAMPION.date} ${TS_CHAMPION.venue}，親眼見證${teamDisplayName(team)}拋下台灣大賽冠軍彩帶`
-      : `拼戰到最後一刻的台灣大賽，你在現場參與了 ${games.length} 場`;
+    const finalKey = TS_CHAMPION ? TS_CHAMPION.key : `T${Math.max(0, ...TS_PLAYED_GAMES.map(g => g.g))}`;
+    const sawFinal = games.some(g => gameKey(g) === finalKey);
+    const lines = TS_TAGLINES[team];
+    if (lines) return lines[sawFinal ? 0 : 1];
+    return `拼戰到最後一刻的台灣大賽，你在現場參與了 ${games.length} 場`;
   }
   return hasYongjiTribute(games, team)
     ? "Go Go Let's Go 陳鏞基！"
@@ -2335,7 +2342,7 @@ function renderResult(){
         <div class="r-side"><span class="r-rec">${s.l}敗${s.t ? ` ${s.t}和` : ""}</span><span class="luck ${s.w ? "up" : ""}">${SM.tag}</span></div>
         <div class="r-cmp">${hasYongjiTribute(seriesGames, team) && view.series === "challenge"
           ? "Go Go Let's Go 陳鏞基！"
-          : intro.includes("冠軍彩帶") ? `${esc(intro)}！每場都會顯示單場關鍵資訊。`
+          : view.series === "taiwan" && TS_TAGLINES[team] ? `<b>${esc(intro)}</b><br>你在現場參與了 <b>${seriesGames.length}</b> 場；每場都會顯示單場關鍵資訊。`
           : `拼戰到最後一刻的${SM.name}，你在現場參與了 <b>${seriesGames.length}</b> 場；每場都會顯示單場關鍵資訊。`}</div>`;
     }
   } else if (team){
