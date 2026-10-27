@@ -130,7 +130,7 @@ function findGame(year, gameNo) {
 }
 
 export function predictionWindowOpen(game, env, now = new Date()) {
-  if (!game?.startsAt || game.dataReady) return false;
+  if (!game?.startsAt || game.dataReady || game.notPlayed) return false;
   const startsAt = Date.parse(game.startsAt);
   const current = now.getTime();
   return Number.isFinite(startsAt) && current < startsAt;

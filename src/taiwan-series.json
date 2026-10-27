@@ -87,43 +87,95 @@
     "year": 2026,
     "series": "taiwan",
     "g": 4,
-    "dataReady": false,
+    "dataReady": true,
     "date": "2026-10-21",
     "time": "18:35",
     "startsAt": "2026-10-21T18:35:00+08:00",
     "away": "味全龍",
-    "home": "中信兄弟"
+    "home": "中信兄弟",
+    "venue": "大巨蛋",
+    "awayScore": 4,
+    "homeScore": 5,
+    "duration": "03:40",
+    "decisions": {
+      "win": "菲力士",
+      "loss": "陳冠偉",
+      "save": ""
+    },
+    "mvp": {
+      "name": "詹子賢"
+    },
+    "winningRbi": "詹子賢",
+    "seriesRecord": {
+      "中信兄弟": "1勝3敗",
+      "味全龍": "3勝1敗"
+    }
   },
   {
     "year": 2026,
     "series": "taiwan",
     "g": 5,
-    "dataReady": false,
-    "date": "2026-10-23",
-    "time": "18:35",
-    "startsAt": "2026-10-23T18:35:00+08:00",
+    "dataReady": true,
+    "date": "2026-10-25",
+    "time": "17:05",
+    "startsAt": "2026-10-25T17:05:00+08:00",
     "away": "中信兄弟",
-    "home": "味全龍"
+    "home": "味全龍",
+    "venue": "大巨蛋",
+    "awayScore": 4,
+    "homeScore": 3,
+    "duration": "03:06",
+    "decisions": {
+      "win": "菲力士",
+      "loss": "林凱威",
+      "save": ""
+    },
+    "mvp": {
+      "name": "江坤宇"
+    },
+    "winningRbi": "黃韋盛",
+    "seriesRecord": {
+      "中信兄弟": "2勝3敗",
+      "味全龍": "3勝2敗"
+    }
   },
   {
     "year": 2026,
     "series": "taiwan",
     "g": 6,
-    "dataReady": false,
-    "date": "2026-10-24",
-    "time": "17:05",
-    "startsAt": "2026-10-24T17:05:00+08:00",
+    "dataReady": true,
+    "date": "2026-10-26",
+    "time": "15:05",
+    "startsAt": "2026-10-26T15:05:00+08:00",
     "away": "中信兄弟",
-    "home": "味全龍"
+    "home": "味全龍",
+    "venue": "大巨蛋",
+    "awayScore": 0,
+    "homeScore": 6,
+    "duration": "02:30",
+    "decisions": {
+      "win": "梅賽鍶",
+      "loss": "勝騎士",
+      "save": ""
+    },
+    "mvp": {
+      "name": "梅賽鍶"
+    },
+    "winningRbi": "張政禹",
+    "seriesRecord": {
+      "中信兄弟": "2勝4敗",
+      "味全龍": "4勝2敗"
+    }
   },
   {
     "year": 2026,
     "series": "taiwan",
     "g": 7,
     "dataReady": false,
-    "date": "2026-10-25",
-    "time": "17:05",
-    "startsAt": "2026-10-25T17:05:00+08:00",
+    "notPlayed": true,
+    "date": "2026-10-27",
+    "time": "18:35",
+    "startsAt": "2026-10-27T18:35:00+08:00",
     "away": "中信兄弟",
     "home": "味全龍"
   }

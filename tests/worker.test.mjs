@@ -6,7 +6,7 @@ import worker, { normalizeThreadsUrl, predictionWindowOpen, sanitizeThreadsEmbed
 
 const game = taiwanSeriesGames[0];
 
-test("2026 Taiwan Series schedule contains G1-G7 in order", () => {
+test("2026 Taiwan Series schedule contains G1-G7 in order (G5-G7 moved by the typhoon)", () => {
   assert.deepEqual(
     taiwanSeriesGames.map(({ g, date, time, away, home }) => ({ g, date, time, away, home })),
     [
@@ -14,9 +14,9 @@ test("2026 Taiwan Series schedule contains G1-G7 in order", () => {
       { g: 2, date: "2026-10-18", time: "17:05", away: "中信兄弟", home: "味全龍" },
       { g: 3, date: "2026-10-20", time: "18:35", away: "味全龍", home: "中信兄弟" },
       { g: 4, date: "2026-10-21", time: "18:35", away: "味全龍", home: "中信兄弟" },
-      { g: 5, date: "2026-10-23", time: "18:35", away: "中信兄弟", home: "味全龍" },
-      { g: 6, date: "2026-10-24", time: "17:05", away: "中信兄弟", home: "味全龍" },
-      { g: 7, date: "2026-10-25", time: "17:05", away: "中信兄弟", home: "味全龍" },
+      { g: 5, date: "2026-10-25", time: "17:05", away: "中信兄弟", home: "味全龍" },
+      { g: 6, date: "2026-10-26", time: "15:05", away: "中信兄弟", home: "味全龍" },
+      { g: 7, date: "2026-10-27", time: "18:35", away: "中信兄弟", home: "味全龍" },
     ],
   );
   assert.equal(taiwanSeriesGames.every((item) => typeof item.dataReady === "boolean"), true);
@@ -36,6 +36,13 @@ test("each game accepts predictions until its own first pitch", () => {
   assert.equal(predictionWindowOpen(scheduled, {}, new Date("2026-10-17T17:04:59+08:00")), true);
   assert.equal(predictionWindowOpen(scheduled, {}, new Date("2026-10-17T17:05:00+08:00")), false);
   assert.equal(predictionWindowOpen({ ...game, dataReady: true }, {}, new Date("2026-10-17T16:00:00+08:00")), false);
+});
+
+test("a game that is not needed never opens for predictions", () => {
+  for (const item of taiwanSeriesGames.filter((g) => g.notPlayed)) {
+    assert.equal(item.dataReady, false);
+    assert.equal(predictionWindowOpen(item, {}, new Date(Date.parse(item.startsAt) - 3600e3)), false);
+  }
 });
 
 test("Taiwan Series rosters contain 32 unique players per team", () => {

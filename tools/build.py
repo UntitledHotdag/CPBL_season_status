@@ -49,6 +49,8 @@ def main():
     assert all(game["g"] == index for index, game in enumerate(taiwan_series, 1)), "taiwan-series.json must contain G1-G7 in order"
     assert all(game["away"] != game["home"] for game in taiwan_series), "Taiwan Series opponents must be different"
     assert all(game.get("dataReady") is False or ts_result_required <= game.keys() for game in taiwan_series), "taiwan-series.json has incomplete result data"
+    # notPlayed = the series was already decided, so this game never happens.
+    assert all(not game.get("notPlayed") or game.get("dataReady") is False for game in taiwan_series), "a notPlayed game cannot have a result"
     assert all("teams" not in game or ts_box_required <= game.keys() for game in taiwan_series), "taiwan-series.json has an incomplete box score"
     roster_groups = {"pitchers": 15, "catchers": 3, "infielders": 8, "outfielders": 6}
     assert taiwan_series_rosters.get("year") == 2026 and taiwan_series_rosters.get("series") == "taiwan", "Taiwan Series roster metadata is invalid"
