@@ -1616,7 +1616,8 @@ const DOW = ["日","一","二","三","四","五","六"];
 const SEASON = {};
 TEAM_ORDER.forEach(t => SEASON[t] = {w:0, l:0, t:0});
 let HOME_W = 0, HOME_L = 0;
-GAMES.forEach(g => {
+// 全季勝率 = regular season + 季後挑戰賽 + 台灣大賽, the same scope as the fan's own record
+ALL_GAMES.forEach(g => {
   if (g.as > g.hs){ SEASON[g.a].w++; SEASON[g.h].l++; HOME_L++; }
   else if (g.hs > g.as){ SEASON[g.h].w++; SEASON[g.a].l++; HOME_W++; }
   else { SEASON[g.a].t++; SEASON[g.h].t++; }
@@ -2339,7 +2340,8 @@ function renderResult(){
           : `拼戰到最後一刻的${SM.name}，你在現場參與了 <b>${seriesGames.length}</b> 場；每場都會顯示單場關鍵資訊。`}</div>`;
     }
   } else if (team){
-    s = statsFor(team, regular);
+    // every game the fan attended counts: regular season + 季後挑戰賽 + 台灣大賽
+    s = statsFor(team, allPicks);
     if (!s.games.length){
       rate.innerHTML = `<div class="r-label">${badge(team, false, "xs")}你進場時的${esc(TEAMS[team].short)}</div>
         <div class="r-big">0<small>場</small></div><div class="r-side"></div>
@@ -2352,7 +2354,7 @@ function renderResult(){
         <div class="r-big">${fmtPct(s.pct)}</div>
         <div class="r-side"><span class="r-rec">${rec(s)}</span>${luck}</div>
         <div class="r-cmp">${d == null ? "全部是和局，暫時算不出勝率"
-          : `全季勝率 <b>${fmtPct(sp)}</b>，你進場時${d >= 0 ? "高" : "低"}了 <b>${Math.abs(d).toFixed(1)}</b> 個百分點`}
+          : `全季勝率（含季後賽） <b>${fmtPct(sp)}</b>，你進場時${d >= 0 ? "高" : "低"}了 <b>${Math.abs(d).toFixed(1)}</b> 個百分點`}
           ${s.games.length < 3 ? " · 至少進場 3 場就能解鎖幸運指數" : ""}${s.streak >= 2 ? ` · 最長 <b>${s.streak}</b> 連勝` : ""}</div>`;
     }
   } else {
@@ -2366,7 +2368,7 @@ function renderResult(){
         ${tile("最常去的球場", `<span class="t">${esc(S.venue.key)}</span>`, `<b>${S.venue.n}</b>場`)}
         ${tile("最常看到的球隊", `${badge(S.seen.key, false, "xs")}<span class="t">${esc(TEAMS[S.seen.key].short)}</span>`, `<b>${S.seen.n}</b>場`)}
       </div>
-      <div class="r-cmp">主場隊在你面前勝率 <b>${fmtPct(S.homePct)}</b>，全季 <b>${fmtPct(SEASON_HOME_PCT)}</b> · 進場最多在 <b>${S.month.key}</b> 月（${S.month.n} 場）</div>`;
+      <div class="r-cmp">主場隊在你面前勝率 <b>${fmtPct(S.homePct)}</b>，全季（含季後賽） <b>${fmtPct(SEASON_HOME_PCT)}</b> · 進場最多在 <b>${S.month.key}</b> 月（${S.month.n} 場）</div>`;
   }
 
   // Poster body: regular-season halves + a visually distinct postseason series.
@@ -2734,20 +2736,20 @@ function shareModel(all, team, name, postseasonMode){
     m.extraLines.push(t === "台灣大賽" ? `台灣大賽　進場 ${list.length} 場 · ${teamDisplayName(team)} ${x.w}勝${x.l}敗` : `季後挑戰賽　${postseasonScoreLine(list)}`);
   });
   if (team){
-    const s = statsFor(team, regular), short = TEAMS[team].short;
+    const s = statsFor(team, all), short = TEAMS[team].short;   // regular season + postseason
     m.label = `我進場時的${short} · 觀賽勝率`;
     m.title = `我進場的時候，${short}贏了幾場？`;
     if (!s.games.length){
       m.label = `我進場時的${short}`;
       m.big = "0"; m.unit = "場"; m.rec = ""; m.luck = "";
-      m.cmp = [{t:`我進場的例行賽沒有${short}`}];
+      m.cmp = [{t:`我進場的比賽沒有${short}`}];
       m.strip = [];
     } else {
       const sp = seasonPct(team), d = s.pct == null ? null : (s.pct - sp) * 100;
       m.big = fmtPct(s.pct); m.unit = ""; m.rec = rec(s);
       m.luck = (d != null && s.games.length >= 3) ? luckLabel(d) : "";
       m.cmp = d == null ? [{t:"全部是和局，暫時算不出勝率"}]
-        : [{t:"全季勝率 "}, {t:fmtPct(sp), b:1}, {t:`，我進場時${d >= 0 ? "高" : "低"}了 `}, {t:Math.abs(d).toFixed(1), b:1}, {t:" 個百分點"}];
+        : [{t:"全季勝率（含季後賽） "}, {t:fmtPct(sp), b:1}, {t:`，我進場時${d >= 0 ? "高" : "低"}了 `}, {t:Math.abs(d).toFixed(1), b:1}, {t:" 個百分點"}];
       m.strip = s.games.map(g => {
         const r = resultOf(g, team);
         return r === "W" ? {fill:ACCENT[team].f} : r === "L" ? {fill:"rgba(255,255,255,.22)"} : {stroke:"rgba(255,255,255,.6)"};
