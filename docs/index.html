@@ -1036,7 +1036,7 @@
     <nav class="site-nav" aria-label="主要導覽">
       <a href="#intro" data-nav="intro">首頁</a>
       <a href="#pick" data-nav="season">我的球季</a>
-      <a href="#taiwan-series" data-nav="taiwan-series">台灣大賽</a>
+      <a href="#taiwan-series" data-nav="taiwan-series" data-ts-zone hidden>台灣大賽</a>
       <a href="#community" data-nav="community">社群</a>
     </nav>
     <div class="right" style="width:auto;margin-left:auto">
@@ -1056,7 +1056,7 @@
           <h1 class="hero-title">你這個賽季，<br><em>進場看了幾場球？</em></h1>
           <p class="hero-lede">勾選你在 2026 年親自進場看過的比賽，看看支持的球隊在你面前打出什麼成績，再放上照片做成一張賽季回顧圖。</p>
           <div class="hero-ctas" id="hero-ctas"></div>
-          <div class="playoff-update" aria-label="台灣大賽專區">
+          <div class="playoff-update" aria-label="台灣大賽專區" data-ts-zone hidden>
             <div class="playoff-update-head">
               <span class="playoff-update-kicker">Taiwan Series</span>
               <span class="playoff-update-status" id="playoff-update-status"></span>
@@ -1351,7 +1351,7 @@
       </div>
       <div class="community-intro">
         <p>球迷作品分享與球隊分類正在準備中。功能上線後，你可以找到同隊球迷的作品，也能分享自己的觀賽回顧。</p>
-        <button class="btn-ghost" data-go="taiwan-series">先做一張台灣大賽圖卡 →</button>
+        <button class="btn-ghost" data-go="taiwan-series" data-ts-zone hidden>先做一張台灣大賽圖卡 →</button><button class="btn-ghost" data-go="pick" data-ts-zone-closed>先做一張賽季回顧圖 →</button>
       </div>
     </div>
 
@@ -4400,10 +4400,17 @@ document.getElementById("admin-refresh").addEventListener("click",()=>loadAdmin(
 // ================================================================
 // Router — #intro → #pick ⇄ #result (browser back works)
 // ================================================================
+// 台灣大賽專區 (predictions, recap cards) — closed after the 2026 series.
+// Set to true to bring back the nav tab, the landing block and #taiwan-series.
+// Finished Taiwan Series games stay pickable in 我的賽季 either way.
+const TS_ZONE_OPEN = false;
+document.querySelectorAll("[data-ts-zone]").forEach(el => el.hidden = !TS_ZONE_OPEN);
+document.querySelectorAll("[data-ts-zone-closed]").forEach(el => el.hidden = TS_ZONE_OPEN);
 const PAGE_NAME = {intro:"首頁", pick:"選擇賽事", result:"我的戰績", "taiwan-series":"台灣大賽", community:"社群即將上線", admin:"社群管理"};
 function go(v){ if (location.hash !== "#" + v) location.hash = v; else render(v); }
 function render(v){
   if(IS_ADMIN_PATH)v="admin";
+  if (v === "taiwan-series" && !TS_ZONE_OPEN){ v = "intro"; history.replaceState(null, "", "#intro"); }
   if (!PAGE_NAME[v]) v = "intro";
   if (v === "result" && picks.size === 0) v = "pick";
   ["intro", "pick", "result", "taiwan-series", "community", "admin"].forEach(k => document.getElementById("view-" + k).hidden = k !== v);
